@@ -1,7 +1,7 @@
 ![OWLOS Air Quality Logo](https://github.com/KirinDenis/OWLOSAirQuality/raw/main/OWLOSResource/images/OWLOSAirQualityLogo.jpg)
 
 # OWLOS Air Quality
-### DIY Open Source OS for building IoT ecosystems
+### Open Source IoT Solution for monitoring air quality based on ![OWLOS](https://github.com/KirinDenis/owlos)
 [ESP32]
 - built-in sensors, actuators, LCDs, DHTs, Steppers and other drivers
 - built-in script language interpreter 
