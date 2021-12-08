@@ -5,7 +5,7 @@
 
  What is OWLOS Air Qulity
  Description Why it is needed
- Thankgiving &#xf187;
+ Thankgiving
  
 
 [We on Facebook](https://www.facebook.com/groups/OWLOS)
