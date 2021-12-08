@@ -2,29 +2,23 @@
 
 # OWLOS Air Quality
 ### Open Source IoT Solution for monitoring air quality based on ![OWLOS](https://github.com/KirinDenis/owlos)
-[ESP32]
-- built-in sensors, actuators, LCDs, DHTs, Steppers and other drivers
-- built-in script language interpreter 
-- built-in HTTP(S) RESTful server, RESTful client, MQTT client
-- WiFi access point/station modes
-- OTA supported 
-- UART AT+ interface supported
-- flexible assembly configuration (config.h)
-- Web and desktop UX
-- doesn't require programming skills
-- doesn't require internet and additional servers
-- Open Source under GPL-3.0 License 
 
-![OWLOS SCHEME](https://github.com/KirinDenis/owlos/raw/master/OWLOSResource/images/owlos-scheme.png)
+Used hardware: 
+- ESP32 microcontroller
+- CCS811 + SI7021 + BMP280
+- ADS1115
+- 3.5" TFT LCD with touch
+- DHT22
+- Photoresistor 
+- MQ7
+- MQ135
 
 ### Source Code map
 
 - **/OWLOS/** C/C++ firmware source code (ESP32, ESP8266)
 - **/OWLOS/data/** JavaScript  stand-alone and embedded UX 
-- **/OWLOSAdmin/** .Net Core C# WPF UX
 - **/OWLOSEcosystem/** (FFR) .Net Core C# WPF + OpenGL UX
 - **/OWLOSResource/** Blendar 3D models, schematics and images resources
-- **/OWLOSStarter/** C/C++ for uploading OWLOS firmware bin from GitHub (HTTP Updater)
 
 ### How to build
 
