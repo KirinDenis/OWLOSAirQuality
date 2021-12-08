@@ -1,0 +1,138 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <title>OWLOS</title>
+    <meta charset="utf-8" />
+
+    <meta name="viewport" content="width=driver-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="ui.css">
+
+    <script src='jquery.min.js'></script>
+    <script src='bootstrap.min.js'></script>
+    <script src='jquery.dataTables.min.js'></script>
+    <script src='dataTables.min.js'></script>
+
+    <script src='bootcore.js'></script>
+    <script src='configcore.js'></script>
+    <script src='restclientcore.js'></script>
+    <script src='languagescore.js'></script>
+
+    <script src='driverscore.js'></script>
+
+    <script src='speechcore.js'></script>
+    <script src='drawcore.js'></script>
+
+    <script src='basewidget.js'></script>
+    <script src='actuatorwidget.js'></script>
+
+
+    <script src='graphwidget.js'></script>
+    <script src='lcdwidget.js'></script>
+    <script src='lightwidget.js'></script>
+    <script src='motionwidget.js'></script>
+    <script src='radialwidget.js'></script>
+    <script src='smokewidget.js'></script>
+    <script src='stepperwidget.js'></script>
+    <script src='tablewidget.js'></script>
+    <script src='temperaturewidget.js'></script>
+    <script src='widgetswrappers.js'></script>
+
+
+    <script src='filespanelui.js'></script>
+    <script src='dashboardui.js'></script>
+    <script src='settingsui.js'></script>
+    <script src='driversui.js'></script>
+
+
+
+    <script src='index.js'></script>
+</head>
+<body  onbeforeunload="return BeforeUnloadEvent()">
+    
+    <pre id="boot" style="font-size: 11px;"><code id="bootLog" style="white-space: pre-wrap; overflow-y:scroll;"></code></pre>
+
+    <div id="pagewrapper" class="page-wrapper default-theme sidebar-bg bg1">
+        <main class="page-content pt-2">
+            <div id="overlay" class="overlay"></div>
+            <nav class="navbar">
+                <form class="form-inline my-2 my-lg-0">
+                    <span type="button" id="toggle-sidebar" class="badge badge-warning fa fa-bars">
+                    </span>
+                    <span type="button" id="pin-sidebar" class="badge badge-success fa fa-anchor">
+                    </span>
+                    <span type="button" id="thingStatusPanelText" class="badge badge-default">
+                    </span>
+                    <span type="button" id="sidebarText" class="badge badge-default">
+                    </span>
+
+                </form>
+
+                <form class="form-inline my-2 my-lg-0">
+                    <div class="thingstatuspanel" id="saveButtonPanel"></div>
+                    <div class="thingstatuspanel" id="dashboardButtonsPanel"></div>
+                    <div class="thingstatuspanel" id="thingStatusPanel"></div>
+
+                </form>
+            </nav>
+
+            <div class="container-fluid">
+                <div class="row">
+
+                    <div class="tab-content col-sm-12" id="thingsPropsPanel">
+                        <div class="tab-pane fade active show" id="dashboard">
+                            <div class="row" id="driversWidgetsPanel">
+                            </div>
+                            <div class="col-sm-12" id="basicPanel">
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="console">
+                            <div class="row">
+                                <div class="col-md-12 driverdiv">
+                                    <div id="consolePanel" class="col-md-12 border-0 drivercard">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="uploadPanel" class="row"></div>
+            <div id="addDriverPanel" class="row"></div>
+            <div id="showDialogPanel" class="row"></div>
+
+            <!--
+
+    <nav id="sidebar" class="bs-docs-sidebar">
+        <ul id="thingsSideBar" class="list-unstyled components"></ul>
+    </nav>
+         -->
+            <div id="thingPropAnchors"> </div>
+
+
+
+        </main>
+        
+    </div>
+    <footer class="footer">
+        <div class="container col-md-12" id="footerContainer">
+            OWLOS
+        </div>
+    </footer>
+    <script>
+        boot();
+
+        function BeforeUnloadEvent() {
+            return "Are you sure?";
+        }
+
+
+
+    </script>
+</body>
+</html>
