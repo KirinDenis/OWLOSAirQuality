@@ -1,4 +1,4 @@
-![OWLOS UX](https://github.com/KirinDenis/owlos/raw/master/OWLOSResource/images/owlosux.jpg)
+![OWLOS UX](https://github.com/KirinDenis/owlos/raw/master/OWLOSResource/images/OWLOSAirQualityLogo.jpg)
 
 # OWLOS Air Quality
 ### DIY Open Source OS for building IoT ecosystems
