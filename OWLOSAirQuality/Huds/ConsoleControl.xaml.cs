@@ -53,7 +53,7 @@ namespace OWLOSAirQuality.Huds
 
     public enum ConsoleMessageCode { Success, Warning, Danger, Info };
     public partial class ConsoleControl : UserControl
-    {
+    {        
         private int consoleCount = 0;
         private double saveY = 0;
         private bool atAnimation = false;

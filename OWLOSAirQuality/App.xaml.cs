@@ -14,6 +14,8 @@ namespace OWLOSAirQuality
     /// </summary>
     public partial class App : Application
     {
+        public static bool UseAnimation = false;
+
         public static OWLOSEcosystemManager EcosystemManager;
         
         void App_Startup(object sender, StartupEventArgs e)

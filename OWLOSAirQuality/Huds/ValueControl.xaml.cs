@@ -288,45 +288,61 @@ namespace OWLOSAirQuality.Huds
 
                     base.Dispatcher.Invoke(() =>
                     {
-                        ColorAnimation animation;
-                        animation = new ColorAnimation
+                        if (App.UseAnimation)
                         {
-                            To = ((SolidColorBrush)App.Current.Resources["OWLOSWarning"]).Color,
-                            Duration = new Duration(TimeSpan.FromSeconds(1)),
-                            AutoReverse = true
-                        };
-                        try
-                        {
-                            _Value.Foreground = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSLight"]).Color);
-                            _Value.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, animation);
+                            ColorAnimation animation;
+                            animation = new ColorAnimation
+                            {
+                                To = ((SolidColorBrush)App.Current.Resources["OWLOSWarning"]).Color,
+                                Duration = new Duration(TimeSpan.FromSeconds(1)),
+                                AutoReverse = true
+                            };
+                            try
+                            {
+                                _Value.Foreground = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSLight"]).Color);
+                                _Value.Foreground.BeginAnimation(SolidColorBrush.ColorProperty, animation);
+                            }
+                            catch { }
                         }
-                        catch { }
+                        else 
+                        {
+                            _Value.Foreground = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSWarning"]).Color);
+                        } 
+                            
                     });
 
-                    //Animate value
-                    float step = ((float)_OriginalValue - (float)OriginalValue) / 10.0f;
-                    Timer valueTimer = new Timer(100);
-                    valueTimer.Elapsed += new ElapsedEventHandler((object source, ElapsedEventArgs e) =>
+                    if (App.UseAnimation)
                     {
-                        OriginalValue += step;
-                        try
+                        //Animate value
+                        float step = ((float)_OriginalValue - (float)OriginalValue) / 10.0f;
+                        Timer valueTimer = new Timer(100);
+                        valueTimer.Elapsed += new ElapsedEventHandler((object source, ElapsedEventArgs e) =>
                         {
-                            Dispatcher.Invoke(() =>
+                            OriginalValue += step;
+                            try
                             {
-                                if (_OriginalValue >= OriginalValue)
+                                Dispatcher.Invoke(() =>
                                 {
-                                    OriginalValue = _OriginalValue;
-                                    Value = string.Format("{0:0.##}", OriginalValue);
-                                    Status = NetworkStatus.Online;
-                                    valueTimer.Stop();
-                                    return;
-                                }
-                                _Value.Text = string.Format("{0:0.##}", OriginalValue);
-                            });
-                        }
-                        catch { }
-                    });
-                    valueTimer.Start();
+                                    if (_OriginalValue >= OriginalValue)
+                                    {
+                                        OriginalValue = _OriginalValue;
+                                        Value = string.Format("{0:0.##}", OriginalValue);
+                                        Status = NetworkStatus.Online;
+                                        valueTimer.Stop();
+                                        return;
+                                    }
+                                    _Value.Text = string.Format("{0:0.##}", OriginalValue);
+                                });
+                            }
+                            catch { }
+                        });
+                        valueTimer.Start();
+                    }
+                    else
+                    {
+                        OriginalValue = _OriginalValue;
+                        Value = string.Format("{0:0.##}", OriginalValue);
+                    }
                 }                                
             }
             else
@@ -361,27 +377,42 @@ namespace OWLOSAirQuality.Huds
 
         private void UserControl_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            ColorAnimation animation;
-            animation = new ColorAnimation
+            if (App.UseAnimation)
             {
-                To = ((SolidColorBrush)App.Current.Resources["OWLOSSecondaryAlpha1"]).Color,
-                Duration = new Duration(TimeSpan.FromSeconds(0.3))
-            };
+                ColorAnimation animation;
+                animation = new ColorAnimation
+                {
+                    To = ((SolidColorBrush)App.Current.Resources["OWLOSSecondaryAlpha1"]).Color,
+                    Duration = new Duration(TimeSpan.FromSeconds(0.3))
+                };
 
-            BoxRectangle.Fill = new SolidColorBrush(((SolidColorBrush)Background).Color);
-            BoxRectangle.Fill.BeginAnimation(SolidColorBrush.ColorProperty, animation);
+                BoxRectangle.Fill = new SolidColorBrush(((SolidColorBrush)Background).Color);
+                BoxRectangle.Fill.BeginAnimation(SolidColorBrush.ColorProperty, animation);
+            }
+            else
+            {
+                BoxRectangle.Fill = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSSecondaryAlpha1"]).Color);
+            }
         }
 
         private void UserControl_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            ColorAnimation animation;
-            animation = new ColorAnimation
+            if (App.UseAnimation)
             {
-                To = Color.FromArgb(0x01, 0x00, 0x00, 0x00),
-                Duration = new Duration(TimeSpan.FromSeconds(2))
-            };
-            BoxRectangle.Fill = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSSecondaryAlpha1"]).Color);
-            BoxRectangle.Fill.BeginAnimation(SolidColorBrush.ColorProperty, animation);
+                ColorAnimation animation;
+                animation = new ColorAnimation
+                {
+                    To = Color.FromArgb(0x01, 0x00, 0x00, 0x00),
+                    Duration = new Duration(TimeSpan.FromSeconds(2))
+                };
+                BoxRectangle.Fill = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSSecondaryAlpha1"]).Color);
+                BoxRectangle.Fill.BeginAnimation(SolidColorBrush.ColorProperty, animation);
+            }
+            else 
+            {
+                BoxRectangle.Fill = new SolidColorBrush(Color.FromArgb(0x01, 0x00, 0x00, 0x00));
+            } 
+               
         }
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)

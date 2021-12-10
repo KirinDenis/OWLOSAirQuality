@@ -11,7 +11,7 @@
     <Grid>
         <Canvas>
             <Rectangle x:Name="SmallBoxRectangle" Stroke="{DynamicResource OWLOSSecondary}" Canvas.Left="0" Canvas.Top="0" Width="150" Height="150" StrokeThickness="0.1"/>
-
+            
             <Line x:Name="SelSQ1" Stroke="{DynamicResource OWLOSInfo}" X1="-1" Y1="0" X2="10" Y2="0" StrokeThickness="3" Visibility="Hidden" />
             <Line x:Name="SelSQ2" Stroke="{DynamicResource OWLOSInfo}" X1="0" Y1="0" X2="0" Y2="10" StrokeThickness="3" Visibility="Hidden"/>
 
@@ -24,7 +24,7 @@
             <Line x:Name="SelSQ7" Stroke="{DynamicResource OWLOSInfo}" X1="151" Y1="150" X2="140" Y2="150" StrokeThickness="3" Visibility="Hidden"/>
             <Line x:Name="SelSQ8" Stroke="{DynamicResource OWLOSInfo}" X1="150" Y1="150" X2="150" Y2="140" StrokeThickness="3" Visibility="Hidden"/>
 
-            <Rectangle x:Name="BoxRectangle" Stroke="{DynamicResource OWLOSSecondaryAlpha1}" Canvas.Left="5" Canvas.Top="5" Width="140" Height="140" StrokeThickness="2"/>
+            <Rectangle x:Name="BoxRectangle"  Stroke="{DynamicResource OWLOSSecondaryAlpha1}" Canvas.Left="5" Canvas.Top="5" Width="140" Height="140" StrokeThickness="2"/>
 
             <Rectangle x:Name="BoxTrapRectangle" Fill="#00000000" Canvas.Left="5" Canvas.Top="5" Width="172" Height="172" />
 
