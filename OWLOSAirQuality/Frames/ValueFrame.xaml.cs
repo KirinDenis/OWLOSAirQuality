@@ -57,6 +57,7 @@ namespace OWLOSAirQuality.Frames
     /// </summary>
     public partial class ValueFrame : Window
     {
+
         private readonly OWLOSEcosystemServiceClient EcosystemServiceClient;
 
         private bool SensorsJoined = false;
@@ -188,10 +189,9 @@ namespace OWLOSAirQuality.Frames
             _BackgroundControl.SearchTextBox.GotFocus += SearchTextBox_GotFocus;
             _BackgroundControl.SearchTextBox.LostFocus += SearchTextBox_LostFocus;
 
-
-
             OnLifeCycleTimer(null, null);
         }
+
 
         private void SearchTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
