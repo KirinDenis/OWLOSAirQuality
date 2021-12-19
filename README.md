@@ -2,12 +2,7 @@
 
 # OWLOS Air Quality
 ### Open Source IoT Solution for monitoring air quality based on ![OWLOS](https://github.com/KirinDenis/owlos)
-
- What is OWLOS Air Qulity
- Description Why it is needed
- Thankgiving
  
-
 [We on Facebook](https://www.facebook.com/groups/OWLOS)
 
 Used hardware: 
