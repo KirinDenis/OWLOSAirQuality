@@ -33,9 +33,9 @@
                         </StackPanel>
 
                         <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,16,0,-16">
-                            <huds:RadialValueControl x:Name="TestRadialValueControl1" Width="172" Height="172" Caption="CCS811" LowDangerTrap="10" LowWarningTrap="20" HighWarningTrap="80" HighDangerTrap="90" Description="Temperature"/>
-                            <huds:RadialValueControl x:Name="TestRadialValueControl2" Width="172" Height="172" Caption="CCS811" LowDangerTrap="10" LowWarningTrap="20" HighWarningTrap="80" HighDangerTrap="90" Description="Temperature"/>
-                            <huds:RadialValueControl x:Name="TestRadialValueControl3" Width="172" Height="172" Caption="CCS811" LowDangerTrap="10" LowWarningTrap="20" HighWarningTrap="80" HighDangerTrap="90" Description="Temperature"/>
+                            <huds:RadialValueControl x:Name="DHT22TemperatureControl" RadialMode="Values" LowRangeValue="-50" HighRangeValue="50" LowDangerTrap="12" LowWarningTrap="20" HighWarningTrap="27" HighDangerTrap="29" Width="172" Height="172" Caption="DHT22"  Description="Temperature"/>
+                            <huds:RadialValueControl x:Name="BMP280TemperatureControl" RadialMode="Values" LowRangeValue="-50" HighRangeValue="50" LowDangerTrap="12" LowWarningTrap="20" HighWarningTrap="27" HighDangerTrap="29" Width="172" Height="172" Caption="BMP280"  Description="Temperature"/>
+                            <huds:RadialValueControl x:Name="CCS811TemperatureControl" RadialMode="Values" LowRangeValue="-50" HighRangeValue="50" LowDangerTrap="12" LowWarningTrap="20" HighWarningTrap="27" HighDangerTrap="29" Width="172" Height="172" Caption="CCS811"  Description="Temperature"/>
                         </WrapPanel>
                     </Grid>
 

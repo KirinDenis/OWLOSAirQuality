@@ -48,15 +48,22 @@ using System.Windows.Controls;
 namespace OWLOSAirQuality.Frames
 {
     public partial class PowerDashboardFrame : Window
-    {   
-        private Random random = new Random();
-        private double Direction = 10.0f;
-        private double Speed = 4.0f;
+    {
+        private readonly OWLOSEcosystemServiceClient EcosystemServiceClient;
+        private bool SensorsJoined = false;
+
+        //private Random random = new Random();
+        //private double Direction = 10.0f;
+        //private double Speed = 4.0f;
+
         private readonly List<SearchIndex> SearchIndices = new List<SearchIndex>();
-        public PowerDashboardFrame()
+        public PowerDashboardFrame(OWLOSEcosystemServiceClient EcosystemServiceClient)
         {
             InitializeComponent();
 
+            this.EcosystemServiceClient = EcosystemServiceClient;
+
+            EcosystemServiceClient.OnACDataReady += Ecosystem_OnACDataReady;
 
             Timer lifeCycleTimer2 = new Timer(1000)
             {
@@ -67,61 +74,116 @@ namespace OWLOSAirQuality.Frames
 
         }
 
-        private void LifeCycleTimer2_Elapsed(object sender, ElapsedEventArgs e)
+        private void Ecosystem_OnACDataReady(object sender, EventArgs e)
         {
             base.Dispatcher.Invoke(() =>
             {
-                if (float.IsNaN((float)TestRadialValueControl1.OriginalValue))
-                {
-                    TestRadialValueControl1.OriginalValue = 0;
-                }
-                //--- TEMP
-                if (Speed > 0)
-                {
-                    if (Direction > (float)TestRadialValueControl1.OriginalValue)
-                    {
-                        TestRadialValueControl1.OnValueChanged(null, new ValueEventArgs((float)(TestRadialValueControl1.OriginalValue + Speed)));
-                    }
-                    else
-                    {
-                        TestRadialValueControl1.OnValueChanged(null, new ValueEventArgs((float)Direction));
-                        float _direction = random.Next(100);
-                        if (_direction > Direction)
-                        {
-                            Speed = random.Next(100) / 10.0f + 1; //0..1
-                            Direction = _direction;
-                        }
-                        else
-                        {
-                            Speed = -(random.Next(100) / 10.0f) - 1; //0..1
-                            Direction = _direction;
-                        }
 
-                    }
-                }
-                else
+                try
                 {
-                    if (Direction > (float)TestRadialValueControl1.OriginalValue)
+                    _BackgroundControl.URL = EcosystemServiceClient.URL;
+                    ThingAirQuality acData = EcosystemServiceClient.dailyAirQulity[OWLOSEcosystemServiceClient.dailyAirQulitySize - 1];
+                    if (acData != null)
                     {
-                        TestRadialValueControl1.OnValueChanged(null, new ValueEventArgs((float)(TestRadialValueControl1.OriginalValue + Speed)));
+                        switch (acData.Status)
+                        {
+                            case ThingAirQualityStatus.Online:
+                                _BackgroundControl.Status = "[online] " + DateTime.Now;
+                                break;
+                            case ThingAirQualityStatus.OnlineWithError:
+                                _BackgroundControl.Status = "[online with error] " + DateTime.Now;
+                                break;
+                            case ThingAirQualityStatus.Offline:
+                                _BackgroundControl.Status = "[offline] " + DateTime.Now;
+                                break;
+                            default:
+                                _BackgroundControl.Status = "[error] " + DateTime.Now;
+                                break;
+                        }
+                        if (!SensorsJoined)
+                        {
+                            acData.OnDHT22tempChanged += DHT22TemperatureControl.OnValueChanged;
+
+                            acData.OnBMP280temperatureChanged += BMP280TemperatureControl.OnValueChanged;
+
+                            acData.OnCCS811tempChanged += CCS811TemperatureControl.OnValueChanged;
+
+
+                            SensorsJoined = true;
+                        }
                     }
                     else
                     {
-                        TestRadialValueControl1.OnValueChanged(null, new ValueEventArgs((float)Direction));
-                        float _direction = random.Next(100);
-                        if (_direction > Direction)
-                        {
-                            Speed = random.Next(100) / 10.0f + 1; //0..1
-                            Direction = _direction;
-                        }
-                        else
-                        {
-                            Speed = -(random.Next(100) / 10.0f) - 1; //0..1
-                            Direction = _direction;
-                        }
+                        _BackgroundControl.Status = "[data is null] " + DateTime.Now;
                     }
+                }
+                catch
+                {
+                    _BackgroundControl.Status = "[error] " + DateTime.Now;
                 }
             });
+        }
+
+
+
+        private void LifeCycleTimer2_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            /*
+         base.Dispatcher.Invoke(() =>
+         {
+
+             if (float.IsNaN((float)TestRadialValueControl1.OriginalValue))
+             {
+                 TestRadialValueControl1.OriginalValue = 0;
+             }
+             //--- TEMP
+             if (Speed > 0)
+             {
+                 if (Direction > (float)TestRadialValueControl1.OriginalValue)
+                 {
+                     TestRadialValueControl1.OnValueChanged(null, new ValueEventArgs((float)(TestRadialValueControl1.OriginalValue + Speed)));
+                 }
+                 else
+                 {
+                     TestRadialValueControl1.OnValueChanged(null, new ValueEventArgs((float)Direction));
+                     float _direction = random.Next(100);
+                     if (_direction > Direction)
+                     {
+                         Speed = random.Next(100) / 10.0f + 1; //0..1
+                         Direction = _direction;
+                     }
+                     else
+                     {
+                         Speed = -(random.Next(100) / 10.0f) - 1; //0..1
+                         Direction = _direction;
+                     }
+
+                 }
+             }
+             else
+             {
+                 if (Direction > (float)TestRadialValueControl1.OriginalValue)
+                 {
+                     TestRadialValueControl1.OnValueChanged(null, new ValueEventArgs((float)(TestRadialValueControl1.OriginalValue + Speed)));
+                 }
+                 else
+                 {
+                     TestRadialValueControl1.OnValueChanged(null, new ValueEventArgs((float)Direction));
+                     float _direction = random.Next(100);
+                     if (_direction > Direction)
+                     {
+                         Speed = random.Next(100) / 10.0f + 1; //0..1
+                         Direction = _direction;
+                     }
+                     else
+                     {
+                         Speed = -(random.Next(100) / 10.0f) - 1; //0..1
+                         Direction = _direction;
+                     }
+                 }
+             }
+         });
+             */
         }
 
         private void SearchTextBox_LostFocus(object sender, RoutedEventArgs e)

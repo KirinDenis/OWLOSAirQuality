@@ -160,7 +160,7 @@ namespace OWLOSAirQuality
             );
             ThingGrid.Children.Add(ThingsManagerControl.parentControl);
 
-            PowerDashboardFrame powerDashboardFrame = new PowerDashboardFrame();
+            PowerDashboardFrame powerDashboardFrame = new PowerDashboardFrame(EcosystemManager.OWLOSEcosystemServiceClients[1]);
             powerDashboardFrame.MainGrid.Children.Remove(powerDashboardFrame.ValueHolderGrid);
             powerDashboardFrame.Close();
             ThingsManagerControl.MainGrid.Children.Add(powerDashboardFrame.ValueHolderGrid);

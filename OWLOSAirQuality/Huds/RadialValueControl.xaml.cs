@@ -74,10 +74,13 @@ namespace OWLOSAirQuality.Huds
         private Path NormalPath;
         private Path HighWarningPath;
         private Path HighDangerPath;
+        
+        public RadialValueMode RadialMode { get; set; } = RadialValueMode.Percentage;
 
-        public RadialValueMode RadialMode = RadialValueMode.Percentage;
-        public double LowRangeValue = 0;
-        public double HighRangeValue = 0;
+        public double LowRangeValue { get; set; }  = 0;
+
+        public double HighRangeValue { get; set; } = 0;
+
 
         protected double ValuePathSize = 240;
 
@@ -324,10 +327,7 @@ namespace OWLOSAirQuality.Huds
             HighWarningPath.Stroke = (SolidColorBrush)App.Current.Resources["OWLOSWarning"];
 
             NormalPath = DrawPath(ValueRadius + 8, 2, 0, ValuePathSize);
-            NormalPath.Stroke = (SolidColorBrush)App.Current.Resources["OWLOSSuccess"];
-
-            
-
+            NormalPath.Stroke = (SolidColorBrush)App.Current.Resources["OWLOSSuccess"];            
         }
 
         private Path DrawPath(double radius, double stroke, double startAngle, double endAngle)
@@ -349,7 +349,15 @@ namespace OWLOSAirQuality.Huds
                 case RadialValueMode.Percentage:
                     return (ValuePathSize / 100.0f) * _value;
                 case RadialValueMode.Values:
-                    return (ValuePathSize / (HighRangeValue - LowRangeValue)) * _value;
+                    double range = HighRangeValue - LowRangeValue;
+                    if (LowRangeValue > 0)
+                    {
+                        return (ValuePathSize / range) * _value;
+                    }
+                    else
+                    {
+                        return (ValuePathSize / range) * _value;
+                    }
                 default: return 0;
             }
         }
