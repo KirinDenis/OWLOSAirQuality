@@ -38,18 +38,25 @@
 
         <Viewbox VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Grid x:Name="ValueGrid" Height="172" Width="172">
-                <TextBlock x:Name="_Caption" Text="--" HorizontalAlignment="Left" Margin="25,16" VerticalAlignment="Top" FontSize="16" Foreground="{DynamicResource OWLOSInfo}"/>
-                <TextBlock x:Name="_StatusText" Text="offline" HorizontalAlignment="Right" Margin="25,25" Padding="6,0" FontSize="8" VerticalAlignment="Top" Foreground="{DynamicResource OWLOSDark}" Background="{DynamicResource OWLOSWarningAlpha3}" />
-                <TextBlock x:Name="_SimbolValue" Text="℃" Margin="0,30,5,45" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="42" Foreground="{DynamicResource OWLOSInfoAlpha3}"/>
-                <TextBlock x:Name="_Value" Text="--" Margin="0,30,0,-30" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="42" Foreground="{DynamicResource OWLOSLight}"/>
-                <TextBlock x:Name="_UnitOfMeasure" Text="Celsius" TextWrapping="WrapWithOverflow" TextAlignment="Right" Margin="25,130,25,0" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="{DynamicResource OWLOSSecondary}"/>
+                <Grid x:Name="PathGrid" Margin="0,5,10,0" Height="172" Width="172">
+                    <TextBlock x:Name="LowDangerPathTextControl" Text="" FontSize="6" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource OWLOSDanger}"/>
+                    <TextBlock x:Name="LowWarningPathTextControl" Text="" FontSize="6" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource OWLOSWarning}"/>
+                    <TextBlock x:Name="NormalPathTextControl" Text="" FontSize="6" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource OWLOSInfo}"/>
+                    <TextBlock x:Name="HighWarningPathTextControl" Text="" FontSize="6" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource OWLOSWarning}"/>
+                    <TextBlock x:Name="HighDangerPathTextControl" Text="" FontSize="6" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource OWLOSDanger}"/>
+
+                    <TextBlock x:Name="LowRangeTextControl" Text="" FontSize="6" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource OWLOSInfo}"/>
+                    <TextBlock x:Name="HighRangeTextControl" Text="" FontSize="6" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource OWLOSInfo}"/>
+
+                </Grid>
+
+                <TextBlock x:Name="_Caption" Text="--" HorizontalAlignment="Left" Margin="25,10" VerticalAlignment="Top" FontSize="16" Foreground="{DynamicResource OWLOSInfo}"/>
+                <TextBlock x:Name="_StatusText" Text="offline" HorizontalAlignment="Right" Margin="25,16" Padding="6,0" FontSize="8" VerticalAlignment="Top" Foreground="{DynamicResource OWLOSDark}" Background="{DynamicResource OWLOSWarningAlpha3}" />
+                <TextBlock x:Name="_SimbolValue" Text="℃" Margin="0,45,5,45" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="42" Foreground="{DynamicResource OWLOSInfoAlpha3}"/>
+                <TextBlock x:Name="_Value" Text="--" Margin="0,50,0,-30" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="42" Foreground="{DynamicResource OWLOSLight}"/>
+                <TextBlock x:Name="_UnitOfMeasure" Text="Celsius" TextWrapping="WrapWithOverflow" TextAlignment="Right" Margin="25,16" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="{DynamicResource OWLOSSecondary}"/>
                 <TextBlock x:Name="_Description" Text="" HorizontalAlignment="Left" Margin="25,16" VerticalAlignment="Bottom" Foreground="{DynamicResource OWLOSWarning}"/>
 
-                <TextBlock x:Name="LowDangerPathTextControl" Text="" FontSize="6" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource OWLOSDanger}"/>
-                <TextBlock x:Name="LowWarningPathTextControl" Text="" FontSize="6" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource OWLOSWarning}"/>
-                <TextBlock x:Name="NormalPathTextControl" Text="" FontSize="6" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource OWLOSSuccess}"/>
-                <TextBlock x:Name="HighWarningPathTextControl" Text="" FontSize="6" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource OWLOSWarning}"/>
-                <TextBlock x:Name="HighDangerPathTextControl" Text="" FontSize="6" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{DynamicResource OWLOSDanger}"/>
             </Grid>
         </Viewbox>
 

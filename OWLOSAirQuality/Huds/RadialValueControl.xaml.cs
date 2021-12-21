@@ -63,6 +63,10 @@ namespace OWLOSAirQuality.Huds
         private double ValueRadius = 0.0f;
 
         private Path LowDangerPath;
+
+        private PathTextControl LowRangePathText;
+        private PathTextControl HighRangePathText;
+
         private PathTextControl LowDangerPathText;
         private PathTextControl LowWarningPathText;
         private PathTextControl NormalPathText;
@@ -96,6 +100,19 @@ namespace OWLOSAirQuality.Huds
             }
         }
 
+        public string Simbol
+        {
+            get => _SimbolValue != null ? _SimbolValue.Text : string.Empty;
+            set
+            {
+                if (_SimbolValue != null)
+                {
+                    _SimbolValue.Text = value;
+                }
+            }
+        }
+
+
         public string Value
         {
             get => _Value != null ? _Value.Text : string.Empty;
@@ -103,7 +120,7 @@ namespace OWLOSAirQuality.Huds
             {
                 if (_Value != null)
                 {
-                    SolidColorBrush trapFill =  new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSInfo"]).Color);
+                    SolidColorBrush trapFill =  new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSInfo"]).Color);                    
 
                     if (!string.IsNullOrEmpty(value))
                     {
@@ -119,41 +136,55 @@ namespace OWLOSAirQuality.Huds
 
                         if (!float.IsNaN((float)OriginalValue))
                         {
-                            DataPath.Data = HudLibrary.DrawArc(ValueGrid.Width / 2.0f, ValueGrid.Height / 2.0f, ValueRadius, 0, ValueToAngle((double)OriginalValue));
-
-                            if (!float.IsNaN(LowWarningTrap))
+                            if ((OriginalValue > HighRangeValue) || (OriginalValue < LowRangeValue))
                             {
-                                if (OriginalValue <= LowWarningTrap)
-                                {
-                                    trapFill = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSWarning"]).Color);
-                                }
+                                DataPath.Data = HudLibrary.DrawArc(ValueGrid.Width / 2.0f, ValueGrid.Height / 2.0f, ValueRadius, 0, ValueToAngle(LowRangeValue));
+                                trapFill = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSDangerAlpha3"]).Color);
+                                Status = NetworkStatus.Erorr;
                             }
-
-                            if (!float.IsNaN(LowDangerTrap))
+                            else
                             {
-                                if (OriginalValue <= LowDangerTrap)
+                                DataPath.Data = HudLibrary.DrawArc(ValueGrid.Width / 2.0f, ValueGrid.Height / 2.0f, ValueRadius, 0, ValueToAngle((double)OriginalValue));
+
+                                if (!float.IsNaN(LowWarningTrap))
                                 {
-                                    trapFill = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSDanger"]).Color);
+                                    if (OriginalValue <= LowWarningTrap)
+                                    {
+                                        trapFill = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSWarning"]).Color);
+                                    }
                                 }
-                            }
 
-                            if (!float.IsNaN(HighWarningTrap))
-                            {
-                                if (OriginalValue >= HighWarningTrap)
+                                if (!float.IsNaN(LowDangerTrap))
                                 {
-                                    trapFill = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSWarning"]).Color);
+                                    if (OriginalValue <= LowDangerTrap)
+                                    {
+                                        trapFill = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSDanger"]).Color);
+                                    }
                                 }
-                            }
 
-                            if (!float.IsNaN(HighDangerTrap))
-                            {
-                                if (OriginalValue >= HighDangerTrap)
+                                if (!float.IsNaN(HighWarningTrap))
                                 {
-                                    trapFill = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSDanger"]).Color);
+                                    if (OriginalValue >= HighWarningTrap)
+                                    {
+                                        trapFill = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSWarning"]).Color);
+                                    }
+                                }
+
+                                if (!float.IsNaN(HighDangerTrap))
+                                {
+                                    if (OriginalValue >= HighDangerTrap)
+                                    {
+                                        trapFill = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSDanger"]).Color);
+                                    }
                                 }
                             }
                         }
+                        else
+                        {
+                            trapFill = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSDanger"]).Color);
+                        }
                         _Value.Foreground = trapFill;
+                        DataPath.Stroke = trapFill;
                     }
                     return;
                 }
@@ -306,34 +337,38 @@ namespace OWLOSAirQuality.Huds
             InitializeComponent();
             Status = NetworkStatus.Offline;
 
-            ValueRadius = ValueGrid.Height / 4.7f;
+            ValueRadius = ValueGrid.Height / 3.7f;
 
             DataBackrgoundPath = DrawPath(ValueRadius, 8, 0, ValuePathSize);
             DataBackrgoundPath.Stroke = (SolidColorBrush)App.Current.Resources["OWLOSInfoAlpha2"];
+            DataBackrgoundPath.StrokeDashArray = new DoubleCollection() { 0.1f };
 
             DataPath = DrawPath(ValueRadius, 8, 0, 0);
-            DataPath.Stroke = (SolidColorBrush)App.Current.Resources["OWLOSInfo"];
+            DataPath.Stroke = (SolidColorBrush)App.Current.Resources["OWLOSInfo"];            
+            DataPath.StrokeDashArray = new DoubleCollection() { 0.1f } ;
 
             LowDangerPath = DrawPath(ValueRadius + 8, 2, 0, 0);
-            LowDangerPath.Stroke = (SolidColorBrush)App.Current.Resources["OWLOSDanger"];
+            LowDangerPath.Stroke = (SolidColorBrush)App.Current.Resources["OWLOSDangerAlpha3"];
            
             LowWarningPath = DrawPath(ValueRadius + 8, 2, 0, 0);
-            LowWarningPath.Stroke = (SolidColorBrush)App.Current.Resources["OWLOSWarning"];
+            LowWarningPath.Stroke = (SolidColorBrush)App.Current.Resources["OWLOSWarningAlpha3"];
 
             HighDangerPath = DrawPath(ValueRadius + 8, 2, 0, 0);
-            HighDangerPath.Stroke = (SolidColorBrush)App.Current.Resources["OWLOSDanger"];
+            HighDangerPath.Stroke = (SolidColorBrush)App.Current.Resources["OWLOSDangerAlpha3"];
 
             HighWarningPath = DrawPath(ValueRadius + 8, 2, 0, 0);
-            HighWarningPath.Stroke = (SolidColorBrush)App.Current.Resources["OWLOSWarning"];
+            HighWarningPath.Stroke = (SolidColorBrush)App.Current.Resources["OWLOSWarningAlpha3"];
 
             NormalPath = DrawPath(ValueRadius + 8, 2, 0, ValuePathSize);
-            NormalPath.Stroke = (SolidColorBrush)App.Current.Resources["OWLOSSuccess"];            
+            NormalPath.Stroke = (SolidColorBrush)App.Current.Resources["OWLOSInfoAlpha3"];
+
+
         }
 
         private Path DrawPath(double radius, double stroke, double startAngle, double endAngle)
         {
             Path targetPath = new Path();            
-            ValueGrid.Children.Add(targetPath);
+            PathGrid.Children.Add(targetPath);
             targetPath.Data = HudLibrary.DrawArc(ValueGrid.Width / 2.0f, ValueGrid.Height / 2.0f, radius, startAngle, endAngle);
             targetPath.RenderTransform = new RotateTransform(-(180 - (360 - ValuePathSize) / 2.0f));
             targetPath.RenderTransformOrigin = new Point(0.5f, 0.5f);
@@ -341,6 +376,23 @@ namespace OWLOSAirQuality.Huds
             return targetPath;
         }
 
+        /// <summary>
+        /// Calculate angle from current value, for both - percentage and free value ranges modes.
+        /// The negative value calculation:
+        /// (for full angle 270 degrees)
+        /// 
+        /// the range 0..50, the angle 270 / 50 * current_value 
+        /// if the range -50..50, what is the angle?
+        /// 
+        /// -50 - 0 degrees
+        ///  0  - 270 / 2 degrees
+        ///  50 - 270 degrees 
+        /// 
+        ///  270 / 2 + (270 / 50 - - 50) * 2.7
+        /// 
+        /// </summary>
+        /// <param name="_value"></param>
+        /// <returns></returns>
         private double ValueToAngle(double _value)
         {
             //Angle 0..ValuePathSize <=> 0..100%
@@ -356,7 +408,7 @@ namespace OWLOSAirQuality.Huds
                     }
                     else
                     {
-                        return (ValuePathSize / range) * _value;
+                        return ValuePathSize / 2 + ((ValuePathSize / range) * _value);
                     }
                 default: return 0;
             }
@@ -364,6 +416,9 @@ namespace OWLOSAirQuality.Huds
 
         private void RecalculateTrapsPath()
         {
+
+            //Danger, Warning, Normal
+
             LowDangerPath.Data = HudLibrary.DrawArc(ValueGrid.Width / 2.0f, ValueGrid.Height / 2.0f, ValueRadius + 8, 0, ValueToAngle(LowDangerTrap));
 
             if (LowDangerPathText == null)
@@ -415,6 +470,22 @@ namespace OWLOSAirQuality.Huds
                     HighDangerPathText = new PathTextControl(ValueGrid.Width / 2.0f, ValueGrid.Height / 2.0f, ValueRadius + 18, ValueToAngle(HighDangerTrap) - (180 - (360 - ValuePathSize) / 2.0f), -(180 - (360 - ValuePathSize) / 2.0f), HighDangerPathTextControl);
                     HighDangerPathText.Rotate(ValueToAngle(HighDangerTrap)-(180 - (360 - ValuePathSize) / 2.0f));
                 }
+
+                //Low - High ranges 
+                if (LowRangePathText == null)
+                {
+                    LowRangeTextControl.Text = LowRangeValue.ToString();
+                    LowRangePathText = new PathTextControl(ValueGrid.Width / 2.0f, ValueGrid.Height / 2.0f, ValueRadius - 3, -(180 - (360 - ValuePathSize) / 2.0f), -(180 - (360 - ValuePathSize) / 2.0f), LowRangeTextControl);
+                    LowRangePathText.Rotate(-(180 - (360 - ValuePathSize) / 2.0f));
+                }
+
+                if (HighRangePathText == null)
+                {
+                    HighRangeTextControl.Text = HighRangeValue.ToString();
+                    HighRangePathText = new PathTextControl(ValueGrid.Width / 2.0f, ValueGrid.Height / 2.0f, ValueRadius - 3, ValuePathSize - (180 - (360 - ValuePathSize) / 2.0f), -(180 - (360 - ValuePathSize) / 2.0f), HighRangeTextControl);
+                    HighRangePathText.Rotate(ValuePathSize - 10 - (180 - (360 - ValuePathSize) / 2.0f));
+                }
+
             }
         }
 
@@ -474,9 +545,9 @@ namespace OWLOSAirQuality.Huds
                                 {
                                     if (_OriginalValue >= OriginalValue)
                                     {
-                                        OriginalValue = _OriginalValue;
-                                        Value = string.Format("{0:0.##}", OriginalValue);
                                         Status = NetworkStatus.Online;
+                                        OriginalValue = _OriginalValue;
+                                        Value = string.Format("{0:0.##}", OriginalValue);                                        
                                         valueTimer.Stop();
                                         return;
                                     }
