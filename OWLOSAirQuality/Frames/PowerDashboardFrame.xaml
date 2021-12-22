@@ -54,18 +54,65 @@
                         </StackPanel>
 
                         <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,32,0,-16">
-                            <huds:RadialValueControl x:Name="KW1Control" RadialMode="Values" Simbol="V" LowRangeValue="140" HighRangeValue="260" LowDangerTrap="180" LowWarningTrap="200" HighWarningTrap="230" HighDangerTrap="240" Width="172" Height="172" Caption="Phase 1"  Description="AC" UnitOfMeasure="Volts"/>
-                            <huds:RadialValueControl x:Name="KW2Control" RadialMode="Values" Simbol="V" LowRangeValue="140" HighRangeValue="260" LowDangerTrap="12" LowWarningTrap="20" HighWarningTrap="29" HighDangerTrap="35" Width="172" Height="172" Caption="Phase 2"  Description="AC" UnitOfMeasure="Volts"/>
-                            <huds:RadialValueControl x:Name="KW3Control" RadialMode="Values" Simbol="V" LowRangeValue="140" HighRangeValue="260" LowDangerTrap="-10" LowWarningTrap="0" HighWarningTrap="29" HighDangerTrap="35" Width="172" Height="172" Caption="Phase 3"  Description="AC" UnitOfMeasure="Volts"/>
+                            <huds:RadialValueControl x:Name="KW1Control" RadialMode="Values" Simbol="V" LowRangeValue="140" HighRangeValue="260" LowDangerTrap="160" LowWarningTrap="170" HighWarningTrap="230" HighDangerTrap="240" Width="172" Height="172" Caption="Phase 1"  Description="AC" UnitOfMeasure="Volts"/>
+                            <huds:RadialValueControl x:Name="KW2Control" RadialMode="Values" Simbol="V" LowRangeValue="140" HighRangeValue="260" LowDangerTrap="160" LowWarningTrap="170" HighWarningTrap="230" HighDangerTrap="240" Width="172" Height="172" Caption="Phase 2"  Description="AC" UnitOfMeasure="Volts"/>
+                            <huds:RadialValueControl x:Name="KW3Control" RadialMode="Values" Simbol="V" LowRangeValue="140" HighRangeValue="260" LowDangerTrap="160" LowWarningTrap="170" HighWarningTrap="230" HighDangerTrap="240" Width="172" Height="172" Caption="Phase 3"  Description="AC" UnitOfMeasure="Volts"/>
                         </WrapPanel>
 
                         <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,16,0,-12">
-                            <huds:ValueControl x:Name="KW1ValueControl" Width="172" Height="172" Caption="Phase 1" Description="AC" HighWarningTrap="25" HighDangerTrap="28" LowWarningTrap="23" LowDangerTrap="20.0" UnitOfMeasure="Volts"/>
-                            <huds:ValueControl x:Name="KW2ValueControl" Width="172" Height="172" Caption="Phase 2" Description="AC" HighWarningTrap="25" HighDangerTrap="28" LowWarningTrap="23" LowDangerTrap="20.0" UnitOfMeasure="Volts"/>
-                            <huds:ValueControl x:Name="KW3ValueControl" Width="172" Height="172" Caption="Phase 3" Description="AC" HighWarningTrap="25" HighDangerTrap="28" LowWarningTrap="23" LowDangerTrap="20.0" UnitOfMeasure="Volts"/>
+                            <huds:ValueControl x:Name="KW1ValueControl" Width="172" Height="172" Caption="Phase 1" Description="AC" LowDangerTrap="160" LowWarningTrap="170" HighWarningTrap="230" HighDangerTrap="240" UnitOfMeasure="Volts"/>
+                            <huds:ValueControl x:Name="KW2ValueControl" Width="172" Height="172" Caption="Phase 2" Description="AC" LowDangerTrap="160" LowWarningTrap="170" HighWarningTrap="230" HighDangerTrap="240" UnitOfMeasure="Volts"/>
+                            <huds:ValueControl x:Name="KW3ValueControl" Width="172" Height="172" Caption="Phase 3" Description="AC" LowDangerTrap="160" LowWarningTrap="170" HighWarningTrap="230" HighDangerTrap="240" UnitOfMeasure="Volts"/>
                         </WrapPanel>
 
                     </Grid>
+
+                    <Grid x:Name="KWGrid2" Grid.Column="2">
+                        <Border BorderBrush="{DynamicResource OWLOSSecondaryAlpha1}" BorderThickness="0,0,1,2" />
+                        <StackPanel Orientation="Horizontal" Margin="6,6,0,0" HorizontalAlignment="Left"  VerticalAlignment="Top">
+                            <TextBlock Text="AC voltage " HorizontalAlignment="Left"  VerticalAlignment="Bottom" FontSize="25" Foreground="{DynamicResource OWLOSPrimary}" />
+                            <TextBlock Text="| Phases 1,2,3 |" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Margin="6,0,0,4" FontSize="16" Foreground="{DynamicResource OWLOSWarning}" />
+                        </StackPanel>
+
+                        <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,32,0,-16">
+                            <huds:RadialValueControl x:Name="KW12Control" RadialMode="Values" Simbol="V" LowRangeValue="140" HighRangeValue="260" LowDangerTrap="160" LowWarningTrap="170" HighWarningTrap="230" HighDangerTrap="240" Width="172" Height="172" Caption="Phase 1"  Description="AC" UnitOfMeasure="Volts"/>
+                            <huds:RadialValueControl x:Name="KW22Control" RadialMode="Values" Simbol="V" LowRangeValue="140" HighRangeValue="260" LowDangerTrap="160" LowWarningTrap="170" HighWarningTrap="230" HighDangerTrap="240" Width="172" Height="172" Caption="Phase 2"  Description="AC" UnitOfMeasure="Volts"/>
+                            <huds:RadialValueControl x:Name="KW32Control" RadialMode="Values" Simbol="V" LowRangeValue="140" HighRangeValue="260" LowDangerTrap="160" LowWarningTrap="170" HighWarningTrap="230" HighDangerTrap="240" Width="172" Height="172" Caption="Phase 3"  Description="AC" UnitOfMeasure="Volts"/>
+                        </WrapPanel>
+
+                        <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,16,0,-12">
+                            <huds:ValueControl x:Name="KW12ValueControl" Width="172" Height="172" Caption="Phase 1" Description="AC" LowDangerTrap="160" LowWarningTrap="170" HighWarningTrap="230" HighDangerTrap="240" UnitOfMeasure="Volts"/>
+                            <huds:ValueControl x:Name="KW22ValueControl" Width="172" Height="172" Caption="Phase 2" Description="AC" LowDangerTrap="160" LowWarningTrap="170" HighWarningTrap="230" HighDangerTrap="240" UnitOfMeasure="Volts"/>
+                            <huds:ValueControl x:Name="KW32ValueControl" Width="172" Height="172" Caption="Phase 3" Description="AC" LowDangerTrap="160" LowWarningTrap="170" HighWarningTrap="230" HighDangerTrap="240" UnitOfMeasure="Volts"/>
+                        </WrapPanel>
+
+                    </Grid>
+
+
+                    <Viewbox Grid.Row="1" HorizontalAlignment="Center" Margin="26,0">
+                        <huds:GraphControl x:Name="ValueGraph1" Width="2000" Height="500"/>
+                    </Viewbox>
+
+                    <Viewbox Grid.Row="2" HorizontalAlignment="Center" Margin="26,0">
+                        <huds:GraphControl x:Name="ValueGraph2" Width="2000" Height="500"/>
+                    </Viewbox>
+
+                    <Viewbox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Margin="26,0">
+                        <huds:GraphControl x:Name="ValueGraph3" Width="2000" Height="500"/>
+                    </Viewbox>
+
+                    <Viewbox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Margin="26,0">
+                        <huds:GraphControl x:Name="ValueGraph4" Width="2000" Height="500"/>
+                    </Viewbox>
+
+                    <Viewbox Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Margin="26,0">
+                        <huds:GraphControl x:Name="ValueGraph5" Width="2000" Height="500"/>
+                    </Viewbox>
+
+                    <Viewbox Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Margin="26,0">
+                        <huds:GraphControl x:Name="ValueGraph6" Width="2000" Height="500"/>
+                    </Viewbox>
+
 
 
 

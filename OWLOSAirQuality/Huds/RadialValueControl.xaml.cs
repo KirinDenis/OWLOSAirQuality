@@ -389,6 +389,12 @@ namespace OWLOSAirQuality.Huds
         ///  50 - 270 degrees 
         /// 
         ///  270 / 2 + (270 / 50 - - 50) * 2.7
+        /// -------------------
+        /// positive:
+        /// 50..100
+        /// 50 - 0 degrees
+        /// 75 - 270 /2 degrees
+        /// 100- 270 degrees
         /// 
         /// </summary>
         /// <param name="_value"></param>
@@ -404,7 +410,7 @@ namespace OWLOSAirQuality.Huds
                     double range = HighRangeValue - LowRangeValue;
                     if (LowRangeValue > 0)
                     {
-                        return (ValuePathSize / range) * _value;
+                        return (ValuePathSize / range) * (_value - LowRangeValue);
                     }
                     else
                     {

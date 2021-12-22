@@ -44,6 +44,7 @@ using System.Collections.Generic;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace OWLOSAirQuality.Frames
 {
@@ -52,18 +53,34 @@ namespace OWLOSAirQuality.Frames
         private readonly OWLOSEcosystemServiceClient EcosystemServiceClient;
         private bool SensorsJoined = false;
 
-        //private Random random = new Random();
-        //private double Direction = 10.0f;
-        //private double Speed = 4.0f;
+        private Random random = new Random();
+        private double Direction = 10.0f;
+        private double Speed = 4.0f;
 
         private readonly List<SearchIndex> SearchIndices = new List<SearchIndex>();
+
+        private bool timerBusy = false;
         public PowerDashboardFrame(OWLOSEcosystemServiceClient EcosystemServiceClient)
         {
             InitializeComponent();
 
             this.EcosystemServiceClient = EcosystemServiceClient;
-
             EcosystemServiceClient.OnACDataReady += Ecosystem_OnACDataReady;
+
+            // ValueGraph.GraphPath.Fill = (SolidColorBrush)App.Current.Resources["OWLOSInfoAlpha3"];
+            ValueGraph1.GraphPath.Fill = new LinearGradientBrush((Color)App.Current.Resources["OWLOSInfoColorAlpha3"], (Color)App.Current.Resources["OWLOSInfoColorAlpha4"], new Point(0.5, 0), new Point(0.5, 1));
+            ValueGraph2.GraphPath.Fill = new LinearGradientBrush((Color)App.Current.Resources["OWLOSInfoColorAlpha3"], (Color)App.Current.Resources["OWLOSInfoColorAlpha4"], new Point(0.5, 0), new Point(0.5, 1));
+            ValueGraph3.GraphPath.Fill = new LinearGradientBrush((Color)App.Current.Resources["OWLOSWarningColorAlpha3"], (Color)App.Current.Resources["OWLOSWarningColorAlpha4"], new Point(0.5, 0), new Point(0.5, 1));
+            ValueGraph4.GraphPath.Fill = new LinearGradientBrush((Color)App.Current.Resources["OWLOSDangerColorAlpha3"], (Color)App.Current.Resources["OWLOSDangerColorAlpha4"], new Point(0.5, 0), new Point(0.5, 1));
+
+            Timer lifeCycleTimer = new Timer(10000)
+            {
+                AutoReset = true
+            };
+            lifeCycleTimer.Elapsed += new ElapsedEventHandler(OnLifeCycleTimer);
+            lifeCycleTimer.Start();
+            OnLifeCycleTimer(null, null);
+
 
             Timer lifeCycleTimer2 = new Timer(1000)
             {
@@ -103,10 +120,13 @@ namespace OWLOSAirQuality.Frames
                         if (!SensorsJoined)
                         {
                             acData.OnDHT22tempChanged += DHT22TemperatureControl.OnValueChanged;
+                            acData.OnDHT22tempChanged += DHT22TemperatureValueControl.OnValueChanged;
 
                             acData.OnBMP280temperatureChanged += BMP280TemperatureControl.OnValueChanged;
+                            acData.OnBMP280temperatureChanged += BMP280TemperatureValueControl.OnValueChanged;
 
                             acData.OnCCS811tempChanged += CCS811TemperatureControl.OnValueChanged;
+                            acData.OnCCS811tempChanged += CCS811TemperatureValueControl.OnValueChanged;
 
 
                             SensorsJoined = true;
@@ -128,62 +148,180 @@ namespace OWLOSAirQuality.Frames
 
         private void LifeCycleTimer2_Elapsed(object sender, ElapsedEventArgs e)
         {
-            /*
-         base.Dispatcher.Invoke(() =>
-         {
 
-             if (float.IsNaN((float)TestRadialValueControl1.OriginalValue))
-             {
-                 TestRadialValueControl1.OriginalValue = 0;
-             }
-             //--- TEMP
-             if (Speed > 0)
-             {
-                 if (Direction > (float)TestRadialValueControl1.OriginalValue)
-                 {
-                     TestRadialValueControl1.OnValueChanged(null, new ValueEventArgs((float)(TestRadialValueControl1.OriginalValue + Speed)));
-                 }
-                 else
-                 {
-                     TestRadialValueControl1.OnValueChanged(null, new ValueEventArgs((float)Direction));
-                     float _direction = random.Next(100);
-                     if (_direction > Direction)
-                     {
-                         Speed = random.Next(100) / 10.0f + 1; //0..1
-                         Direction = _direction;
-                     }
-                     else
-                     {
-                         Speed = -(random.Next(100) / 10.0f) - 1; //0..1
-                         Direction = _direction;
-                     }
+            base.Dispatcher.Invoke(() =>
+            {
 
-                 }
-             }
-             else
-             {
-                 if (Direction > (float)TestRadialValueControl1.OriginalValue)
-                 {
-                     TestRadialValueControl1.OnValueChanged(null, new ValueEventArgs((float)(TestRadialValueControl1.OriginalValue + Speed)));
-                 }
-                 else
-                 {
-                     TestRadialValueControl1.OnValueChanged(null, new ValueEventArgs((float)Direction));
-                     float _direction = random.Next(100);
-                     if (_direction > Direction)
-                     {
-                         Speed = random.Next(100) / 10.0f + 1; //0..1
-                         Direction = _direction;
-                     }
-                     else
-                     {
-                         Speed = -(random.Next(100) / 10.0f) - 1; //0..1
-                         Direction = _direction;
-                     }
-                 }
-             }
-         });
-             */
+                if (float.IsNaN((float)KW1Control.OriginalValue))
+                {
+                    KW1Control.OriginalValue = 0;
+                    KW1ValueControl.OnValueChanged(null, new ValueEventArgs((float)0));
+                }
+                //--- TEMP
+                if (Speed > 0)
+                {
+                    if (Direction > (float)KW1Control.OriginalValue)
+                    {
+                        KW1Control.OnValueChanged(null, new ValueEventArgs((float)(KW1Control.OriginalValue + Speed) + 150));
+                        KW1ValueControl.OnValueChanged(null, new ValueEventArgs((float)(KW1Control.OriginalValue + Speed) + 150));
+                    }
+                    else
+                    {
+                        KW1Control.OnValueChanged(null, new ValueEventArgs((float)Direction + 150));
+                        KW1ValueControl.OnValueChanged(null, new ValueEventArgs((float)Direction + 150));
+                        float _direction = random.Next(100);
+                        if (_direction > Direction)
+                        {
+                            Speed = random.Next(100) / 20.0f + 1; //0..1
+                            Direction = _direction;
+                        }
+                        else
+                        {
+                            Speed = -(random.Next(100) / 20.0f) - 1; //0..1
+                            Direction = _direction;
+                        }
+
+                    }
+                }
+                else
+                {
+                    if (Direction > (float)KW1Control.OriginalValue)
+                    {
+                        KW1Control.OnValueChanged(null, new ValueEventArgs((float)(KW1Control.OriginalValue + Speed) + 150));
+                        KW1ValueControl.OnValueChanged(null, new ValueEventArgs((float)(KW1Control.OriginalValue + Speed) + 150));
+                    }
+                    else
+                    {
+                        KW1Control.OnValueChanged(null, new ValueEventArgs((float)Direction + 150));
+                        KW1ValueControl.OnValueChanged(null, new ValueEventArgs((float)Direction + 150));
+                        float _direction = random.Next(100);
+                        if (_direction > Direction)
+                        {
+                            Speed = random.Next(100) / 20.0f + 1; //0..1
+                            Direction = _direction;
+                        }
+                        else
+                        {
+                            Speed = -(random.Next(200) / 10.0f) - 1; //0..1
+                            Direction = _direction;
+                        }
+                    }
+                }
+            });
+            //Second
+            if (float.IsNaN((float)KW2Control.OriginalValue))
+            {
+                KW2Control.OriginalValue = 0;
+                KW2ValueControl.OnValueChanged(null, new ValueEventArgs((float)0));
+            }
+            //--- TEMP
+            if (Speed > 0)
+            {
+                if (Direction > (float)KW2Control.OriginalValue)
+                {
+                    KW2Control.OnValueChanged(null, new ValueEventArgs((float)(KW2Control.OriginalValue + Speed) + 150));
+                    KW2ValueControl.OnValueChanged(null, new ValueEventArgs((float)(KW2Control.OriginalValue + Speed) + 150));
+                }
+                else
+                {
+                    KW2Control.OnValueChanged(null, new ValueEventArgs((float)Direction + 150));
+                    KW2ValueControl.OnValueChanged(null, new ValueEventArgs((float)Direction + 150));
+                    float _direction = random.Next(100);
+                    if (_direction > Direction)
+                    {
+                        Speed = random.Next(100) / 20.0f + 1; //0..1
+                        Direction = _direction;
+                    }
+                    else
+                    {
+                        Speed = -(random.Next(100) / 20.0f) - 1; //0..1
+                        Direction = _direction;
+                    }
+
+                }
+            }
+            else
+            {
+                if (Direction > (float)KW2Control.OriginalValue)
+                {
+                    KW2Control.OnValueChanged(null, new ValueEventArgs((float)(KW2Control.OriginalValue + Speed) + 150));
+                    KW2ValueControl.OnValueChanged(null, new ValueEventArgs((float)(KW2Control.OriginalValue + Speed) + 150));
+                }
+                else
+                {
+                    KW2Control.OnValueChanged(null, new ValueEventArgs((float)Direction + 150));
+                    KW2ValueControl.OnValueChanged(null, new ValueEventArgs((float)Direction + 150));
+                    float _direction = random.Next(100);
+                    if (_direction > Direction)
+                    {
+                        Speed = random.Next(100) / 20.0f + 1; //0..1
+                        Direction = _direction;
+                    }
+                    else
+                    {
+                        Speed = -(random.Next(200) / 10.0f) - 1; //0..1
+                        Direction = _direction;
+                    }
+                }
+            }
+            //Thirty 
+            if (float.IsNaN((float)KW3Control.OriginalValue))
+            {
+                KW3Control.OriginalValue = 0;
+                KW3ValueControl.OnValueChanged(null, new ValueEventArgs((float)0));
+            }
+            //--- TEMP
+            if (Speed > 0)
+            {
+                if (Direction > (float)KW3Control.OriginalValue)
+                {
+                    KW3Control.OnValueChanged(null, new ValueEventArgs((float)(KW3Control.OriginalValue + Speed) + 150));
+                    KW3ValueControl.OnValueChanged(null, new ValueEventArgs((float)(KW3Control.OriginalValue + Speed) + 150));
+                }
+                else
+                {
+                    KW3Control.OnValueChanged(null, new ValueEventArgs((float)Direction + 150));
+                    KW3ValueControl.OnValueChanged(null, new ValueEventArgs((float)Direction + 150));
+                    float _direction = random.Next(100);
+                    if (_direction > Direction)
+                    {
+                        Speed = random.Next(100) / 20.0f + 1; //0..1
+                        Direction = _direction;
+                    }
+                    else
+                    {
+                        Speed = -(random.Next(100) / 20.0f) - 1; //0..1
+                        Direction = _direction;
+                    }
+
+                }
+            }
+            else
+            {
+                if (Direction > (float)KW3Control.OriginalValue)
+                {
+                    KW3Control.OnValueChanged(null, new ValueEventArgs((float)(KW3Control.OriginalValue + Speed) + 150));
+                    KW3ValueControl.OnValueChanged(null, new ValueEventArgs((float)(KW3Control.OriginalValue + Speed) + 150));
+                }
+                else
+                {
+                    KW3Control.OnValueChanged(null, new ValueEventArgs((float)Direction + 150));
+                    KW3ValueControl.OnValueChanged(null, new ValueEventArgs((float)Direction + 150));
+                    float _direction = random.Next(100);
+                    if (_direction > Direction)
+                    {
+                        Speed = random.Next(100) / 20.0f + 1; //0..1
+                        Direction = _direction;
+                    }
+                    else
+                    {
+                        Speed = -(random.Next(200) / 10.0f) - 1; //0..1
+                        Direction = _direction;
+                    }
+                }
+            }
+
+
         }
 
         private void SearchTextBox_LostFocus(object sender, RoutedEventArgs e)
@@ -226,5 +364,34 @@ namespace OWLOSAirQuality.Frames
             }
         }
 
+        private async void OnLifeCycleTimer(object source, ElapsedEventArgs e)
+        {
+            if (timerBusy)
+            {
+                return;
+            }
+            timerBusy = true;
+
+            if (EcosystemServiceClient == null)
+            {
+                timerBusy = false;
+                return;
+            }
+
+            ThingAirQualityHistoryData thingAirQualities;
+            thingAirQualities = EcosystemServiceClient.GetOneHourData(0);
+
+            base.Dispatcher.Invoke(() =>
+            {
+                ValueGraph1.Update(thingAirQualities.DHT22temp, thingAirQualities.QueryTime, thingAirQualities.Statuses);
+                ValueGraph2.Update(thingAirQualities.DHT22hum, thingAirQualities.QueryTime, thingAirQualities.Statuses);
+                ValueGraph3.Update(thingAirQualities.BMP280pressure, thingAirQualities.QueryTime, thingAirQualities.Statuses);
+                ValueGraph4.Update(thingAirQualities.CCS811CO2, thingAirQualities.QueryTime, thingAirQualities.Statuses);
+                ValueGraph5.Update(thingAirQualities.BMP280temperature, thingAirQualities.QueryTime, thingAirQualities.Statuses);
+                ValueGraph6.Update(thingAirQualities.ADS1X15MQ135, thingAirQualities.QueryTime, thingAirQualities.Statuses);
+
+            });
+            timerBusy = false;
+        }
     }
 }
