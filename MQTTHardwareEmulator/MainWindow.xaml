@@ -1,0 +1,46 @@
+﻿<Window x:Class="WpfApp1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1"
+        mc:Ignorable="d"
+        Title="MQTT no hardware emulator" Height="450" Width="800">
+    <Grid>
+        
+        <StackPanel>
+            <Button x:Name="bStatus" Content="RECIEVE STATUS" Margin="2,0" Click="bStatus_Click" />
+            <TextBlock Text="SET topic (UX Side):" Margin="5,10" FontWeight="Bold" />
+            <StackPanel Orientation="Horizontal" Height="25" VerticalAlignment="Top">
+
+                <TextBlock Text="Lamp 1" FontWeight="Bold" VerticalAlignment="Center" Margin="10,0"/>
+                <TextBlock x:Name="Lamp1Text" Text="-" VerticalAlignment="Center"/>
+                <Button x:Name="bl1on" Content="SET ON" Margin="2,0" Click="bl1on_Click"/>
+                <Button x:Name="bl1off" Content="SET OFF " Margin="2,0" Click="bl1off_Click"/>
+
+                <TextBlock Text="Lamp 2" FontWeight="Bold" VerticalAlignment="Center" Margin="10,0"/>
+                <TextBlock x:Name="Lamp2Text" Text="-" VerticalAlignment="Center"/>
+                <Button x:Name="bl2on" Content="SET ON" Margin="2,0" Click="bl2on_Click"/>
+                <Button x:Name="bl2off" Content="SET OFF " Margin="2,0" Click="bl2off_Click"/>
+
+            </StackPanel>
+
+            <TextBlock Text="GET topic (micro controller side emulation):" Margin="5,10" FontWeight="Bold" />
+            <StackPanel Orientation="Horizontal" Height="25" VerticalAlignment="Top">
+
+                <TextBlock Text="Lamp 1" FontWeight="Bold" VerticalAlignment="Center" Margin="10,0"/>
+                <TextBlock x:Name="GLamp1Text" Text="-" VerticalAlignment="Center"/>
+                <Button x:Name="Gbl1on" Content="SET ON" Margin="2,0" Click="Gbl1on_Click"/>
+                <Button x:Name="Gbl1off" Content="SET OFF " Margin="2,0" Click="Gbl1off_Click"/>
+
+                <TextBlock Text="Lamp 2" FontWeight="Bold" VerticalAlignment="Center" Margin="10,0"/>
+                <TextBlock x:Name="GLamp2Text" Text="-" VerticalAlignment="Center"/>
+                <Button x:Name="Gbl2on" Content="SET ON" Margin="2,0" Click="Gbl2on_Click"/>
+                <Button x:Name="Gbl2off" Content="SET OFF " Margin="2,0" Click="Gbl2off_Click"/>
+
+            </StackPanel>
+
+            <TextBlock Name="text" TextWrapping="WrapWithOverflow" />
+        </StackPanel>
+    </Grid>
+</Window>
