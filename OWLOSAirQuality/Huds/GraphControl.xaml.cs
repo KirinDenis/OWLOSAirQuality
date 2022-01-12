@@ -397,8 +397,8 @@ namespace OWLOSAirQuality.Huds
                 TopLine.Visibility =
                 MinLine.Visibility = Visibility.Visible;
 
-                topLineControl.Show();
-                minLineControl.Show();
+                topLineControl?.Show();
+                minLineControl?.Show();
 
                 GraphGrid_PreviewMouseMove(null, null);
             }

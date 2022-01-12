@@ -113,8 +113,14 @@
                         <huds:GraphControl x:Name="ValueGraph6" Width="2000" Height="500"/>
                     </Viewbox>
 
+                    <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,0,0" Grid.Column="2" Grid.Row="1" >
+                        <huds:ActuatorControl x:Name="Lamp1ActuatorControl" Width="172" Height="172" Caption="Lamp 1"  Description="AC" />
+                        <huds:ActuatorControl x:Name="Lamp2ActuatorControl" Width="172" Height="172" Caption="Lamp 2"  Description="AC" />
+                        <huds:ActuatorControl x:Name="Lamp3ActuatorControl" Width="172" Height="172" Caption="Lamp 3"  Description="AC" />
+                    </WrapPanel>
 
-
+                    <Grid x:Name="LogGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,0" Grid.Column="2" Grid.Row="2" Grid.RowSpan="2">
+                    </Grid>
 
                     <huds:CrossControl HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="-7" Grid.Column="0" Grid.Row="0"></huds:CrossControl>
                     <huds:CrossControl HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="-7" Grid.Column="1" Grid.Row="0"></huds:CrossControl>

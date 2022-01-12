@@ -45,6 +45,7 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace OWLOSAirQuality.Frames
 {
@@ -60,6 +61,10 @@ namespace OWLOSAirQuality.Frames
         private readonly List<SearchIndex> SearchIndices = new List<SearchIndex>();
 
         private bool timerBusy = false;
+
+        private OWLOSEcosystemMQTT _OWLOSEcosystemMQTT;
+
+        private readonly ConsoleControl logConsole;
         public PowerDashboardFrame(OWLOSEcosystemServiceClient EcosystemServiceClient)
         {
             InitializeComponent();
@@ -82,13 +87,66 @@ namespace OWLOSAirQuality.Frames
             OnLifeCycleTimer(null, null);
 
 
-            Timer lifeCycleTimer2 = new Timer(1000)
+            Timer lifeCycleTimer2 = new Timer(10000)
             {
                 AutoReset = true
             };
             lifeCycleTimer2.Elapsed += LifeCycleTimer2_Elapsed;
             lifeCycleTimer2.Start();
 
+            _OWLOSEcosystemMQTT = new OWLOSEcosystemMQTT();
+            _OWLOSEcosystemMQTT.OnPropertyValueChangeChanged += _OWLOSEcosystemMQTT_OnPropertyValueChangeChanged;
+
+            Lamp1ActuatorControl.OnChange += Lamp1ActuatorControl_OnChange;
+            Lamp2ActuatorControl.OnChange += Lamp2ActuatorControl_OnChange;
+            Lamp3ActuatorControl.OnChange += Lamp3ActuatorControl_OnChange;
+
+            this.EcosystemServiceClient = EcosystemServiceClient;
+            logConsole = new ConsoleControl();
+            LogGrid.Children.Add(logConsole);
+            EcosystemServiceClient.OnLog += EcosystemServiceClient_OnLog;
+            _OWLOSEcosystemMQTT.OnLog += EcosystemServiceClient_OnLog;
+        }
+
+        private void EcosystemServiceClient_OnLog(object sender, OWLOSLogEventArgs e)
+        {
+            logConsole.AddToconsole(e.Message, e.EventType);
+        }
+
+        private void Lamp1ActuatorControl_OnChange(object sender, bool e)
+        {
+            Lamp1ActuatorControl.Status = _OWLOSEcosystemMQTT.SetLamp(0, e);
+        }
+
+        private void Lamp2ActuatorControl_OnChange(object sender, bool e)
+        {
+            Lamp1ActuatorControl.Status = _OWLOSEcosystemMQTT.SetLamp(1, e);
+        }
+
+        private void Lamp3ActuatorControl_OnChange(object sender, bool e)
+        {
+            Lamp1ActuatorControl.Status = _OWLOSEcosystemMQTT.SetLamp(2, e);
+        }
+
+        private void _OWLOSEcosystemMQTT_OnPropertyValueChangeChanged(object sender, ValueEventArgs e)
+        {
+            bool value = (sender as Lamp).on == 1 ? true : false;
+
+            switch ((sender as Lamp).lamp)
+            {
+                case 0:
+                    Lamp1ActuatorControl.Status = OWLOSThingsManager.Ecosystem.OWLOS.NetworkStatus.Online;
+                    Lamp1ActuatorControl.On = (sender as Lamp).on == 1 ? true : false;
+                    break;
+                case 1:
+                    Lamp2ActuatorControl.Status = OWLOSThingsManager.Ecosystem.OWLOS.NetworkStatus.Online;
+                    Lamp2ActuatorControl.On = (sender as Lamp).on == 1 ? true : false;
+                    break;
+                case 2:
+                    Lamp3ActuatorControl.Status = OWLOSThingsManager.Ecosystem.OWLOS.NetworkStatus.Online;
+                    Lamp3ActuatorControl.On = (sender as Lamp).on == 1 ? true : false;
+                    break;
+            }
         }
 
         private void Ecosystem_OnACDataReady(object sender, EventArgs e)

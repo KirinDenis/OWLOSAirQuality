@@ -60,7 +60,7 @@ namespace WpfApp1
 
 
             MqttClientOptionsBuilder builder = new MqttClientOptionsBuilder()
-                                                    .WithClientId("OWLOSUX")
+                                                    .WithClientId("OWLOSHardwareEmulator")
                                                     .WithTcpServer("owlos.org", 1883);
 
 
