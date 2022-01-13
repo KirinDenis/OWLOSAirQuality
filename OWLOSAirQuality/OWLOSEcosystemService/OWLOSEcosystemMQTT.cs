@@ -44,7 +44,7 @@ namespace OWLOSAirQuality.OWLOSEcosystemService
         public OWLOSEcosystemMQTT()
         {
             MqttClientOptionsBuilder builder = new MqttClientOptionsBuilder()
-                                                    .WithClientId("OWLOSUX")
+                                                    .WithClientId("OWLOSUX" + Environment.TickCount.ToString())
                                                     .WithTcpServer("owlos.org", 1883);
 
 
