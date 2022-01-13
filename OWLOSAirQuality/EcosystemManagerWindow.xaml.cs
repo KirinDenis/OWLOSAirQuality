@@ -147,6 +147,26 @@ namespace OWLOSAirQuality
             }
 
 
+            ThingsManagerControl = new EcosystemManagerChildControl(new Point()
+            {
+                X = 150,
+                Y = 100 + (2 * 1080 / 2.0f + 100)
+            },
+            new Point()
+            {
+                X = 1920 / 2.0f,
+                Y = 1080 / 2.0f,
+            }
+            );
+            ThingGrid.Children.Add(ThingsManagerControl.parentControl);
+
+            PowerDashboardFrame powerDashboardFrame = new PowerDashboardFrame(EcosystemManager.OWLOSEcosystemServiceClients[1]);
+            powerDashboardFrame.MainGrid.Children.Remove(powerDashboardFrame.ValueHolderGrid);
+            powerDashboardFrame.Close();
+            ThingsManagerControl.MainGrid.Children.Add(powerDashboardFrame.ValueHolderGrid);
+
+
+
         }
 
         /*

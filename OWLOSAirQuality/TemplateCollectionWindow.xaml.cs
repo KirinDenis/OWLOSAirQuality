@@ -97,6 +97,7 @@ namespace OWLOSAirQuality
             insideThingPath2 = new Path();
             freeHeapPathBack = new Path();
 
+
             ThingShadowPath.Stroke = (SolidColorBrush)App.Current.Resources["OWLOSPrimaryAlpha2"];
             ThingPath.Stroke = (SolidColorBrush)App.Current.Resources["OWLOSPrimary"];
             

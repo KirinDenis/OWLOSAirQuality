@@ -1,0 +1,133 @@
+﻿<Window x:Class="OWLOSAirQuality.Frames.PowerDashboardFrame"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OWLOSAirQuality.Frames" 
+        xmlns:huds="clr-namespace:OWLOSAirQuality.Huds"
+        mc:Ignorable="d"
+        Title="Power Dashboard Frame" Width="1920" Height="1080" Background="black">
+    <Grid x:Name="MainGrid" Width="1920" Height="1080">
+        <Viewbox x:Name="ValueHolderGrid" Grid.Column="2" Grid.Row="0">
+            <Grid Width="1920" Height="1080">
+                <huds:FrameBackgroundControl x:Name="_BackgroundControl" TitleFrame="POWER " DescriptionFrame="DASHBOARD" QueryInterval="x10 sec"/>
+                <Grid x:Name="ValuesGrid" Margin="60,121,60,106">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="33*"/>
+                        <ColumnDefinition Width="33*"/>
+                        <ColumnDefinition Width="33*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="48*"/>
+                        <RowDefinition Height="24*"/>
+                        <RowDefinition Height="24*"/>
+                        <RowDefinition Height="16*"/>
+                    </Grid.RowDefinitions>
+
+
+                    <Grid x:Name="TemperatureGrid">
+                        <Border BorderBrush="{DynamicResource OWLOSSecondaryAlpha1}" BorderThickness="0,0,1,2" />
+                        <StackPanel Orientation="Horizontal" Margin="6,6,0,0" HorizontalAlignment="Left"  VerticalAlignment="Top">
+                            <TextBlock Text="Temperature Sensors" HorizontalAlignment="Left"  VerticalAlignment="Bottom" FontSize="25" Foreground="{DynamicResource OWLOSPrimary}" />
+                            <TextBlock Text="| Celsius |" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Margin="6,0,0,4" FontSize="16" Foreground="{DynamicResource OWLOSWarning}" />
+                        </StackPanel>
+
+                        <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,32,0,-16">
+                            <huds:RadialValueControl x:Name="DHT22TemperatureControl" RadialMode="Values" LowRangeValue="-50" HighRangeValue="50" LowDangerTrap="12" LowWarningTrap="20" HighWarningTrap="29" HighDangerTrap="35" Width="172" Height="172" Caption="DHT22"  Description="Temperature"/>
+                            <huds:RadialValueControl x:Name="BMP280TemperatureControl" RadialMode="Values" LowRangeValue="-50" HighRangeValue="50" LowDangerTrap="12" LowWarningTrap="20" HighWarningTrap="29" HighDangerTrap="35" Width="172" Height="172" Caption="BMP280"  Description="Temperature"/>
+                            <huds:RadialValueControl x:Name="CCS811TemperatureControl" RadialMode="Values" LowRangeValue="-50" HighRangeValue="50" LowDangerTrap="-10" LowWarningTrap="0" HighWarningTrap="29" HighDangerTrap="35" Width="172" Height="172" Caption="CCS811"  Description="Temperature"/>
+                        </WrapPanel>
+
+                        <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,16,0,-12">
+                            <huds:TemperatureValueControl x:Name="DHT22TemperatureValueControl" Width="172" Height="172" Caption="DHT22" Description="Temperature" HighWarningTrap="25" HighDangerTrap="28" LowWarningTrap="23" LowDangerTrap="20.0"/>
+                            <huds:TemperatureValueControl x:Name="BMP280TemperatureValueControl" Width="172" Height="172" Caption="BMP280" Description="Temperature" HighWarningTrap="25" HighDangerTrap="28" LowWarningTrap="23" LowDangerTrap="20.0"/>
+                            <huds:TemperatureValueControl x:Name="CCS811TemperatureValueControl" Width="172" Height="172" Caption="CCS811" Description="Temperature" HighWarningTrap="25" HighDangerTrap="28" LowWarningTrap="23" LowDangerTrap="20.0"/>
+                        </WrapPanel>
+
+                    </Grid>
+
+                    <Grid x:Name="KWGrid" Grid.Column="1">
+                        <Border BorderBrush="{DynamicResource OWLOSSecondaryAlpha1}" BorderThickness="0,0,1,2" />
+                        <StackPanel Orientation="Horizontal" Margin="6,6,0,0" HorizontalAlignment="Left"  VerticalAlignment="Top">
+                            <TextBlock Text="AC voltage " HorizontalAlignment="Left"  VerticalAlignment="Bottom" FontSize="25" Foreground="{DynamicResource OWLOSPrimary}" />
+                            <TextBlock Text="| Phases 1,2,3 |" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Margin="6,0,0,4" FontSize="16" Foreground="{DynamicResource OWLOSWarning}" />
+                        </StackPanel>
+
+                        <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,32,0,-16">
+                            <huds:RadialValueControl x:Name="KW1Control" RadialMode="Values" Simbol="V" LowRangeValue="140" HighRangeValue="260" LowDangerTrap="160" LowWarningTrap="170" HighWarningTrap="230" HighDangerTrap="240" Width="172" Height="172" Caption="Phase 1"  Description="AC" UnitOfMeasure="Volts"/>
+                            <huds:RadialValueControl x:Name="KW2Control" RadialMode="Values" Simbol="V" LowRangeValue="140" HighRangeValue="260" LowDangerTrap="160" LowWarningTrap="170" HighWarningTrap="230" HighDangerTrap="240" Width="172" Height="172" Caption="Phase 2"  Description="AC" UnitOfMeasure="Volts"/>
+                            <huds:RadialValueControl x:Name="KW3Control" RadialMode="Values" Simbol="V" LowRangeValue="140" HighRangeValue="260" LowDangerTrap="160" LowWarningTrap="170" HighWarningTrap="230" HighDangerTrap="240" Width="172" Height="172" Caption="Phase 3"  Description="AC" UnitOfMeasure="Volts"/>
+                        </WrapPanel>
+
+                        <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,16,0,-12">
+                            <huds:ValueControl x:Name="KW1ValueControl" Width="172" Height="172" Caption="Phase 1" Description="AC" LowDangerTrap="160" LowWarningTrap="170" HighWarningTrap="230" HighDangerTrap="240" UnitOfMeasure="Volts"/>
+                            <huds:ValueControl x:Name="KW2ValueControl" Width="172" Height="172" Caption="Phase 2" Description="AC" LowDangerTrap="160" LowWarningTrap="170" HighWarningTrap="230" HighDangerTrap="240" UnitOfMeasure="Volts"/>
+                            <huds:ValueControl x:Name="KW3ValueControl" Width="172" Height="172" Caption="Phase 3" Description="AC" LowDangerTrap="160" LowWarningTrap="170" HighWarningTrap="230" HighDangerTrap="240" UnitOfMeasure="Volts"/>
+                        </WrapPanel>
+
+                    </Grid>
+
+                    <Grid x:Name="KWGrid2" Grid.Column="2">
+                        <Border BorderBrush="{DynamicResource OWLOSSecondaryAlpha1}" BorderThickness="0,0,1,2" />
+                        <StackPanel Orientation="Horizontal" Margin="6,6,0,0" HorizontalAlignment="Left"  VerticalAlignment="Top">
+                            <TextBlock Text="AC voltage " HorizontalAlignment="Left"  VerticalAlignment="Bottom" FontSize="25" Foreground="{DynamicResource OWLOSPrimary}" />
+                            <TextBlock Text="| Phases 1,2,3 |" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Margin="6,0,0,4" FontSize="16" Foreground="{DynamicResource OWLOSWarning}" />
+                        </StackPanel>
+
+                        <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,32,0,-16">
+                            <huds:RadialValueControl x:Name="KW12Control" RadialMode="Values" Simbol="V" LowRangeValue="140" HighRangeValue="260" LowDangerTrap="160" LowWarningTrap="170" HighWarningTrap="230" HighDangerTrap="240" Width="172" Height="172" Caption="Phase 1"  Description="AC" UnitOfMeasure="Volts"/>
+                            <huds:RadialValueControl x:Name="KW22Control" RadialMode="Values" Simbol="V" LowRangeValue="140" HighRangeValue="260" LowDangerTrap="160" LowWarningTrap="170" HighWarningTrap="230" HighDangerTrap="240" Width="172" Height="172" Caption="Phase 2"  Description="AC" UnitOfMeasure="Volts"/>
+                            <huds:RadialValueControl x:Name="KW32Control" RadialMode="Values" Simbol="V" LowRangeValue="140" HighRangeValue="260" LowDangerTrap="160" LowWarningTrap="170" HighWarningTrap="230" HighDangerTrap="240" Width="172" Height="172" Caption="Phase 3"  Description="AC" UnitOfMeasure="Volts"/>
+                        </WrapPanel>
+
+                        <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,16,0,-12">
+                            <huds:ValueControl x:Name="KW12ValueControl" Width="172" Height="172" Caption="Phase 1" Description="AC" LowDangerTrap="160" LowWarningTrap="170" HighWarningTrap="230" HighDangerTrap="240" UnitOfMeasure="Volts"/>
+                            <huds:ValueControl x:Name="KW22ValueControl" Width="172" Height="172" Caption="Phase 2" Description="AC" LowDangerTrap="160" LowWarningTrap="170" HighWarningTrap="230" HighDangerTrap="240" UnitOfMeasure="Volts"/>
+                            <huds:ValueControl x:Name="KW32ValueControl" Width="172" Height="172" Caption="Phase 3" Description="AC" LowDangerTrap="160" LowWarningTrap="170" HighWarningTrap="230" HighDangerTrap="240" UnitOfMeasure="Volts"/>
+                        </WrapPanel>
+
+                    </Grid>
+
+
+                    <Viewbox Grid.Row="1" HorizontalAlignment="Center" Margin="26,0">
+                        <huds:GraphControl x:Name="ValueGraph1" Width="2000" Height="500"/>
+                    </Viewbox>
+
+                    <Viewbox Grid.Row="2" HorizontalAlignment="Center" Margin="26,0">
+                        <huds:GraphControl x:Name="ValueGraph2" Width="2000" Height="500"/>
+                    </Viewbox>
+
+                    <Viewbox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Margin="26,0">
+                        <huds:GraphControl x:Name="ValueGraph3" Width="2000" Height="500"/>
+                    </Viewbox>
+
+                    <Viewbox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Margin="26,0">
+                        <huds:GraphControl x:Name="ValueGraph4" Width="2000" Height="500"/>
+                    </Viewbox>
+
+                    <Viewbox Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Margin="26,0">
+                        <huds:GraphControl x:Name="ValueGraph5" Width="2000" Height="500"/>
+                    </Viewbox>
+
+                    <Viewbox Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Margin="26,0">
+                        <huds:GraphControl x:Name="ValueGraph6" Width="2000" Height="500"/>
+                    </Viewbox>
+
+                    <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,0,0" Grid.Column="2" Grid.Row="1" >
+                        <huds:ActuatorControl x:Name="Lamp1ActuatorControl" Width="172" Height="172" Caption="Lamp 1"  Description="AC" />
+                        <huds:ActuatorControl x:Name="Lamp2ActuatorControl" Width="172" Height="172" Caption="Lamp 2"  Description="AC" />
+                        <huds:ActuatorControl x:Name="Lamp3ActuatorControl" Width="172" Height="172" Caption="Lamp 3"  Description="AC" />
+                    </WrapPanel>
+
+                    <Grid x:Name="LogGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,0" Grid.Column="2" Grid.Row="2" Grid.RowSpan="2">
+                    </Grid>
+
+                    <huds:CrossControl HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="-7" Grid.Column="0" Grid.Row="0"></huds:CrossControl>
+                    <huds:CrossControl HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="-7" Grid.Column="1" Grid.Row="0"></huds:CrossControl>
+                    <huds:CrossControl HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="-7" Grid.Column="0" Grid.Row="1"></huds:CrossControl>
+                    <huds:CrossControl HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="-7" Grid.Column="0" Grid.Row="2"></huds:CrossControl>
+                </Grid>
+            </Grid>
+        </Viewbox>
+    </Grid>
+</Window>
