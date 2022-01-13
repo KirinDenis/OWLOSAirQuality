@@ -146,7 +146,7 @@ namespace OWLOSAirQuality
 
             }
 
-
+            //POwer dashboard 
             ThingsManagerControl = new EcosystemManagerChildControl(new Point()
             {
                 X = 150,
@@ -164,6 +164,25 @@ namespace OWLOSAirQuality
             powerDashboardFrame.MainGrid.Children.Remove(powerDashboardFrame.ValueHolderGrid);
             powerDashboardFrame.Close();
             ThingsManagerControl.MainGrid.Children.Add(powerDashboardFrame.ValueHolderGrid);
+
+            //Station emulator 
+            ThingsManagerControl = new EcosystemManagerChildControl(new Point()
+            {
+                X = 150 + 1920 / 2.0f,
+                Y = 100 + (2 * 1080 / 2.0f + 100)
+            },
+            new Point()
+            {
+                X = 1920 / 2.0f,
+                Y = 1080 / 2.0f,
+            }
+            );
+            ThingGrid.Children.Add(ThingsManagerControl.parentControl);
+
+            StationEmulatorFrame stationEmulatorFrame = new StationEmulatorFrame();
+            stationEmulatorFrame.MainGrid.Children.Remove(stationEmulatorFrame.ValueHolderGrid);
+            stationEmulatorFrame.Close();
+            ThingsManagerControl.MainGrid.Children.Add(stationEmulatorFrame.ValueHolderGrid);
 
 
 
