@@ -6,11 +6,28 @@
         xmlns:local="clr-namespace:OWLOSAirQuality.Frames" 
         xmlns:huds="clr-namespace:OWLOSAirQuality.Huds"
         mc:Ignorable="d"
-        Title="Station Emulator Frame" Width="1920" Height="1080" Background="black">
+        Title="Station Emulator Frame" Width="1920" Height="1080" Background="black" Loaded="Window_Loaded">
     <Grid x:Name="MainGrid" Width="1920" Height="1080">
         <Viewbox x:Name="ValueHolderGrid" Grid.Column="2" Grid.Row="0">
             <Grid Width="1920" Height="1080">
                 <huds:FrameBackgroundControl x:Name="_BackgroundControl" TitleFrame="STATION EMULATOR" DescriptionFrame="Air Quality" QueryInterval="x10 sec"/>
+
+                <Grid x:Name="ConnectionInfoGrid" Height="60" VerticalAlignment="Top" Margin="800,62,0,0" >
+                    <TextBlock Text="Connection properties" Margin="8,10" VerticalAlignment="Top" Foreground="{DynamicResource OWLOSSuccess}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="OWLOS Ecosystem service URL" Margin="8,0" VerticalAlignment="Center" Foreground="{DynamicResource OWLOSInfo}"/>
+                        <TextBox x:Name="EcosystemURLTextBox" Text="https://192.168.1.100:5004" Width="150" Height="22" Margin="8,0" VerticalAlignment="Center" Foreground="{DynamicResource OWLOSLight}"  BorderBrush="{DynamicResource OWLOSSecondary}" Background="Transparent"/>
+                        <TextBlock Text="User token" Margin="8,0" VerticalAlignment="Center" Foreground="{DynamicResource OWLOSInfo}"/>
+                        <TextBox x:Name="UserTokenTextBox" Text="TTA0R254SlhKQkhoa1lwTkRvdzhvMjg4dG5rTXhFcS84ekVpdytSZks3TVFBQUFBYjdnR2Jtbk1JY2pZbzdvbHUwWDNBbW9yY3RjbWxhMDBEelUvZWNrU1NpQjFsOXVaZTFXNFFEU0IxdDJuVjB3VnhET2ZFMTJwYUZrbW03OFRsS3RzN2w5a3VleTkyL2hYQndueGZhZDY3bDBaMk85VUpzMFZSRm4zaUc2REswZktwQVBod25qMHZtdURFQ0RMOWxydmRnPT0=" Width="150" Height="22"  Margin="8,0" VerticalAlignment="Center" Foreground="{DynamicResource OWLOSLight}"  BorderBrush="{DynamicResource OWLOSSecondary}" Background="Transparent"/>
+                        <TextBlock Text="Query interval" Margin="8,0" VerticalAlignment="Center" Foreground="{DynamicResource OWLOSInfo}"/>
+                        <TextBox x:Name="QueryIntervalTextBox" Text="10" Width="25" Height="22" Margin="8,0" VerticalAlignment="Center" Foreground="{DynamicResource OWLOSLight}"  BorderBrush="{DynamicResource OWLOSSecondary}" Background="Transparent"/>
+                        <TextBlock Text="sec" Margin="8,0" VerticalAlignment="Center" Foreground="{DynamicResource OWLOSInfoAlpha3}"/>
+                        <Button x:Name="ApplyButton" Content="Apply" Margin="8,0" Width="74" Height="22" Foreground="{DynamicResource OWLOSDark}"  BorderBrush="{DynamicResource OWLOSSecondary}" Background="{DynamicResource OWLOSSecondary}" Click="ApplyButton_Click"/>
+                    </StackPanel>
+                </Grid>
+
+
+
                 <Grid x:Name="ValuesGrid" Margin="60,121,60,106">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="33*"/>
@@ -23,8 +40,11 @@
                         <RowDefinition Height="24*"/>
                         <RowDefinition Height="16*"/>
                     </Grid.RowDefinitions>
-                
-                <Grid x:Name="LogGrid" Grid.Column="0" Grid.Row="0" Grid.RowSpan="4">
+
+                    
+
+
+                    <Grid x:Name="LogGrid" Grid.Column="0" Grid.Row="0" Grid.RowSpan="4">
                     
                 </Grid>
                 </Grid>
