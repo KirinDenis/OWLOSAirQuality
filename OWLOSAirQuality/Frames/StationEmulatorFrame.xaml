@@ -26,8 +26,6 @@
                     </StackPanel>
                 </Grid>
 
-
-
                 <Grid x:Name="ValuesGrid" Margin="60,121,60,106">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="33*"/>
@@ -41,13 +39,17 @@
                         <RowDefinition Height="16*"/>
                     </Grid.RowDefinitions>
 
-                    
-
-
                     <Grid x:Name="LogGrid" Grid.Column="0" Grid.Row="0" Grid.RowSpan="4">
-                    
-                </Grid>
-                </Grid>
+
+                    </Grid>
+
+                    <Grid Grid.Column="2">
+                        <StackPanel>
+                          <Button x:Name="AddButton" Content="Add" Margin="8" Width="74" Height="22"  HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="{DynamicResource OWLOSDark}"  BorderBrush="{DynamicResource OWLOSSecondary}" Background="{DynamicResource OWLOSSecondary}" Click="AddButton_Click"/>
+                          <WrapPanel x:Name="ThingsConnectionPanel"></WrapPanel>
+                        </StackPanel>
+                    </Grid>
+                 </Grid>
             </Grid>
         </Viewbox>
     </Grid>

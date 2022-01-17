@@ -36,9 +36,12 @@ OWLOS распространяется в надежде, что она буде
 этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.)
 --------------------------------------------------------------------------------------*/
 
+using Newtonsoft.Json;
 using OWLOSAirQuality.Huds;
 using OWLOSAirQuality.OWLOSEcosystemService;
+using OWLOSEcosystemService.DTO.Things;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
@@ -64,6 +67,12 @@ namespace OWLOSAirQuality.Frames
         protected string userToken = string.Empty;
 
         protected int queryInterval = 10;
+
+        protected List<ThingConnectionPropertiesDTO> thingConnectionPropertiesDTOs = null;
+
+        protected int ConnectionSelector = 0;
+
+        protected Timer lifeCycleTimer = null;
         public StationEmulatorFrame()
         {
             InitializeComponent();
@@ -75,7 +84,8 @@ namespace OWLOSAirQuality.Frames
 
             ApplyConnectionSettings();
 
-            Timer lifeCycleTimer = new Timer(queryInterval * 1000)
+
+            lifeCycleTimer = new Timer(queryInterval * 1000)
             {
                 AutoReset = true
             };
@@ -105,11 +115,41 @@ namespace OWLOSAirQuality.Frames
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
             ApplyConnectionSettings();
+            lifeCycleTimer.Interval = queryInterval * 1000;
+        }
+
+        private async void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (await NewThingConnection() == string.Empty)
+            {
+                logConsole.AddToconsole("OK add new thing ", ConsoleMessageCode.Success);
+                RefreshThingConnections();
+            }
+        }
+
+        private void RefreshThingConnections()
+        {
+            ThingsConnectionPanel.Children.Clear();
+
+            thingConnectionPropertiesDTOs = GetThingsConnections().Result;
+
+            if (thingConnectionPropertiesDTOs != null)
+            {
+                foreach (ThingConnectionPropertiesDTO thingConnectionPropertiesDTO in thingConnectionPropertiesDTOs)
+                {
+                    ModeControl modeControl = new ModeControl();
+                    modeControl.Tag = thingConnectionPropertiesDTO;
+                    modeControl.Caption = thingConnectionPropertiesDTO.Name;
+                    modeControl.HighWarningTrap = 50;
+                    modeControl.HighDangerTrap = 100;
+                    ThingsConnectionPanel.Children.Add(modeControl);
+                }
+            }
         }
 
         private static bool ServerCertificateCustomValidation(HttpRequestMessage requestMessage, X509Certificate2 certificate, X509Chain chain, SslPolicyErrors sslErrors)
         {
-            // It is possible inpect the certificate provided by server
+            // It is possible inspect the certificate provided by server
             //   Console.WriteLine($"Requested URI: {requestMessage.RequestUri}");
             //   Console.WriteLine($"Effective date: {certificate.GetEffectiveDateString()}");
             //   Console.WriteLine($"Exp date: {certificate.GetExpirationDateString()}");
@@ -120,16 +160,67 @@ namespace OWLOSAirQuality.Frames
             return true; // sslErrors == SslPolicyErrors.None;
         }
 
+        protected async Task<List<ThingConnectionPropertiesDTO>> GetThingsConnections()
+        {
+            List<ThingConnectionPropertiesDTO> result = null;
+            try
+            {
+                HttpClientHandler handler = new HttpClientHandler
+                {
+                    ServerCertificateCustomValidationCallback = ServerCertificateCustomValidation
+                };
+
+                HttpClient client = new HttpClient(handler);
+
+                string queryString = connectionURL + "/Things/GetThingsConnections?userToken=" + userToken;
+
+                HttpResponseMessage response = client.GetAsync(queryString).GetAwaiter().GetResult();
+
+                response.EnsureSuccessStatusCode();
+                result = JsonConvert.DeserializeObject<List<ThingConnectionPropertiesDTO>>(await response.Content.ReadAsStringAsync());
+                logConsole.AddToconsole("OK GetThingsConnections, count: " + result.Count, ConsoleMessageCode.Success);
+            }
+            catch (Exception exception)
+            {
+                logConsole.AddToconsole("Error GetThingsConnections: " + exception.Message, ConsoleMessageCode.Danger);
+            }
+            return result;
+        }
+
+        protected async Task<string> NewThingConnection()
+        {
+            int NewThingNumber = thingConnectionPropertiesDTOs != null ? thingConnectionPropertiesDTOs.Count + 1 : 1;
+            string queryString = connectionURL + "/Things/NewThingConnection?userToken=" + userToken + "&Name=ThingEmulator" + NewThingNumber.ToString();
+
+            try
+            {
+                HttpClientHandler handler = new HttpClientHandler
+                {
+                    ServerCertificateCustomValidationCallback = ServerCertificateCustomValidation
+                };
+
+                HttpClient client = new HttpClient(handler);
+
+                HttpResponseMessage response = client.PostAsync(queryString, new StringContent(" ")).GetAwaiter().GetResult();
+
+                response.EnsureSuccessStatusCode();
+
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                return string.Empty;
+            }
+            catch (Exception exception)
+            {
+                return queryString + " " + exception.Message;
+            }
+        }
+
         protected async Task<string> PostAirQualityData(string OWLOSEcosystemHost, string airQualityData)
         {
             try
             {
-
-                // Create an HttpClientHandler object and set to use default credentials
                 HttpClientHandler handler = new HttpClientHandler
                 {
-
-                    // Set custom server validation callback
                     ServerCertificateCustomValidationCallback = ServerCertificateCustomValidation
                 };
 
@@ -141,7 +232,7 @@ namespace OWLOSAirQuality.Frames
 
                 string responseBody = await response.Content.ReadAsStringAsync();
 
-                return OWLOSEcosystemHost + " " + response.StatusCode.ToString();
+                return string.Empty;
             }
             catch (Exception exception)
             {
@@ -158,8 +249,60 @@ namespace OWLOSAirQuality.Frames
             }
             timerBusy = true;
 
+            if (thingConnectionPropertiesDTOs == null)
+            {
+                RefreshThingConnections();
+            }
+
+            if (thingConnectionPropertiesDTOs == null)
+            {
+                logConsole.AddToconsole("No thing connections revived from OWLOS Ecosystem Service", ConsoleMessageCode.Danger);
+                timerBusy = false;
+                return;
+            }
+
+            ConnectionSelector++;
+            if (ConnectionSelector >= thingConnectionPropertiesDTOs.Count - 1)
+            {
+                ConnectionSelector = 0;
+            }
+
+            for (int i = ConnectionSelector; i < thingConnectionPropertiesDTOs.Count; i++)
+            {
+                if (thingConnectionPropertiesDTOs[i].Name.Contains("ThingEmulator"))
+                {
+                    ConnectionSelector = i;
+                    break;
+                }
+            }
+
+            ModeControl selectedModeControl = null;
+            base.Dispatcher.Invoke(() =>
+            {
+
+                //find control 
+
+                foreach (UIElement uiElement in ThingsConnectionPanel.Children)
+                {
+                    ModeControl modeControl = uiElement as ModeControl;
+                    ThingConnectionPropertiesDTO thingConnectionPropertiesDTO = modeControl.Tag as ThingConnectionPropertiesDTO;
+                    if (thingConnectionPropertiesDTO.Token == thingConnectionPropertiesDTOs[ConnectionSelector].Token)
+                    {
+                        selectedModeControl = modeControl;
+                        break;
+                    }
+                }
+
+                if (selectedModeControl != null)
+                {
+                    selectedModeControl.InjectValue(51);
+                }
+
+            });
+
+
             string airQualityDate = "topic:owlos/owlthingb0c40a24/AirQuality\n" +
-"token:ed3f0fc7-d7ec-42dc-a3fe-a64131d0c788\n" +
+"token:" + thingConnectionPropertiesDTOs[ConnectionSelector].Token + "\n" +
 "airqualityonly:1\n" +
 "TickCount:267993692\n" +
 "DHT22:yes\n" +
@@ -198,7 +341,23 @@ namespace OWLOSAirQuality.Frames
 
             base.Dispatcher.Invoke(() =>
             {
-                logConsole.AddToconsole(response, ConsoleMessageCode.Success);
+                if (string.IsNullOrEmpty(response))
+                {
+                    logConsole.AddToconsole("OK " + thingConnectionPropertiesDTOs[ConnectionSelector].Name, ConsoleMessageCode.Success);
+                    if (selectedModeControl != null)
+                    {
+                        selectedModeControl.InjectValue(49);
+                    }
+                }
+                else
+                {
+                    logConsole.AddToconsole("Error " + thingConnectionPropertiesDTOs[ConnectionSelector].Name + " " + response, ConsoleMessageCode.Danger);
+                    if (selectedModeControl != null)
+                    {
+                        selectedModeControl.InjectValue(101);
+                    }
+
+                }
             });
 
             timerBusy = false;

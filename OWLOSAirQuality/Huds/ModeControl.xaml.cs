@@ -194,6 +194,12 @@ namespace OWLOSAirQuality.Huds
                 Value = "NaN";
             }
         }
+
+        public void InjectValue(float _OriginalValue)
+        {
+            OriginalValue = _OriginalValue;
+            Value = OriginalValue.ToString();
+        }
         public void OnValueChanged(object sender, ValueEventArgs e)
         {
             base.Dispatcher.Invoke(() =>
