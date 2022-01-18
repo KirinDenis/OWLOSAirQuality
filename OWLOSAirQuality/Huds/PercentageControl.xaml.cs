@@ -1,18 +1,46 @@
-﻿using OWLOSAdmin.EcosystemExplorer.Huds;
+﻿/* ----------------------------------------------------------------------------
+OWLOS DIY Open Source OS for building IoT ecosystems
+Copyright 2019, 2020, 2021 by:
+- Denis Kirin (deniskirinacs@gmail.com)
+
+This file is part of OWLOS DIY Open Source OS for building IoT ecosystems
+
+OWLOS is free software : you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+OWLOS is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with OWLOS. If not, see < https://www.gnu.org/licenses/>.
+
+GitHub: https://github.com/KirinDenis/owlos
+
+(Этот файл — часть OWLOS DIY Open Source OS for building IoT ecosystems.
+
+OWLOS - свободная программа: вы можете перераспространять ее и/или изменять
+ее на условиях Стандартной общественной лицензии GNU в том виде, в каком она
+была опубликована Фондом свободного программного обеспечения; версии 3
+лицензии, любой более поздней версии.
+
+OWLOS распространяется в надежде, что она будет полезной, но БЕЗО ВСЯКИХ
+ГАРАНТИЙ; даже без неявной гарантии ТОВАРНОГО ВИДА или ПРИГОДНОСТИ ДЛЯ
+ОПРЕДЕЛЕННЫХ ЦЕЛЕЙ.
+Подробнее см.в Стандартной общественной лицензии GNU.
+
+Вы должны были получить копию Стандартной общественной лицензии GNU вместе с
+этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.)
+--------------------------------------------------------------------------------------*/
+
+using OWLOSAdmin.EcosystemExplorer.Huds;
 using OWLOSThingsManager.EcosystemExplorer.Huds;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace OWLOSAirQuality.Huds
@@ -73,14 +101,16 @@ namespace OWLOSAirQuality.Huds
             for (int i = 0; i < data.Length; i++) 
             {
                 endAngle = startAngle + data[i] / 100.0f * 360.0f;
-                Path p = new Path();
-                p.StrokeThickness = 40;
-                p.Data = HudLibrary.DrawArc(Gold.center, Gold.center, radius, startAngle, endAngle);
-                p.RenderTransformOrigin = new Point(0.5, 0.5);
-                p.HorizontalAlignment = HorizontalAlignment.Center;
-                p.VerticalAlignment = VerticalAlignment.Center;
-                p.Width = 700;
-                p.Height = 700;
+                Path p = new Path
+                {
+                    StrokeThickness = 40,
+                    Data = HudLibrary.DrawArc(Gold.center, Gold.center, radius, startAngle, endAngle),
+                    RenderTransformOrigin = new Point(0.5, 0.5),
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Width = 700,
+                    Height = 700
+                };
                 //p.Stroke = (SolidColorBrush)App.Current.Resources["OWLOSInfoAlpha2"];
                 currentColor.A -= (byte)(hideStep);
                 p.Stroke = new SolidColorBrush(currentColor);

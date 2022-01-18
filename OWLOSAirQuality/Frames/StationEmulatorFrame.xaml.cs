@@ -40,6 +40,7 @@ using Newtonsoft.Json;
 using OWLOSAirQuality.Huds;
 using OWLOSAirQuality.OWLOSEcosystemService;
 using OWLOSEcosystemService.DTO.Things;
+using OWLOSThingsManager.Ecosystem.OWLOS;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -77,7 +78,7 @@ namespace OWLOSAirQuality.Frames
         {
             InitializeComponent();
 
-            this.EcosystemManager = App.EcosystemManager;
+            EcosystemManager = App.EcosystemManager;
 
             logConsole = new ConsoleControl();
             LogGrid.Children.Add(logConsole);
@@ -137,11 +138,11 @@ namespace OWLOSAirQuality.Frames
             {
                 foreach (ThingConnectionPropertiesDTO thingConnectionPropertiesDTO in thingConnectionPropertiesDTOs)
                 {
-                    ModeControl modeControl = new ModeControl();
-                    modeControl.Tag = thingConnectionPropertiesDTO;
-                    modeControl.Caption = thingConnectionPropertiesDTO.Name;
-                    modeControl.HighWarningTrap = 50;
-                    modeControl.HighDangerTrap = 100;
+                    ThingConnectionControl modeControl = new ThingConnectionControl
+                    {
+                        Tag = thingConnectionPropertiesDTO,
+                        Name = thingConnectionPropertiesDTO.Name,
+                    };
                     ThingsConnectionPanel.Children.Add(modeControl);
                 }
             }
@@ -251,7 +252,10 @@ namespace OWLOSAirQuality.Frames
 
             if (thingConnectionPropertiesDTOs == null)
             {
-                RefreshThingConnections();
+                base.Dispatcher.Invoke(() =>
+                {
+                    RefreshThingConnections();
+                });
             }
 
             if (thingConnectionPropertiesDTOs == null)
@@ -276,7 +280,7 @@ namespace OWLOSAirQuality.Frames
                 }
             }
 
-            ModeControl selectedModeControl = null;
+            ThingConnectionControl selectedControl = null;
             base.Dispatcher.Invoke(() =>
             {
 
@@ -284,18 +288,18 @@ namespace OWLOSAirQuality.Frames
 
                 foreach (UIElement uiElement in ThingsConnectionPanel.Children)
                 {
-                    ModeControl modeControl = uiElement as ModeControl;
+                    ThingConnectionControl modeControl = uiElement as ThingConnectionControl;
                     ThingConnectionPropertiesDTO thingConnectionPropertiesDTO = modeControl.Tag as ThingConnectionPropertiesDTO;
                     if (thingConnectionPropertiesDTO.Token == thingConnectionPropertiesDTOs[ConnectionSelector].Token)
                     {
-                        selectedModeControl = modeControl;
+                        selectedControl = modeControl;
                         break;
                     }
                 }
 
-                if (selectedModeControl != null)
+                if (selectedControl != null)
                 {
-                    selectedModeControl.InjectValue(51);
+                    selectedControl.Status = NetworkStatus.Reconnect;
                 }
 
             });
@@ -344,17 +348,17 @@ namespace OWLOSAirQuality.Frames
                 if (string.IsNullOrEmpty(response))
                 {
                     logConsole.AddToconsole("OK " + thingConnectionPropertiesDTOs[ConnectionSelector].Name, ConsoleMessageCode.Success);
-                    if (selectedModeControl != null)
+                    if (selectedControl != null)
                     {
-                        selectedModeControl.InjectValue(49);
+                        selectedControl.Status = NetworkStatus.Online;
                     }
                 }
                 else
                 {
                     logConsole.AddToconsole("Error " + thingConnectionPropertiesDTOs[ConnectionSelector].Name + " " + response, ConsoleMessageCode.Danger);
-                    if (selectedModeControl != null)
+                    if (selectedControl != null)
                     {
-                        selectedModeControl.InjectValue(101);
+                        selectedControl.Status = NetworkStatus.Erorr;
                     }
 
                 }

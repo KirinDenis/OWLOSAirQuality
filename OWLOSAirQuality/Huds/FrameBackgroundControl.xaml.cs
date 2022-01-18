@@ -47,10 +47,7 @@ namespace OWLOSAirQuality.Huds
     {
         public string TitleFrame
         {
-            get
-            {
-                return _TitleFrame!= null ? _TitleFrame.Text : string.Empty;
-            }
+            get => _TitleFrame != null ? _TitleFrame.Text : string.Empty;
             set
             {
                 if (_TitleFrame != null)
@@ -62,10 +59,7 @@ namespace OWLOSAirQuality.Huds
 
         public string DescriptionFrame
         {
-            get
-            {
-                return _DescriptionFrame != null ? _DescriptionFrame.Text : string.Empty;
-            }
+            get => _DescriptionFrame != null ? _DescriptionFrame.Text : string.Empty;
             set
             {
                 if (_DescriptionFrame != null)
@@ -74,13 +68,10 @@ namespace OWLOSAirQuality.Huds
                 }
             }
         }
-        
+
         public string QueryInterval
         {
-            get
-            {
-                return _QueryInterval != null ? _QueryInterval.Text : string.Empty;
-            }
+            get => _QueryInterval != null ? _QueryInterval.Text : string.Empty;
             set
             {
                 if (_QueryInterval != null)
@@ -89,13 +80,10 @@ namespace OWLOSAirQuality.Huds
                 }
             }
         }
-        
+
         public string Status
         {
-            get
-            {
-                return _Status != null ? _Status.Text : string.Empty;
-            }
+            get => _Status != null ? _Status.Text : string.Empty;
             set
             {
                 if (_Status != null)
@@ -107,10 +95,7 @@ namespace OWLOSAirQuality.Huds
 
         public string URL
         {
-            get
-            {
-                return _URL != null ? _URL.Text : string.Empty;
-            }
+            get => _URL != null ? _URL.Text : string.Empty;
             set
             {
                 if (_URL != null)
@@ -120,7 +105,7 @@ namespace OWLOSAirQuality.Huds
             }
         }
 
-        
+
 
 
 
