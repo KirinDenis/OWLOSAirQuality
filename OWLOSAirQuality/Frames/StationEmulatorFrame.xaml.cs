@@ -138,14 +138,34 @@ namespace OWLOSAirQuality.Frames
             {
                 foreach (ThingConnectionPropertiesDTO thingConnectionPropertiesDTO in thingConnectionPropertiesDTOs)
                 {
-                    ThingConnectionControl modeControl = new ThingConnectionControl
+                    ThingConnectionControl connectionControl = new ThingConnectionControl
                     {
                         Tag = thingConnectionPropertiesDTO,
                         Name = thingConnectionPropertiesDTO.Name,
                     };
-                    ThingsConnectionPanel.Children.Add(modeControl);
+                    connectionControl.OnDelete += ConnectionControl_OnDelete;
+
+                    ThingsConnectionPanel.Children.Add(connectionControl);
                 }
             }
+        }
+
+        private void ConnectionControl_OnDelete(object sender, bool e)
+        {
+            ThingConnectionControl connectionControl = sender as ThingConnectionControl;
+            ThingConnectionPropertiesDTO thingConnectionPropertiesDTO = connectionControl.Tag as ThingConnectionPropertiesDTO;
+
+            string result = DeleteThingConnection(thingConnectionPropertiesDTO.Id).Result;
+
+            if (string.IsNullOrEmpty(result))
+            {
+                ThingsConnectionPanel.Children.Remove(sender as ThingConnectionControl);
+            }
+            else
+            {
+                logConsole.AddToconsole("Error, can't delete thing: " + result, ConsoleMessageCode.Danger);
+            } 
+                
         }
 
         private static bool ServerCertificateCustomValidation(HttpRequestMessage requestMessage, X509Certificate2 certificate, X509Chain chain, SslPolicyErrors sslErrors)
@@ -216,7 +236,7 @@ namespace OWLOSAirQuality.Frames
             }
         }
 
-        protected async Task<string> PostAirQualityData(string OWLOSEcosystemHost, string airQualityData)
+        protected async Task<string> PostAirQualityData(string OWLOSEcosystemHost, string airQualityData, ThingConnectionControl connectionControl)
         {
             try
             {
@@ -232,15 +252,51 @@ namespace OWLOSAirQuality.Frames
                 response.EnsureSuccessStatusCode();
 
                 string responseBody = await response.Content.ReadAsStringAsync();
+                connectionControl.Recv = responseBody.Length;
+
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    connectionControl.Send = airQualityData.Length;
+                    connectionControl.Success = 1;
+                }
+                else
+                {
+                    connectionControl.Errors = 1;
+                }                    
+                return string.Empty;
+            }
+            catch (Exception exception)
+            {
+                connectionControl.Errors = 1;
+                return OWLOSEcosystemHost + " " + exception.Message;
+            }
+        }
+
+        protected async Task<string> DeleteThingConnection(int thingId)
+        {            
+            string queryString = connectionURL + "/Things/DeleteThingConnection?userToken=" + userToken + "&ThingId=" + thingId.ToString();
+            try
+            {
+                HttpClientHandler handler = new HttpClientHandler
+                {
+                    ServerCertificateCustomValidationCallback = ServerCertificateCustomValidation
+                };
+
+                HttpClient client = new HttpClient(handler);
+
+                HttpResponseMessage response = client.DeleteAsync(queryString).GetAwaiter().GetResult();
+
+                response.EnsureSuccessStatusCode();
+
+                string responseBody = await response.Content.ReadAsStringAsync();
 
                 return string.Empty;
             }
             catch (Exception exception)
             {
-                return OWLOSEcosystemHost + " " + exception.Message;
+                return queryString + " " + exception.Message;
             }
         }
-
 
         private async void OnLifeCycleTimer(object source, ElapsedEventArgs e)
         {
@@ -341,10 +397,11 @@ namespace OWLOSAirQuality.Frames
 "CCS811temp:-273.15\n" +
 "CCS811tempHD:30;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;-273.15;\n";
 
-            string response = PostAirQualityData(connectionURL + "/Things/AirQuality", airQualityDate).Result;
+
 
             base.Dispatcher.Invoke(() =>
             {
+                string response = PostAirQualityData(connectionURL + "/Things/AirQuality", airQualityDate, selectedControl).Result;
                 if (string.IsNullOrEmpty(response))
                 {
                     logConsole.AddToconsole("OK " + thingConnectionPropertiesDTOs[ConnectionSelector].Name, ConsoleMessageCode.Success);

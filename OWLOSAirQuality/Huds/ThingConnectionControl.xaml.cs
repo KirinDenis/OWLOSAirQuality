@@ -47,6 +47,8 @@ namespace OWLOSAirQuality.Huds
 {
     public partial class ThingConnectionControl : UserControl
     {
+        public delegate void DeleteEventHandler(object? sender, bool e);
+        public event DeleteEventHandler OnDelete;
 
         protected ColorAnimation animation;
 
@@ -66,12 +68,34 @@ namespace OWLOSAirQuality.Huds
             }
         }
 
+        private readonly long SendCount = 0;
+        public long Send
+        {
+            set => _Send.Text = string.Format("{0:0.##}", SendCount + value);
+        }
+
+        private readonly long RecvCount = 0;
+        public long Recv
+        {
+            set => _Recv.Text = string.Format("{0:0.##}", RecvCount + value);
+        }
+
+        private readonly long SuccessCount = 0;
+        public long Success
+        {
+            set => _Success.Text = string.Format("{0:0.##}", SuccessCount + value);
+        }
+
+        private readonly long ErrorsCount = 0;
+        public long Errors
+        {
+            set => _Errors.Text = string.Format("{0:0.##}", ErrorsCount + value);
+        }
 
         protected NetworkStatus _Status = NetworkStatus.Offline;
         public NetworkStatus Status
         {
             get => _Status;
-
             set
             {
                 _Status = value;
@@ -91,7 +115,7 @@ namespace OWLOSAirQuality.Huds
                 {
                     case NetworkStatus.Online:
                         _Name.Foreground = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSLight"]).Color);
-                        _StatusText.Background = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSSuccessAlpha2"]).Color);
+                        _StatusText.Foreground = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSSuccessAlpha2"]).Color);
                         _StatusText.Text = "ONLINE";
 
                         Background = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSInfoAlpha1"]).Color);
@@ -99,7 +123,7 @@ namespace OWLOSAirQuality.Huds
                         break;
                     case NetworkStatus.Offline:
                         _Name.Foreground = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSInfo"]).Color);
-                        _StatusText.Background = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSWarningAlpha2"]).Color);
+                        _StatusText.Foreground = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSWarningAlpha2"]).Color);
                         _StatusText.Text = "OFFLINE";
 
                         animation.To = ((SolidColorBrush)App.Current.Resources["OWLOSWarningAlpha2"]).Color;
@@ -107,25 +131,21 @@ namespace OWLOSAirQuality.Huds
 
                         Background = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSInfoAlpha1"]).Color);
                         Background.BeginAnimation(SolidColorBrush.ColorProperty, animation);
-
-
                         break;
                     case NetworkStatus.Reconnect:
                         _Name.Foreground = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSPrimary"]).Color);
-                        _StatusText.Background = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSInfoAlpha2"]).Color);
+                        _StatusText.Foreground = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSInfoAlpha2"]).Color);
                         _StatusText.Text = "RECONNECT";
-
 
                         animation.To = ((SolidColorBrush)App.Current.Resources["OWLOSInfoAlpha2"]).Color;
                         animation.Duration = new Duration(TimeSpan.FromSeconds(0.2 + random.NextDouble()));
 
                         Background = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSInfoAlpha1"]).Color);
                         Background.BeginAnimation(SolidColorBrush.ColorProperty, animation);
-
                         break;
                     default:
                         _Name.Foreground = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSDanger"]).Color);
-                        _StatusText.Background = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSDangerAlpha2"]).Color);
+                        _StatusText.Foreground = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSDangerAlpha2"]).Color);
                         _StatusText.Text = "ERROR";
 
                         animation.To = ((SolidColorBrush)App.Current.Resources["OWLOSDangerAlpha2"]).Color;
@@ -133,7 +153,6 @@ namespace OWLOSAirQuality.Huds
 
                         Background = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSInfoAlpha1"]).Color);
                         Background.BeginAnimation(SolidColorBrush.ColorProperty, animation);
-
                         break;
                 }
             }
@@ -142,6 +161,29 @@ namespace OWLOSAirQuality.Huds
         public ThingConnectionControl()
         {
             InitializeComponent();
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteButton.IsEnabled = false;
+
+            _StatusText.Foreground = new SolidColorBrush(((SolidColorBrush)App.Current.Resources["OWLOSWarningAlpha2"]).Color);
+            _StatusText.Text = "DELETING...";
+
+            animation = new ColorAnimation
+            {
+                To = ((SolidColorBrush)App.Current.Resources["OWLOSWarningAlpha2"]).Color,
+                Duration = new Duration(TimeSpan.FromSeconds(0.3 + random.NextDouble())),
+                RepeatBehavior = RepeatBehavior.Forever
+            };
+            Background = new SolidColorBrush(((SolidColorBrush)Background).Color);
+            Background.BeginAnimation(SolidColorBrush.ColorProperty, animation);
+
+            OnDelete?.Invoke(this, true);
+
+            Background.BeginAnimation(SolidColorBrush.ColorProperty, null);
+            _StatusText.Text = "ERROR";
+            _Caption.Text = "Can't delete thing";
         }
     }
 }

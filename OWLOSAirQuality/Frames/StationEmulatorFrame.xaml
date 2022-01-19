@@ -43,11 +43,13 @@
 
                     </Grid>
 
-                    <Grid Grid.Column="2">
+                    <Grid Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                        <ScrollViewer>
                         <StackPanel>
                           <Button x:Name="AddButton" Content="Add" Margin="8" Width="74" Height="22"  HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="{DynamicResource OWLOSDark}"  BorderBrush="{DynamicResource OWLOSSecondary}" Background="{DynamicResource OWLOSSecondary}" Click="AddButton_Click"/>
                           <WrapPanel x:Name="ThingsConnectionPanel"></WrapPanel>
                         </StackPanel>
+                        </ScrollViewer>
                     </Grid>
                  </Grid>
             </Grid>

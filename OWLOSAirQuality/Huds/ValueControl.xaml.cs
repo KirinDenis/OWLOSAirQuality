@@ -63,7 +63,6 @@ namespace OWLOSAirQuality.Huds
                 }
             }
         }
-
         public string Value
         {
             get => _Value != null ? _Value.Text : string.Empty;
@@ -411,8 +410,7 @@ namespace OWLOSAirQuality.Huds
             else 
             {
                 BoxRectangle.Fill = new SolidColorBrush(Color.FromArgb(0x01, 0x00, 0x00, 0x00));
-            } 
-               
+            }                
         }
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
