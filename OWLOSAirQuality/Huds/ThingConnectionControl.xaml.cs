@@ -68,28 +68,44 @@ namespace OWLOSAirQuality.Huds
             }
         }
 
-        private readonly long SendCount = 0;
+        private long SendCount = 0;
         public long Send
-        {
-            set => _Send.Text = string.Format("{0:0.##}", SendCount + value);
+        {            
+            set 
+            { 
+                SendCount += value;
+                _Send.Text = string.Format("{0:0.##}", SendCount);
+            }
         }
 
-        private readonly long RecvCount = 0;
+        private long RecvCount = 0;
         public long Recv
         {
-            set => _Recv.Text = string.Format("{0:0.##}", RecvCount + value);
+            set
+            {
+                RecvCount += value;
+                _Recv.Text = string.Format("{0:0.##}", RecvCount);
+            }
         }
 
-        private readonly long SuccessCount = 0;
+        private long SuccessCount = 0;
         public long Success
         {
-            set => _Success.Text = string.Format("{0:0.##}", SuccessCount + value);
+            set
+            {
+                SuccessCount += value;
+                _Success.Text = string.Format("{0:0.##}", SuccessCount);
+            }
         }
 
-        private readonly long ErrorsCount = 0;
+        private long ErrorsCount = 0;
         public long Errors
         {
-            set => _Errors.Text = string.Format("{0:0.##}", ErrorsCount + value);
+            set
+            {
+                ErrorsCount += value;
+                _Errors.Text = string.Format("{0:0.##}", ErrorsCount);
+            }
         }
 
         protected NetworkStatus _Status = NetworkStatus.Offline;
