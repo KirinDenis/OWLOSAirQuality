@@ -128,11 +128,11 @@ namespace OWLOSAirQuality.Frames
             }
         }
 
-        private void RefreshThingConnections()
+        private async Task RefreshThingConnections()
         {
             ThingsConnectionPanel.Children.Clear();
 
-            thingConnectionPropertiesDTOs = GetThingsConnections().Result;
+            thingConnectionPropertiesDTOs = await GetThingsConnections();
 
             if (thingConnectionPropertiesDTOs != null)
             {
@@ -195,7 +195,7 @@ namespace OWLOSAirQuality.Frames
 
                 string queryString = connectionURL + "/Things/GetThingsConnections?userToken=" + userToken;
 
-                HttpResponseMessage response = client.GetAsync(queryString).GetAwaiter().GetResult();
+                HttpResponseMessage response = await client.GetAsync(queryString);
 
                 response.EnsureSuccessStatusCode();
                 result = JsonConvert.DeserializeObject<List<ThingConnectionPropertiesDTO>>(await response.Content.ReadAsStringAsync());
@@ -222,7 +222,7 @@ namespace OWLOSAirQuality.Frames
 
                 HttpClient client = new HttpClient(handler);
 
-                HttpResponseMessage response = client.PostAsync(queryString, new StringContent(" ")).GetAwaiter().GetResult();
+                HttpResponseMessage response = await client.PostAsync(queryString, new StringContent(" "));
 
                 response.EnsureSuccessStatusCode();
 
@@ -247,7 +247,7 @@ namespace OWLOSAirQuality.Frames
 
                 HttpClient client = new HttpClient(handler);
 
-                HttpResponseMessage response = client.PostAsync(OWLOSEcosystemHost, new StringContent(airQualityData)).GetAwaiter().GetResult();
+                HttpResponseMessage response = await client.PostAsync(OWLOSEcosystemHost, new StringContent(airQualityData));
 
                 response.EnsureSuccessStatusCode();
 
@@ -284,7 +284,7 @@ namespace OWLOSAirQuality.Frames
 
                 HttpClient client = new HttpClient(handler);
 
-                HttpResponseMessage response = client.DeleteAsync(queryString).GetAwaiter().GetResult();
+                HttpResponseMessage response = await client.DeleteAsync(queryString);
 
                 response.EnsureSuccessStatusCode();
 
@@ -308,9 +308,9 @@ namespace OWLOSAirQuality.Frames
 
             if (thingConnectionPropertiesDTOs == null)
             {
-                base.Dispatcher.Invoke(() =>
+                 base.Dispatcher.Invoke(() =>
                 {
-                    RefreshThingConnections();
+                     RefreshThingConnections();
                 });
             }
 
@@ -399,9 +399,9 @@ namespace OWLOSAirQuality.Frames
 
 
 
-            base.Dispatcher.Invoke(() =>
+            base.Dispatcher.Invoke(async () =>
             {
-                string response = PostAirQualityData(connectionURL + "/Things/AirQuality", airQualityDate, selectedControl).Result;
+                string response = await PostAirQualityData(connectionURL + "/Things/AirQuality", airQualityDate, selectedControl);
                 if (string.IsNullOrEmpty(response))
                 {
                     logConsole.AddToconsole("OK " + thingConnectionPropertiesDTOs[ConnectionSelector].Name, ConsoleMessageCode.Success);
