@@ -60,7 +60,7 @@ char *stringToChar(String src)
 
 #if defined (DEBUG) || defined (LOG_SCREEN_UX)
 void debugOut(const String &tag, const String &text, int code)
-{
+{	
 #ifdef LOG_SCREEN_UX
   logScreenAddText(tag, text, code);
 #endif

@@ -42,7 +42,7 @@ OWLOS распространяется в надежде, что она буде
 //var boardhost = "http://46.219.35.245/"; //DEBUG
 //var boardhost = "http://iot.light.kiev.ua:8084/";
 //var boardhost = "http://192.168.1.5:8084/"; //DEBUG as WiFi Access Point
-var boardhost = "http://192.168.1.12/"; //Station mode
+var boardhost = "http://192.168.0.108/"; //Station mode
 //var boardhost = ""; //UI loading from ESPxxxx
 
 

@@ -6,6 +6,10 @@
 		{
 			"name": "OWLOS",
 			"path": "OWLOS"
+		},
+		{
+			"name": "ESP32_BME680",
+			"path": "F:\\ESP32_BME680\\ESP32_BME680"
 		}
 	],
 	"settings": {

@@ -138,7 +138,7 @@ namespace OWLOSThingsManager.Ecosystem
 
             RESTfulClientConnectionDTO _RESTfulClientConnectionDTO = new RESTfulClientConnectionDTO
             {
-                host = "http://192.168.1.101:80/"
+                host = "http://192.168.0.100:80/"
             };
             // _RESTfulClientConnectionDTO.port = 80;
             _RESTfulClientConnection.connectionString = JsonConvert.SerializeObject(_RESTfulClientConnectionDTO);

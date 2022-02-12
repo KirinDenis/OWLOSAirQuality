@@ -59,7 +59,8 @@ bool BMP280Driver::init()
 	if (pinDriverInfo != nullptr)
 	{
 //если пользователь задал адрес, инкапсулируем класс обслуживающий BMP280 и пробуем работать с через указанный порт
-		bmp280 = new Adafruit_BMP280();
+		bmp280 = new Adafruit_BMP280();		
+
 		if (bmp280->begin(pinDriverInfo->driverI2CAddr, BMP280_CHIPID))
 		{
 			/* Default settings from datasheet. */
