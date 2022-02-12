@@ -101,10 +101,10 @@ public:
 	String getTemperatureHistoryData();
 	bool setTemperatureHistoryData(float _historydata);
 
-	String CO2 = "nan";
-	String TVOC = "nan";
-	String resistence = "nan";
-	String temperature = "nan";
+	String CO2 = "calc";
+	String TVOC = "calc";
+	String resistence = "calc";
+	String temperature = "calc";
 
 private:
 	CCS811 *ccs811 = nullptr;

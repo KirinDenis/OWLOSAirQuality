@@ -42,7 +42,7 @@ OWLOS распространяется в надежде, что она буде
 #define DRIVER_ID "ccs811"
 #define CCS811_LOOP_INTERVAL 2000
 
-//CCS811_ADDR 0x5A Default I2C Address
+// CCS811_ADDR 0x5A Default I2C Address
 
 bool CCS811Driver::init()
 {
@@ -94,7 +94,7 @@ bool CCS811Driver::query()
 {
 	if (BaseDriver::query())
 	{
-		//Fill array of history data ---------------------------
+		// Fill array of history data ---------------------------
 		if (millis() >= lastHistoryMillis + historyInterval)
 		{
 			lastHistoryMillis = millis();
@@ -148,8 +148,8 @@ String CCS811Driver::onMessage(String route, String _payload, int8_t transportMa
 	//с архитектурой, по этой причине необходим отдельный обработчик I2CADDR пина
 	if (matchRoute(route, topic, "/setpin"))
 	{
-		//base is put the new address to to PinService
-		result = init(); //init() get Address from PinManger
+		// base is put the new address to to PinService
+		result = init(); // init() get Address from PinManger
 	}
 
 	if (!result.equals(WRONG_PROPERTY_NAME))
@@ -192,18 +192,19 @@ String CCS811Driver::onMessage(String route, String _payload, int8_t transportMa
 	return result;
 }
 
-//Read data ----------------------------------------------
+// Read data ----------------------------------------------
 bool CCS811Driver::readData()
 {
 
-	CO2 = "nan";
-	TVOC = "nan";
-	resistence = "nan";
-	temperature = "nan";
-
-	if (ccs811 == nullptr) //compile boolean expression must be enabled
+	if (ccs811 == nullptr) // compile boolean expression must be enabled
 	{
 		setAvailable(false);
+
+		CO2 = "nan";
+		TVOC = "nan";
+		resistence = "nan";
+		temperature = "nan";
+
 #ifdef DETAILED_DEBUG
 #if defined(DEBUG) || defined(LOGO_SCREEN_UX)
 		debugOut(id, "CCS811 object not ready");
@@ -230,12 +231,12 @@ bool CCS811Driver::readData()
 	return false;
 }
 
-//CO2 ------------------------------------------------
+// CO2 ------------------------------------------------
 String CCS811Driver::getCO2()
 {
 	return CO2;
 }
-//History data ------------------------------------------------
+// History data ------------------------------------------------
 //получение накопленных данных о показаниях сенсора давления
 String CCS811Driver::getCO2HistoryData()
 {
@@ -271,12 +272,12 @@ bool CCS811Driver::setCO2HistoryData(float _historydata)
 	return true;
 }
 
-//TVOC ------------------------------------------------
+// TVOC ------------------------------------------------
 String CCS811Driver::getTVOC()
 {
 	return TVOC;
 }
-//History data ------------------------------------------------
+// History data ------------------------------------------------
 //получение накопленных данных о показаниях сенсора давления
 String CCS811Driver::getTVOCHistoryData()
 {
@@ -312,12 +313,12 @@ bool CCS811Driver::setTVOCHistoryData(float _historydata)
 	return true;
 }
 
-//Resistence ------------------------------------------------
+// Resistence ------------------------------------------------
 String CCS811Driver::getResistence()
 {
 	return resistence;
 }
-//History data ------------------------------------------------
+// History data ------------------------------------------------
 //получение накопленных данных о показаниях сенсора давления
 String CCS811Driver::getResistenceHistoryData()
 {
@@ -353,12 +354,12 @@ bool CCS811Driver::setResistenceHistoryData(float _historydata)
 	return true;
 }
 
-//Temperature ------------------------------------------------
+// Temperature ------------------------------------------------
 String CCS811Driver::getTemperature()
 {
 	return temperature;
 }
-//History data ------------------------------------------------
+// History data ------------------------------------------------
 //получение накопленных данных о показаниях сенсора давления
 String CCS811Driver::getTemperatureHistoryData()
 {
