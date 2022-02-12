@@ -7,7 +7,7 @@
 
 Used hardware: 
 - ESP32 microcontroller
-- CCS811 + SI7021 + BMP280
+- CCS811 + SI7021 + BMP280 (or BME680)
 - ADS1115
 - 3.5" TFT LCD with touch
 - DHT22
