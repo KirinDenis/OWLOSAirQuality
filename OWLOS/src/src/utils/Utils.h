@@ -98,6 +98,7 @@ OWLOS распространяется в надежде, что она буде
 #define BMP280_DRIVER_TYPE 16
 #define ADS1X15_DRIVER_TYPE 17
 #define CCS811_DRIVER_TYPE 18
+#define BME680_DRIVER_TYPE 19
 
 char *stringToChar(String src);
 #if defined (DEBUG) || defined (LOG_SCREEN_UX)

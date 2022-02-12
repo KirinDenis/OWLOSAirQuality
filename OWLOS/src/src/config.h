@@ -163,8 +163,11 @@ OWLOS распространяется в надежде, что она буде
         //Драйвер цифровых серсоров температуры и влажности (Digital Humidity and Temperature) - DHT11, DTH22 и прочих
         #define USE_DHT_DRIVER
 
+        //Драйвер сенсора BME680
+        #define USE_BME680_DRIVER 
+
         //Драйвер сенсора BMP280
-        #define USE_BMP280_DRIVER
+        //#define USE_BMP280_DRIVER
 
         //Драйвер сенсора ADS1X15
         #define USE_ADS1X15_DRIVER

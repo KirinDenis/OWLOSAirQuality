@@ -50,7 +50,15 @@ extern TFT_eSPI tft;
 extern int currentMode;
 
 extern DHTDriver *_DHTDriver;
+
+#ifdef USE_BMP280_DRIVER
 extern BMP280Driver *_BMP280Driver;
+#endif
+
+#ifdef USE_BME680_DRIVER
+extern BME680Driver *_BME680Driver;
+#endif
+
 extern ADS1X15Driver *_ADS1X15Driver;
 extern CCS811Driver *_CCS811Driver;
 
@@ -183,6 +191,8 @@ void drawBMP280Status()
 {
     int statusColor = OWLOSDangerColor;
     int textColor = OWLOSPrimaryColor;
+//NOTE: Use BME680 if BMP280 is not pressent on the PCB
+#ifdef USE_BMP280_DRIVER    
     if ((_BMP280Driver != nullptr) && (_BMP280Driver->available == 1))
     {
         statusColor = OWLOSLightColor;
@@ -207,6 +217,35 @@ void drawBMP280Status()
     bmp280PressureItem.draw("pressure", textColor, OWLOSDarkColor, 2);
     bmp280AltitudeItem.draw("altitude", textColor, OWLOSDarkColor, 2);
     bmp280TemperatureItem.draw("temperature", textColor, OWLOSDarkColor, 2);
+#endif    
+
+#ifdef USE_BME680_DRIVER    
+    if ((_BME680Driver != nullptr) && (_BME680Driver->available == 1))
+    {
+        statusColor = OWLOSLightColor;
+        textColor = OWLOSLightColor;
+
+        float kPa = atof(_BME680Driver->pressure.c_str()) / 1000.0f;
+        float mmHg = kPa * 7.5006375541921;
+
+        bmp280PressureValueItem.draw(String(kPa) + "kPa/" + String(mmHg) + "mmHg", textColor, OWLOSDarkColor, 2);
+        bmp280AltitudeValueItem.draw(_BME680Driver->altitude + "m", textColor, OWLOSDarkColor, 2);
+        bmp280TemperatureValueItem.draw(_BME680Driver->temperature + "C", textColor, OWLOSDarkColor, 2);
+    }
+    else
+    {
+        bmp280PressureValueItem.draw("--", textColor, OWLOSDarkColor, 2);
+        bmp280AltitudeValueItem.draw("--", textColor, OWLOSDarkColor, 2);
+        bmp280TemperatureValueItem.draw("--", textColor, OWLOSDarkColor, 2);
+    }
+
+    bmp280HeaderItem.draw("BME 680", statusColor, OWLOSSecondaryColor, 1);
+    textColor = OWLOSPrimaryColor;
+    bmp280PressureItem.draw("pressure", textColor, OWLOSDarkColor, 2);
+    bmp280AltitudeItem.draw("altitude", textColor, OWLOSDarkColor, 2);
+    bmp280TemperatureItem.draw("temperature", textColor, OWLOSDarkColor, 2);
+#endif    
+
 }
 
 //-------------------------------------------------

@@ -216,6 +216,18 @@ String driversGetAccessable()
 		result += "pintypedecoded" + String(i) + "=" + decodePinTypes(DHTDriver::getPinType(i)) + "\n";
 	}
 #endif
+
+#ifdef USE_BME680_DRIVER
+	result += "name:BME680Driver\n";
+	result += "type=" + String(BME680_DRIVER_TYPE) + "\n";
+	result += "pinscount=" + String(BME680Driver::getPinsCount()) + "\n";
+	for (int i = 0; i < BME680Driver::getPinsCount(); i++)
+	{
+		result += "pintype" + String(i) + "=" + BME680Driver::getPinType(i) + "\n";
+		result += "pintypedecoded" + String(i) + "=" + decodePinTypes(BME680Driver::getPinType(i)) + "\n";
+	}
+#endif
+
 #ifdef USE_STEPPER_DRIVER
 	result += "name:StepperDriver\n";
 	result += "type=" + String(STEPPER_DRIVER_TYPE) + "\n";
@@ -697,7 +709,7 @@ String driversAdd(int type, String id, String pins) //String D1,D3,GND,....
 		result = setDriverPin(_pins[SDA_INDEX], 
 		id, SDA_INDEX, ADS1X15Driver::getPinType(SDA_INDEX)) + setDriverPin(_pins[SCL_INDEX], 
 		id, SCL_INDEX, ADS1X15Driver::getPinType(SCL_INDEX)) + _setDriverPin(_pins[I2CADDR_INDEX], 
-		id, I2CADDR_INDEX, BMP280Driver::getPinType(I2CADDR_INDEX), _pins[SDA_INDEX]) + setDriverPin(_pins[I2C_VCC5_INDEX], 
+		id, I2CADDR_INDEX, ADS1X15Driver::getPinType(I2CADDR_INDEX), _pins[SDA_INDEX]) + setDriverPin(_pins[I2C_VCC5_INDEX], 
 		id, I2C_VCC5_INDEX, ADS1X15Driver::getPinType(I2C_VCC5_INDEX)) + setDriverPin(_pins[I2C_GND_INDEX], 
 		id, I2C_GND_INDEX, ADS1X15Driver::getPinType(I2C_GND_INDEX));
 
@@ -749,7 +761,7 @@ String driversAdd(int type, String id, String pins) //String D1,D3,GND,....
 		result = setDriverPin(_pins[SDA_INDEX], 
 		id, SDA_INDEX, CCS811Driver::getPinType(SDA_INDEX)) + setDriverPin(_pins[SCL_INDEX], 
 		id, SCL_INDEX, CCS811Driver::getPinType(SCL_INDEX)) + _setDriverPin(_pins[I2CADDR_INDEX], 
-		id, I2CADDR_INDEX, BMP280Driver::getPinType(I2CADDR_INDEX), _pins[SDA_INDEX]) + setDriverPin(_pins[I2C_VCC5_INDEX], 
+		id, I2CADDR_INDEX, CCS811Driver::getPinType(I2CADDR_INDEX), _pins[SDA_INDEX]) + setDriverPin(_pins[I2C_VCC5_INDEX], 
 		id, I2C_VCC5_INDEX, CCS811Driver::getPinType(I2C_VCC5_INDEX)) + setDriverPin(_pins[I2C_GND_INDEX], 
 		id, I2C_GND_INDEX, CCS811Driver::getPinType(I2C_GND_INDEX));
 
@@ -800,6 +812,57 @@ String driversAdd(int type, String id, String pins) //String D1,D3,GND,....
 		dhtDriver->init(id);
 		dhtDriver->id = id;
 		driversList[freeIndex] = dhtDriver;
+	}
+	else
+#endif
+#ifdef USE_BME680_DRIVER
+		if (type == BME680_DRIVER_TYPE)
+	{
+#ifdef DETAILED_DEBUG
+#if defined (DEBUG) || defined (LOG_SCREEN_UX)
+		debugOut("pin", String(pinCount));
+#endif
+#endif
+		if (pinCount != BME680Driver::getPinsCount())
+		{
+			return "BME680Driver's pins quantity does not match, must be " + String(BME680Driver::getPinsCount());
+		}
+		
+		result = 
+		checkDriverPin(_pins[SDA_INDEX], BME680Driver::getPinType(SDA_INDEX)) + 
+		checkDriverPin(_pins[SCL_INDEX], BME680Driver::getPinType(SCL_INDEX)) + 		
+		_checkDriverPin(_pins[I2CADDR_INDEX], BME680Driver::getPinType(I2CADDR_INDEX), _pins[SDA_INDEX]) + 
+		checkDriverPin(_pins[I2C_VCC5_INDEX], BME680Driver::getPinType(I2C_VCC5_INDEX)) + 				
+		checkDriverPin(_pins[I2C_GND_INDEX], BME680Driver::getPinType(I2C_GND_INDEX));		
+
+
+		if (result.length() != 0)
+		{
+#if defined (DEBUG) || defined (LOG_SCREEN_UX)			
+			debugOut("BME680", String(result));
+#endif			
+			return result;
+		}
+		
+		result = setDriverPin(_pins[SDA_INDEX], 
+		id, SDA_INDEX, BME680Driver::getPinType(SDA_INDEX)) + setDriverPin(_pins[SCL_INDEX], 
+		id, SCL_INDEX, BME680Driver::getPinType(SCL_INDEX)) + _setDriverPin(_pins[I2CADDR_INDEX], 
+		id, I2CADDR_INDEX, BME680Driver::getPinType(I2CADDR_INDEX), _pins[SDA_INDEX]) + setDriverPin(_pins[I2C_VCC5_INDEX], 
+		id, I2C_VCC5_INDEX, BME680Driver::getPinType(I2C_VCC5_INDEX)) + setDriverPin(_pins[I2C_GND_INDEX], 
+		id, I2C_GND_INDEX, BME680Driver::getPinType(I2C_GND_INDEX));
+
+		if (result.length() != 0)
+		{
+#if defined (DEBUG) || defined (LOG_SCREEN_UX)			
+			debugOut("BME680", result);
+#endif						
+			return result;
+		}
+		
+		BME680Driver *bme680Driver = new BME680Driver;
+		bme680Driver->id = id;
+		bme680Driver->init();
+		driversList[freeIndex] = bme680Driver;
 	}
 	else
 #endif

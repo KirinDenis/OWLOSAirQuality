@@ -56,8 +56,17 @@ unsigned long lastPublishMillis = 0;
 #define DHT22_Driver_Id "dht22"
 #define DHT22_Driver_Pind "IO32,VCC33,GND"
 
+#ifdef USE_BMP280_DRIVER
 #define BMP280_Driver_Id "bmp280"
 #define BMP280_Driver_Pind "IO21,IO22,ADDR0x76,VCC33,GND"
+#endif
+
+#ifdef USE_BME680_DRIVER
+#define BME680_Driver_Id "bme680"
+#define BME680_Driver_Pind "IO21,IO22,ADDR0x77,VCC33,GND"
+#endif
+
+
 
 #define ADS1X15_Driver_Id "ads1x15"
 #define ADS1X15_Driver_Pind "IO21,IO22,ADDR0x48,VCC33,GND"
@@ -66,7 +75,15 @@ unsigned long lastPublishMillis = 0;
 #define CCS811_Driver_Pind "IO21,IO22,ADDR0x5A,VCC33,GND"
                              
 DHTDriver *_DHTDriver = nullptr;
+
+#ifdef USE_BMP280_DRIVER
 BMP280Driver *_BMP280Driver = nullptr;
+#endif
+
+#ifdef USE_BME680_DRIVER
+BME680Driver *_BME680Driver = nullptr;
+#endif
+
 ADS1X15Driver *_ADS1X15Driver = nullptr;
 CCS811Driver *_CCS811Driver = nullptr;
 
@@ -77,8 +94,16 @@ void AirQualityBegin(String __topic)
     driversAdd(DHT_DRIVER_TYPE, DHT22_Driver_Id, DHT22_Driver_Pind);
     _DHTDriver = (DHTDriver*)driversGetDriver(DHT22_Driver_Id);
 
+#ifdef USE_BMP280_DRIVER
     driversAdd(BMP280_DRIVER_TYPE, BMP280_Driver_Id, BMP280_Driver_Pind);    
     _BMP280Driver = (BMP280Driver*)driversGetDriver(BMP280_Driver_Id);
+#endif    
+
+#ifdef USE_BME680_DRIVER
+    driversAdd(BME680_DRIVER_TYPE, BME680_Driver_Id, BME680_Driver_Pind);    
+    _BME680Driver = (BME680Driver*)driversGetDriver(BME680_Driver_Id);
+#endif    
+
 
     driversAdd(ADS1X15_DRIVER_TYPE, ADS1X15_Driver_Id, ADS1X15_Driver_Pind);    
     _ADS1X15Driver = (ADS1X15Driver*)driversGetDriver(ADS1X15_Driver_Id);
@@ -112,6 +137,8 @@ void AirQualityLoop()
           AirQualityPropertiesMode += "DHT22:no\n";
       }
 
+//NOTE: TODO: TEMPORARY: use BMP280 as BME680 drive prefix for server compotable 
+#ifdef USE_BMP280_DRIVER
       if (_BMP280Driver != nullptr)
       {
           AirQualityPropertiesMode += "BMP280:yes\n";
@@ -123,6 +150,20 @@ void AirQualityLoop()
           AirQualityPropertiesMode += "BMP280temperatureHD:" +  String(_BMP280Driver->getTemperatureHistoryData()) + "\n";
       }
       else 
+#endif      
+#ifdef USE_BME680_DRIVER
+      if (_BME680Driver != nullptr)
+      {
+          AirQualityPropertiesMode += "BMP280:yes\n";
+          AirQualityPropertiesMode += "BMP280pressure:" +  String(_BME680Driver->pressure) + "\n";          
+          AirQualityPropertiesMode += "BMP280pressureHD:" +  String(_BME680Driver->getPressureHistoryData()) + "\n";
+          AirQualityPropertiesMode += "BMP280altitude:" +  String(_BME680Driver->altitude) + "\n";
+          AirQualityPropertiesMode += "BMP280altitudeHD:" +  String(_BME680Driver->getAltitudeHistoryData()) + "\n";
+          AirQualityPropertiesMode += "BMP280temperature:" +  String(_BME680Driver->temperature) + "\n";
+          AirQualityPropertiesMode += "BMP280temperatureHD:" +  String(_BME680Driver->getTemperatureHistoryData()) + "\n";
+      }
+      else 
+#endif            
       {
           AirQualityPropertiesMode += "BMP280:no\n";
       }

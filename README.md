@@ -45,7 +45,7 @@ Used hardware:
 - [DHT-sensor-library](https://github.com/adafruit/DHT-sensor-library)
 - [LiquidCrystal_I2C](https://gitlab.com/tandembyte/liquidcrystal_i2c)	
 
-### Copyright 2019, 2020, 2021 by
+### Copyright 2019, 2020, 2021, 2022 by
 
 - Mónica (rovt@ua.fm)
 - Yan Sokolov (Dadras279@gmail.com)

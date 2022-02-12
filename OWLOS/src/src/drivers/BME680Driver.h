@@ -1,9 +1,6 @@
 ﻿/* ----------------------------------------------------------------------------
 OWLOS DIY Open Source OS for building IoT ecosystems
-Copyright 2019, 2020 by:
-- Konstantin Brul (konstabrul@gmail.com)
-- Vitalii Glushchenko (cehoweek@gmail.com)
-- Denys Melnychuk (meldenvar@gmail.com)
+Copyright 2022 by:
 - Denis Kirin (deniskirinacs@gmail.com)
 
 This file is part of OWLOS DIY Open Source OS for building IoT ecosystems
@@ -38,81 +35,82 @@ OWLOS распространяется в надежде, что она буде
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с
 этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.)
 --------------------------------------------------------------------------------------*/
-#include "../config.h"
-
-#ifdef USE_DRIVERS
-
-#ifndef DRIVERSERVICE_H
-#define DRIVERSERVICE_H
-
-#include "../drivers/BaseDriver.h"
-
-#ifdef USE_ACTUATOR_DRIVER
-#include "../drivers/ActuatorDriver.h"
-#endif
-
-#ifdef USE_SENSOR_DRIVER
-#include "../drivers/SensorDriver.h"
-#endif
-
-#ifdef USE_DHT_DRIVER
-#include "../drivers/DHTDriver.h"
-#endif
-
-#ifdef USE_LCD_DRIVER
-#include "../drivers/LCDDriver.h"
-#endif
-
-#ifdef USE_STEPPER_DRIVER
-#include "../drivers/StepperDriver.h"
-#endif
-
-#ifdef USE_VALVE_DRIVER
-#include "../drivers/ValveDriver.h"
-#endif
-
-#ifdef USE_BMP280_DRIVER
-#include "../drivers/BMP280Driver.h"
-#endif
-
-#ifdef USE_ADS1X15_DRIVER
-#include "../drivers/ADS1X15Driver.h"
-#endif
-
-#ifdef USE_CCS811_DRIVER
-#include "../drivers/CCS811Driver.h"
-#endif
-
+#include "BaseDriver.h"
 #ifdef USE_BME680_DRIVER
-#include "../drivers/BME680Driver.h"
-#endif
 
-void driversInit(String _topic);
-void driversBegin(String thingTopic);
-void driversLoop();
-String driversGetAccessable();
-void driversSubscribe();
-void driversCallback(String _topic, String _payload);
-String driversGetDriversId();
-BaseDriver *driversGetDriver(String id);
-String driversGetDriverProperty(String id, String property);
-String driversSetDriverProperty(String id, String property, String value);
-String driversGetDriverProperties(String id);
-String driversGetAllDriversProperties();
+#ifndef BME680DRIVER_H
+#define BME680DRIVER_H
 
-bool checkPinBusy(int pin);
-String driversGetBusyPins();
-String driversGetPinsMap();
-int driversPinNameToValue(String pinName);
-String driversValueToPinName(int pinValue);
+#include "../libraries/Adafruit_BME680/Adafruit_BME680.h" 
+#define SDA_INDEX 0
+#define SCL_INDEX 1
+#define I2CADDR_INDEX 2
+#define I2C_VCC5_INDEX 3
+#define I2C_GND_INDEX 4
 
-bool driversSaveList();
-String driversLoadFromConfig();
+class BME680Driver : public BaseDriver
+{
+public:
+	static int getPinsCount()
+	{
+		return 5;
+	}
 
-String driversAdd(int type, String id, String pins);
+	static uint16_t getPinType(int pinIndex)
+	{
+		switch (pinIndex)
+		{
+		case SDA_INDEX:
+			return SDA_MASK;
+		case SCL_INDEX:
+			return SCL_MASK;
+		case I2CADDR_INDEX:
+			return I2CADDR_MASK;
+		case I2C_VCC5_INDEX:
+			return VCC5_MASK | VCC33_MASK;
+		case I2C_GND_INDEX:
+			return GND_MASK;
+		default:
+			return NO_MASK;
+		}
+	}
 
-String driversChangePin(String pinName, String driverId, int driverPinIndex);
-String driversDelete(String id);
+	bool init();
 
+	bool begin(String _topic);
+	bool query();
+	String getAllProperties();
+	String onMessage(String route, String _payload, int8_t transportMask);
+    String getPressure();
+	String getAltitude();
+	String getTemperature();
+
+	String getPressureHistoryData();
+	bool setPressureHistoryData(float _historydata);
+
+	String getAltitudeHistoryData();
+	bool setAltitudeHistoryData(float _historydata);
+
+	String getTemperatureHistoryData();
+	bool setTemperatureHistoryData(float _historydata);
+
+	String pressure = "nan";
+	String altitude = "nan";
+	String temperature = "nan";
+
+
+private:
+	Adafruit_BME680 *BME680 = nullptr;
+
+	int pressureHistoryCount = 0;
+	float *pressureHistoryData = new float[historySize]();
+
+	int altitudeHistoryCount = 0;
+	float *altitudeHistoryData = new float[historySize]();
+
+	int temperatureHistoryCount = 0;
+	float *temperatureHistoryData = new float[historySize]();
+
+};
 #endif
 #endif
