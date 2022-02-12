@@ -1,13 +1,11 @@
 ![OWLOS Air Quality Logo](https://github.com/KirinDenis/OWLOSAirQuality/raw/main/OWLOSResource/images/OWLOSAirQualityLogo.jpg)
 
-[![OWLOS Air Quality](https://img.youtube.com/vi/HRcJmzvD9GQ/0.jpg)(https://www.youtube.com/watch?v=HRcJmzvD9GQ)
-
 # OWLOS Air Quality
 ### Open Source IoT Solution for monitoring air quality based on ![OWLOS](https://github.com/KirinDenis/owlos)
  
 [We on Facebook](https://www.facebook.com/groups/OWLOS)
 
-Used hardware: 
+### Used hardware: 
 - ESP32 microcontroller
 - CCS811 + SI7021 + BMP280 (or BME680)
 - ADS1115
@@ -16,6 +14,13 @@ Used hardware:
 - Photoresistor 
 - MQ7
 - MQ135
+
+### OWLOS Air Quality SCH+PCB+3D+BOM
+https://365.altium.com/files/A92F63A8-C7F4-40DA-98BB-F1BCB85EE9DF
+
+
+### Youtube video describing the architecture (click the image)
+[![OWLOS Air Quality](https://img.youtube.com/vi/HRcJmzvD9GQ/0.jpg)](https://www.youtube.com/watch?v=HRcJmzvD9GQ)
 
 ### Source Code map
 
