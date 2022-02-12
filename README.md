@@ -1,6 +1,6 @@
 ![OWLOS Air Quality Logo](https://github.com/KirinDenis/OWLOSAirQuality/raw/main/OWLOSResource/images/OWLOSAirQualityLogo.jpg)
 
-[![OWLOS Air Quality][(https://img.youtube.com/vi/HRcJmzvD9GQ/0.jpg)](https://www.youtube.com/watch?v=HRcJmzvD9GQ)
+[![OWLOS Air Quality](https://img.youtube.com/vi/HRcJmzvD9GQ/0.jpg)(https://www.youtube.com/watch?v=HRcJmzvD9GQ)
 
 # OWLOS Air Quality
 ### Open Source IoT Solution for monitoring air quality based on ![OWLOS](https://github.com/KirinDenis/owlos)
