@@ -15,8 +15,10 @@
 - MQ7
 - MQ135
 
-### OWLOS Air Quality SCH+PCB+3D+BOM
-https://365.altium.com/files/A92F63A8-C7F4-40DA-98BB-F1BCB85EE9DF
+### SCH+PCB+3D+BOM
+![OWLOS Air Quality PCB](https://github.com/KirinDenis/OWLOSAirQuality/raw/main/OWLOSResource/images/OWLOSPCBImage.jpg)
+[Click here to view online](https://365.altium.com/files/A92F63A8-C7F4-40DA-98BB-F1BCB85EE9DF)
+
 
 
 ### Youtube video describing the architecture (click the image)
