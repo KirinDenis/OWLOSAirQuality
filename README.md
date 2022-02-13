@@ -10,7 +10,7 @@
 - ESP32 microcontroller
 - ILI9486 3.5" TFT LCD touch screen
 - TP4056
--- linear charger for single cell
+ - linear charger for single cell
 - CCS811 
   -- eCO2, TVOC, Resistance levels sensor
 - SI7021 
