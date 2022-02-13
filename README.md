@@ -24,9 +24,15 @@ Discussions about this PCB in our [Facebook](https://www.facebook.com/groups/OWL
 
 ### Youtube videos
 [Describing the architecture](https://www.youtube.com/watch?v=HRcJmzvD9GQ)
+
 [OWLOS Air Quality UX (Single station)](https://www.youtube.com/watch?v=m-6JkY-oQG0)
+
 [OWLOS Air Quality UX (Ecosystem)](https://www.youtube.com/watch?v=i3rpMwrq_1s)
+
 [OWLOS Java Script embedded UX)](https://youtu.be/wqaX4ojn0hw?t=59)
+
+[OWLOS Air Quality UX (Actuators and MQTT)](https://www.youtube.com/watch?v=V5jAli-MB0o)
+
 
 ### Source Code map
 - **/OWLOS/** C/C++ firmware source code (ESP32, ESP8266)
