@@ -16,9 +16,9 @@
 - MQ135
 
 ### SCH+PCB+3D+BOM
-We have published the PCB of OWLOS Air Quality based on ESP32. 
-[Click here to view online](https://365.altium.com/files/A92F63A8-C7F4-40DA-98BB-F1BCB85EE9DF)
-See the testing and using of the PCB at our [Facebook](https://www.facebook.com/groups/OWLOS) community. a
+We have published the PCB of OWLOS Air Quality based on ESP32 ([Click here to view online](https://365.altium.com/files/A92F63A8-C7F4-40DA-98BB-F1BCB85EE9DF)).
+
+We publish and discuss the results of the assembly and use of this PCB at our [Facebook](https://www.facebook.com/groups/OWLOS) community. 
 
 ### Youtube video describing the architecture (click the image)
 [![OWLOS Air Quality](https://img.youtube.com/vi/HRcJmzvD9GQ/0.jpg)](https://www.youtube.com/watch?v=HRcJmzvD9GQ)
