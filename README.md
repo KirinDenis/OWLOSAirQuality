@@ -16,18 +16,16 @@
 - DHT22 (or DHT11 or AM2301) - temperature, humidity and heat index sensor
 - Photoresistor- light level sensor 
 - MQ7 - different gases contains CO sensor
-- MQ135- gas sensor (ammonia gas), sulfide, benzene series steam, smoke and other toxic gases sensor
+- MQ135 - gas sensor (ammonia gas), sulfide, benzene series steam, smoke and other toxic gases sensor
 
 ### SCH+PCB+3D+BOM
-We have published the PCB of OWLOS Air Quality based on ESP32 ([Click here to view online](https://365.altium.com/files/A92F63A8-C7F4-40DA-98BB-F1BCB85EE9DF)).
-
-We discuss the results of the assembly and use of this PCB at our [Facebook](https://www.facebook.com/groups/OWLOS) community. 
+We have published the PCB of OWLOS Air Quality (ESP32) ([Click here to view online](https://365.altium.com/files/A92F63A8-C7F4-40DA-98BB-F1BCB85EE9DF)).
+Discussions about this PCS in our [Facebook](https://www.facebook.com/groups/OWLOS) community. 
 
 ### Youtube video describing the architecture (click the image)
 [![OWLOS Air Quality](https://img.youtube.com/vi/HRcJmzvD9GQ/0.jpg)](https://www.youtube.com/watch?v=HRcJmzvD9GQ)
 
 ### Source Code map
-
 - **/OWLOS/** C/C++ firmware source code (ESP32, ESP8266)
 - **/OWLOSEcosystemService/** .Net Core C# MVC RESTful server (MySQL Data Base used)
 - **/OWLOS/data/** JavaScript stand-alone and embedded UX 
@@ -35,7 +33,6 @@ We discuss the results of the assembly and use of this PCB at our [Facebook](htt
 - **/OWLOSResource/** Blendar 3D models, schematics and images resources
 
 ### How to build
-
 1. install [PlatformIO IDE](https://platformio.org/)
 2. install COM port drivers for your board
 3. in PlatformIO open OWLOS workspace 
@@ -46,7 +43,6 @@ We discuss the results of the assembly and use of this PCB at our [Facebook](htt
 
 
 ### Special thanks to
-
 - [PlatformIO IDE](https://platformio.org/)
 - [ESP32 Arduino Core](https://github.com/espressif/arduino-esp32)
 - [me-no-dev/AsyncTCP (ESP32)](https://github.com/me-no-dev/AsyncTCP)
@@ -58,7 +54,6 @@ We discuss the results of the assembly and use of this PCB at our [Facebook](htt
 - [LiquidCrystal_I2C](https://gitlab.com/tandembyte/liquidcrystal_i2c)	
 
 ### Copyright 2019, 2020, 2021, 2022 by
-
 - Mónica (rovt@ua.fm)
 - Yan Sokolov (Dadras279@gmail.com)
 - Ddone Deedone (https://techadv.xyz/)
@@ -71,5 +66,3 @@ We discuss the results of the assembly and use of this PCB at our [Facebook](htt
 - Boris Pavlov (hiroyashy@gmail.com)
 - Denys Melnychuk (meldenvar@gmail.com)
 - Denis Kirin (deniskirinacs@gmail.com)
-
-
