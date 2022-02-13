@@ -1,4 +1,4 @@
-![OWLOS Air Quality Logo](https://github.com/KirinDenis/OWLOSAirQuality/raw/main/OWLOSResource/images/OWLOSAirQualityLogo.jpg)
+![OWLOS Air Quality PCB](https://github.com/KirinDenis/OWLOSAirQuality/raw/main/OWLOSResource/images/OWLOSPCBImage.jpg)
 
 # OWLOS Air Quality
 ### Open Source IoT Solution for monitoring air quality based on ![OWLOS](https://github.com/KirinDenis/owlos)
@@ -16,10 +16,9 @@
 - MQ135
 
 ### SCH+PCB+3D+BOM
-![OWLOS Air Quality PCB](https://github.com/KirinDenis/OWLOSAirQuality/raw/main/OWLOSResource/images/OWLOSPCBImage.jpg)
+We have published the PCB of OWLOS Air Quality based on ESP32. 
 [Click here to view online](https://365.altium.com/files/A92F63A8-C7F4-40DA-98BB-F1BCB85EE9DF)
-
-
+See the testing and using of the PCB at our [Facebook](https://www.facebook.com/groups/OWLOS) community. a
 
 ### Youtube video describing the architecture (click the image)
 [![OWLOS Air Quality](https://img.youtube.com/vi/HRcJmzvD9GQ/0.jpg)](https://www.youtube.com/watch?v=HRcJmzvD9GQ)
