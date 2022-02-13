@@ -9,10 +9,8 @@
 ### Used hardware: 
 - ESP32 microcontroller
 - ILI9486 3.5" TFT LCD touch screen
-- TP4056
- - linear charger for single cell
-- CCS811 
-  -- eCO2, TVOC, Resistance levels sensor
+- TP4056 - linear charger for single cell
+- CCS811 - eCO2, TVOC, Resistance levels sensor
 - SI7021 
   -- temperature and humidity sensor 
 - BMP280 (or BME680)
