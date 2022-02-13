@@ -11,20 +11,13 @@
 - ILI9486 3.5" TFT LCD touch screen
 - TP4056 - linear charger for single cell
 - CCS811 - eCO2, TVOC, Resistance levels sensor
-- SI7021 
-  -- temperature and humidity sensor 
-- BMP280 (or BME680)
--- absolute barometric pressure sensor
-- ADS1X15
--- 12 and 16-bit ADC for photoresistor, MQ7, MQ135
-- DHT22 (or DHT11 or AM2301)
--- temperature, humidity and heat index sensor
-- Photoresistor
--- light level sensor 
-- MQ7 
--- different gases contains CO sensor
-- MQ135
--- gas sensor (ammonia gas), sulfide, benzene series steam, smoke and other toxic gases sensor
+- SI7021 - temperature and humidity sensor 
+- BMP280 (or BME680) - absolute barometric pressure sensor
+- ADS1X15 - 12 and 16-bit ADC for photoresistor, MQ7, MQ135
+- DHT22 (or DHT11 or AM2301) - temperature, humidity and heat index sensor
+- Photoresistor- light level sensor 
+- MQ7 - different gases contains CO sensor
+- MQ135- gas sensor (ammonia gas), sulfide, benzene series steam, smoke and other toxic gases sensor
 
 ### SCH+PCB+3D+BOM
 We have published the PCB of OWLOS Air Quality based on ESP32 ([Click here to view online](https://365.altium.com/files/A92F63A8-C7F4-40DA-98BB-F1BCB85EE9DF)).
@@ -37,7 +30,8 @@ We discuss the results of the assembly and use of this PCB at our [Facebook](htt
 ### Source Code map
 
 - **/OWLOS/** C/C++ firmware source code (ESP32, ESP8266)
-- **/OWLOS/data/** JavaScript  stand-alone and embedded UX 
+- **/OWLOSEcosystemService/** .Net Core C# MVC RESTful server (MySQL Data Base used)
+- **/OWLOS/data/** JavaScript stand-alone and embedded UX 
 - **/OWLOSEcosystem/** (FFR) .Net Core C# WPF + OpenGL UX
 - **/OWLOSResource/** Blendar 3D models, schematics and images resources
 
