@@ -20,10 +20,10 @@
 
 ### SCH+PCB+3D+BOM
 We have published the PCB of OWLOS Air Quality (ESP32) ([Click here to view online](https://365.altium.com/files/A92F63A8-C7F4-40DA-98BB-F1BCB85EE9DF)).
-Discussions about this PCS in our [Facebook](https://www.facebook.com/groups/OWLOS) community. 
+Discussions about this PCB in our [Facebook](https://www.facebook.com/groups/OWLOS) community. 
 
-### Youtube video describing the architecture (click the image)
-[![OWLOS Air Quality](https://img.youtube.com/vi/HRcJmzvD9GQ/0.jpg)](https://www.youtube.com/watch?v=HRcJmzvD9GQ)
+### Youtube videos describing the architecture 
+[![OWLOS Air Quality](describing the architecture)](https://www.youtube.com/watch?v=HRcJmzvD9GQ)
 
 ### Source Code map
 - **/OWLOS/** C/C++ firmware source code (ESP32, ESP8266)
