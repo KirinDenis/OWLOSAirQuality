@@ -1,6 +1,7 @@
+# OWLOS Air Quality
+
 ![OWLOS Air Quality PCB](https://github.com/KirinDenis/OWLOSAirQuality/raw/main/OWLOSResource/images/OWLOSPCBImage.jpg)
 
-# OWLOS Air Quality
 ### Open Source IoT Solution for monitoring air quality based on ![OWLOS](https://github.com/KirinDenis/owlos)
  
 [We on Facebook](https://www.facebook.com/groups/OWLOS)
@@ -8,11 +9,11 @@
 ### Used hardware: 
 - ESP32 microcontroller
 - CCS811 + SI7021 + BMP280 (or BME680)
-- ADS1115
-- 3.5" TFT LCD with touch
-- DHT22
+- ADS1X15
+- ILI9486 3.5" TFT LCD touch screen
+- DHT22 (or DHT11 or AM2301)
 - Photoresistor 
-- MQ7
+- MQ7 
 - MQ135
 
 ### SCH+PCB+3D+BOM
