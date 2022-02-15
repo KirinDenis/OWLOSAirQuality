@@ -79,8 +79,8 @@ TextControlClass dhtHomeHumValueItem(1, 2);
 TextControlClass dhtHomeHeatItem(0, 3);
 TextControlClass dhtHomeHeatValueItem(1, 3);
 
-int scount = 0;
-int size = 1;
+String prevTemp = "";
+String prevHum = "";
 
 void HomeButtonTouch()
 {
@@ -183,8 +183,12 @@ void drawHomeDHTStatus()
   tft.unloadFont();
 
   tft.loadFont(AA_FONT_LARGE); // M
+  tft.setTextColor(TFT_BLACK, TFT_BLACK);                                        
+  tft.print(prevTemp);
+  prevTemp = _DHTDriver->temperature + "C";
   tft.setTextColor(OWLOSLightColor, TFT_BLACK);                                        
-  tft.println(_DHTDriver->temperature + "C");
+  tft.print(prevTemp);
+  tft.println();
   tft.unloadFont();
 
   tft.setTextColor(OWLOSInfoColor, TFT_BLACK);                                        
@@ -197,8 +201,12 @@ void drawHomeDHTStatus()
   tft.unloadFont();
 
   tft.loadFont(AA_FONT_BIG); // M
+  tft.setTextColor(TFT_BLACK, TFT_BLACK);                                        
+  tft.print(prevHum);
+  prevHum = _DHTDriver->humidity + "%";
   tft.setTextColor(OWLOSPrimaryColor, TFT_BLACK);                                        
-  tft.println(_DHTDriver->humidity + "%");
+  tft.print(prevHum);
+  tft.println();
   tft.unloadFont();
 
 
