@@ -73,6 +73,13 @@ TextControlClass::TextControlClass(int column, int row)
     y = row * GOLD_8 + GOLD_11;
 }
 
+TextControlClass::TextControlClass(int _x, int _y, int _size)
+{
+    x = _x;
+    y = _y;
+    size = _size;
+}
+
 void TextControlClass::draw()
 {
     if (leftAlign)

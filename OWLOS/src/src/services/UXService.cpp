@@ -93,7 +93,7 @@ bool UXServiceInit()
     currentMode = LOG_MODE;
     previosMode = LOG_MODE;
 
-    homeScreenInit();
+    HomeScreenInit();
     transportScreenInit();
     sensorsScreenInit();
 
@@ -115,11 +115,11 @@ void UXServiceLoop()
     if (!SetupComplete)
     {
         SetupComplete = true;
-        currentMode = SENSORS_MODE;
-        previosMode = SENSORS_MODE;
-        SensorButtonTouch();
-        sensorsScreenRefresh();
-        sensorsScreenDraw();
+        currentMode = HOME_MODE;
+        previosMode = HOME_MODE;
+        HomeButtonTouch();
+        HomeScreenRefresh();
+        HomeScreenDraw();
     }
 
 
@@ -140,7 +140,7 @@ void UXServiceLoop()
         {
 
         case HOME_MODE:
-            homeScreenRefresh();
+            HomeScreenRefresh();
             break;
 
         case SENSORS_MODE:
@@ -167,7 +167,7 @@ void UXServiceLoop()
     switch (currentMode)
     {
     case HOME_MODE:
-        homeScreenDraw();
+        HomeScreenDraw();
         break;
 
     case SENSORS_MODE:

@@ -41,9 +41,10 @@ OWLOS распространяется в надежде, что она буде
 
 #include "../UXUtils.h"
 
-void homeScreenInit();
-void homeScreenRefresh();
-void homeScreenDraw();
+void HomeButtonTouch();
+void HomeScreenInit();
+void HomeScreenRefresh();
+void HomeScreenDraw();
 
 void SensorButtonTouch();
 

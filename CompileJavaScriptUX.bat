@@ -37,10 +37,14 @@ REM Подробнее см.в Стандартной общественной �
 REM Вы должны были получить копию Стандартной общественной лицензии GNU вместе с
 REM этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.)
 
+REM ---------------------------------------------------------------------------------
+REM Сжимает и упоковывает OWLOSJavaSctiptUX в OWLOS\data для последующей загрузки на контроллер.
+REM Смотрите PlatformIO.ini файл. 
+REM Смотрите документ: https://docs.platformio.org/en/latest/platforms/espressif8266.html#uploading-files-to-filesystem
 
 REM unREM copy and put destination path, to copy content to different path
 @ECHO GZ and REM copy  JavaScript sources
-CD data
+CD OWLOSJavaScriptUX
 MKDIR "CompressedFull"
 del /Q "CompressedFull\*.*"
 
@@ -252,6 +256,11 @@ CD "CompressedPackOne"
 D:\7Zip\7z.exe a -mx9 owlos.js.gz owlos.js 
 D:\7Zip\7z.exe a -mx9 owlos.css.gz owlos.css 
 
+move "index.html.gz" "..\..\OWLOS\data\"
+move "owlos.js.gz" "..\..\OWLOS\data\"
+move "owlos.css.gz" "..\..\OWLOS\data\"
+
+copy "..\..\OWLOS\lib\TFT_eSPI\examples\Smooth Fonts\SPIFFS\Font_Demo_1\data\*" "..\..\OWLOS\data\*"
 
 REM copy  "updateinfo.html" "updateinfo.html"
 

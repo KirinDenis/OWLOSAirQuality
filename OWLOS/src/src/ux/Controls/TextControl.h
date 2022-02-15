@@ -74,6 +74,8 @@ public:
   //         1,3 - align right (width / 2, width)
   //row --> row * Glod8 = y
   TextControlClass(int column, int row);
+  //Manual 
+  TextControlClass(int _x, int _y, int _size);
   void refresh();
   void draw(String _text, int _fgColor, int _bgColor, int _size);
 };

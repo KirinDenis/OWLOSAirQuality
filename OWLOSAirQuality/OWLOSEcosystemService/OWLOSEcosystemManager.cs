@@ -22,10 +22,11 @@ namespace OWLOSAirQuality.OWLOSEcosystemService
             OWLOSEcosystemServiceClients.Add(new OWLOSEcosystemServiceClient()
             {
                 Name = "Local",
-                URL = "https://192.168.1.100:5004/Things/",
+                URL = "https://192.168.0.100:5004/Things/",
                 Token = "UjJsdzBlbEF2ZmN6dUU2clpOOTBEbWp5SVloaFBxSlBQa0hRTXhKaWNTOFFBQUFBYXJpaW1aUG5SMjhPSDRzWlpNWVhVZVpDbXlSczd1NmR1aEYwYzlvbENvaTQyZWNYVDRHaGkvUlRGOEdreVl5UzM0emg0NWlJK0tNYXljWW8vWHo1My9OdGtvSTJRYXhxc01hZ3JIT2JzRis0NHFuVFc1SVNCTkJPQ2lxRXRYKzEwYnBESnluUkROR2FMalhyN2ZVSkhnPT0="
             });
 
         }
     }
 }
+
