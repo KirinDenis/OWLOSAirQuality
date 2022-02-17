@@ -50,8 +50,7 @@ protected:
     bool leftAlign = true;
     int fgColor = OWLOSLightColor;
     int bgColor = OWLOSInfoColor;
-    int touchColor = OWLOSWarningColor;
-    int selectColor = OWLOSDarkColor;
+    int touchColor = OWLOSWarningColor;    
     String text = "";
 
 public:
@@ -61,6 +60,7 @@ public:
     int text_y;
     int inTouch = BUTTON_TOUCH_NOTDEFINE;
     bool selected = false;
+    int selectColor = OWLOSDarkColor;
 
     void (*OnTouchEvent)() = nullptr;
     //column - 1,2,3,4

@@ -191,46 +191,55 @@ void drawBMP280Status()
 {
     int statusColor = OWLOSDangerColor;
     int textColor = OWLOSPrimaryColor;
+
+    String kPaStr = "--";
+    String mmHgStr = "--";
+    String altitudeStr = "--";
+    String temperatureStr = "--";
+
+    
 //NOTE: Use BME680 if BMP280 is not pressent on the PCB
 #ifdef USE_BMP280_DRIVER    
     if ((_BMP280Driver != nullptr) && (_BMP280Driver->available == 1))
     {
-        statusColor = OWLOSLightColor;
-        textColor = OWLOSLightColor;
-
+        bmp280HeaderItem.draw("BMP 280", statusColor, OWLOSSecondaryColor, 1);    
         float kPa = atof(_BMP280Driver->pressure.c_str()) / 1000.0f;
         float mmHg = kPa * 7.5006375541921;
 
-        bmp280PressureValueItem.draw(String(kPa) + "kPa/" + String(mmHg) + "mmHg", textColor, OWLOSDarkColor, 2);
-        bmp280AltitudeValueItem.draw(_BMP280Driver->altitude + "m", textColor, OWLOSDarkColor, 2);
-        bmp280TemperatureValueItem.draw(_BMP280Driver->temperature + "C", textColor, OWLOSDarkColor, 2);
+        kPaStr = String(kPa);
+        mmHgStr = String(mmHg);
+        altitudeStr = String(_BMP280Driver->altitude);
+        temperatureStr = String(_BMP280Driver->temperature);
     }
-    else
-    {
-        bmp280PressureValueItem.draw("--", textColor, OWLOSDarkColor, 2);
-        bmp280AltitudeValueItem.draw("--", textColor, OWLOSDarkColor, 2);
-        bmp280TemperatureValueItem.draw("--", textColor, OWLOSDarkColor, 2);
-    }
-
-    bmp280HeaderItem.draw("BMP 280", statusColor, OWLOSSecondaryColor, 1);
-    textColor = OWLOSPrimaryColor;
-    bmp280PressureItem.draw("pressure", textColor, OWLOSDarkColor, 2);
-    bmp280AltitudeItem.draw("altitude", textColor, OWLOSDarkColor, 2);
-    bmp280TemperatureItem.draw("temperature", textColor, OWLOSDarkColor, 2);
-#endif    
+#endif
 
 #ifdef USE_BME680_DRIVER    
     if ((_BME680Driver != nullptr) && (_BME680Driver->available == 1))
     {
-        statusColor = OWLOSLightColor;
-        textColor = OWLOSLightColor;
-
+        bmp280HeaderItem.draw("BME 680", statusColor, OWLOSSecondaryColor, 1);    
         float kPa = atof(_BME680Driver->pressure.c_str()) / 1000.0f;
         float mmHg = kPa * 7.5006375541921;
 
-        bmp280PressureValueItem.draw(String(kPa) + "kPa/" + String(mmHg) + "mmHg", textColor, OWLOSDarkColor, 2);
-        bmp280AltitudeValueItem.draw(_BME680Driver->altitude + "m", textColor, OWLOSDarkColor, 2);
-        bmp280TemperatureValueItem.draw(_BME680Driver->temperature + "C", textColor, OWLOSDarkColor, 2);
+        kPaStr = String(kPa);
+        mmHgStr = String(mmHg);
+        altitudeStr = String(_BME680Driver->altitude);
+        temperatureStr = String(_BME680Driver->temperature);
+    }
+#endif
+
+#ifndef USE_BMP280_DRIVER    
+ #ifndef USE_BME680_DRIVER 
+  bmp280HeaderItem.draw("BMP 280/BME 680 not pressent", statusColor, OWLOSSecondaryColor, 1);    
+ #endif  
+#endif   
+
+    if (kPaStr.compareTo("nan") != 0)
+    {
+        statusColor = OWLOSLightColor;
+        textColor = OWLOSLightColor;
+        bmp280PressureValueItem.draw(kPaStr + "kPa/" + mmHgStr + "mmHg", textColor, OWLOSDarkColor, 2);
+        bmp280AltitudeValueItem.draw(altitudeStr + "m", textColor, OWLOSDarkColor, 2);
+        bmp280TemperatureValueItem.draw(temperatureStr + "C", textColor, OWLOSDarkColor, 2);
     }
     else
     {
@@ -239,13 +248,10 @@ void drawBMP280Status()
         bmp280TemperatureValueItem.draw("--", textColor, OWLOSDarkColor, 2);
     }
 
-    bmp280HeaderItem.draw("BME 680", statusColor, OWLOSSecondaryColor, 1);
     textColor = OWLOSPrimaryColor;
     bmp280PressureItem.draw("pressure", textColor, OWLOSDarkColor, 2);
     bmp280AltitudeItem.draw("altitude", textColor, OWLOSDarkColor, 2);
     bmp280TemperatureItem.draw("temperature", textColor, OWLOSDarkColor, 2);
-#endif    
-
 }
 
 //-------------------------------------------------
