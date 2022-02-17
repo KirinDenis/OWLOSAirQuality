@@ -1,5 +1,5 @@
 # OWLOS Air Quality
-### Open Source IoT Solution for monitoring air quality, based on ![OWLOS](https://github.com/KirinDenis/owlos)
+### Open Source IoT solution for monitoring air quality, powered by ![OWLOS](https://github.com/KirinDenis/owlos)
 
 ![OWLOS Air Quality PCB](https://github.com/KirinDenis/OWLOSAirQuality/raw/main/OWLOSResource/images/OWLOSPCBImage.jpg)
 
