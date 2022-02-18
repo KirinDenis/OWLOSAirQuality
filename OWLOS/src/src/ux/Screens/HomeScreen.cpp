@@ -104,6 +104,10 @@ String prevmmHg = "";
 String prevAltitude = "";
 String prevBMxTemp = "";
 
+String bigTextCaption = "";
+String bigTextValue = "";
+String bigTextValueType = "";
+
 int valueLeftPadding = GOLD_9;
 
 void RefreshHomeScreenButtons()
@@ -116,6 +120,11 @@ void RefreshHomeScreenButtons()
     prevmmHg = "";
     prevAltitude = "";
     prevBMxTemp = "";
+
+    bigTextCaption = "";
+    bigTextValue = "";
+    bigTextValueType = "";
+
 
     homeButton.refresh();
     sensorsButton.refresh();
@@ -147,7 +156,58 @@ void RefreshHomeScreenButtons()
     CO2Button.refresh();
     gasButton.refresh();
 }
+// Controls --------------------------------------------------------------------------------
+// horisontalPosition - two positions, indexes 0 and 1 - 0 up, 1 down
+void BigText(int horisontalPosition, String caption, String value, String valueType, int captionColor = OWLOSInfoColor, int valueColor = OWLOSLightColor, int valueTypeColor = OWLOSInfoColor)
+{
+    int yStep = GOLD_6 + GOLD_8;
+    if (horisontalPosition == 1)
+    {
+        yStep = HEIGHT / 2;
+    }
 
+    tft.loadFont(AA_FONT_SMALL);
+
+    if (caption.compareTo(bigTextCaption) != 0)
+    {
+        tft.fillRect(valueLeftPadding, yStep, tft.textWidth(bigTextCaption), tft.fontHeight(0), OWLOSDarkColor);
+        tft.setTextColor(captionColor, OWLOSDarkColor);
+        tft.setCursor(valueLeftPadding, yStep);
+        bigTextCaption = caption;
+        tft.print(caption);
+    }
+
+    yStep += tft.fontHeight(1) + GOLD_8;
+    tft.unloadFont();
+
+    if (value.compareTo(bigTextValue) != 0)
+    {
+        tft.loadFont(AA_FONT_BIG);
+        int valueTypeWidth = tft.textWidth(valueType) + GOLD_8;
+        tft.unloadFont();
+
+        tft.loadFont(AA_FONT_LARGE);
+
+        tft.fillRect(0, yStep, WIDTH, tft.fontHeight(0), OWLOSDarkColor);
+
+        tft.setTextColor(OWLOSLightColor, OWLOSDarkColor);
+        bigTextValue = value;
+        int valueLeft = WIDTH / 2 - (tft.textWidth(bigTextValue) / 2 + valueTypeWidth / 2); // recalculate left
+        int valueHeight = tft.fontHeight(0);
+        tft.setCursor(valueLeft, yStep);
+        tft.print(bigTextValue);
+        valueLeft += tft.textWidth(bigTextValue) + GOLD_8;
+        tft.unloadFont();
+
+        tft.loadFont(AA_FONT_BIG);
+        tft.setCursor(valueLeft, yStep + valueHeight - tft.fontHeight(0) - GOLD_10);
+        bigTextValueType = valueType;
+        tft.print(bigTextValueType);
+        tft.unloadFont();
+    }
+}
+
+//-----------------------------------------------------------------------------------------
 
 void HomeButtonTouch()
 {
@@ -283,28 +343,16 @@ void HomeScreenRefresh()
 
 void drawHomeDHTStatus()
 {
-    tft.setTextColor(OWLOSInfoColor, OWLOSDarkColor);
-    tft.setCursor(valueLeftPadding, GOLD_6 + GOLD_8);
-
-    tft.loadFont(AA_FONT_SMALL);
-    tft.print("temperature");
-    int yStep = tft.fontHeight(1) + GOLD_6 + GOLD_8 * 2;
-    tft.unloadFont();
-
-    tft.setTextColor(OWLOSLightColor, OWLOSDarkColor);
-
-    tft.loadFont(AA_FONT_LARGE);
-    if (prevTemp.compareTo(_DHTDriver->temperature + "C") != 0)
-    {
-        tft.fillRect(WIDTH / 2 - tft.textWidth(prevTemp) / 2, yStep, tft.textWidth(prevTemp), tft.fontHeight(0), OWLOSDarkColor);
-        prevTemp = _DHTDriver->temperature + "C";
-        tft.setCursor(WIDTH / 2 - tft.textWidth(prevTemp) / 2, yStep);
-        tft.print(prevTemp);
+    if (_DHTDriver->celsius)
+    {        
+      BigText(0, "temperature", String(atoi(_DHTDriver->temperature.c_str())), "C");
     }
-    yStep += tft.fontHeight(0) + GOLD_8;
-    ;
-    tft.unloadFont();
+    else 
+    {
+      BigText(0, "temperature", String(atoi(_DHTDriver->temperature.c_str())), "F");
+    }
 
+    int yStep = HEIGHT / 2 + GOLD_8;
     tft.setTextColor(OWLOSInfoColor, OWLOSDarkColor);
     tft.setCursor(valueLeftPadding, yStep);
 
@@ -322,17 +370,19 @@ void drawHomeDHTStatus()
 
     tft.loadFont(AA_FONT_BIG);
 
-    if (prevHum.compareTo(_DHTDriver->humidity + "%") != 0)
+    String cHum = String(atoi(_DHTDriver->humidity.c_str())) + "%";
+    if (prevHum.compareTo(cHum) != 0)
     {
-        tft.fillRect(valueLeftPadding, yStep, tft.textWidth(prevHum), tft.fontHeight(0), OWLOSDarkColor);
-        prevHum = _DHTDriver->humidity + "%";
+        tft.fillRect(valueLeftPadding, yStep, tft.textWidth(prevHum), tft.fontHeight(0), OWLOSDarkColor);        
+        prevHum = cHum;        
         tft.print(prevHum);
     }
 
-    if (prevHeat.compareTo(_DHTDriver->heatIndex) != 0)
+    String cHeat = String(atoi(_DHTDriver->heatIndex.c_str()));
+    if (prevHeat.compareTo(cHeat) != 0)
     {
-        tft.fillRect(WIDTH - tft.textWidth(prevHeat) - valueLeftPadding, yStep, tft.textWidth(prevHeat), tft.fontHeight(0), OWLOSDarkColor);
-        prevHeat = _DHTDriver->heatIndex;
+        tft.fillRect(WIDTH - tft.textWidth(prevHeat) - valueLeftPadding, yStep, tft.textWidth(prevHeat), tft.fontHeight(0), OWLOSDarkColor);        
+        prevHeat = cHeat;
         tft.setCursor(WIDTH - tft.textWidth(prevHeat) - valueLeftPadding, yStep);
         tft.print(prevHeat);
     }
@@ -350,25 +400,25 @@ void drawHomePressureStatus()
     String altitudeStr = "--";
     String temperatureStr = "--";
 
-//NOTE: Use BME680 if BMP280 is not pressent on the PCB
-#ifdef USE_BMP280_DRIVER    
+// NOTE: Use BME680 if BMP280 is not pressent on the PCB
+#ifdef USE_BMP280_DRIVER
     if ((_BMP280Driver != nullptr) && (_BMP280Driver->available == 1))
     {
         float kPa = atof(_BMP280Driver->pressure.c_str()) / 1000.0f;
-        float mmHg = kPa * 7.5006375541921;
+        int mmHg = kPa * 7.5006375541921;
 
         kPaStr = String(kPa);
-        mmHgStr = String(mmHg);        
+        mmHgStr = String(mmHg);
         altitudeStr = String(atoi(_BMP280Driver->altitude.c_str()));
-        temperatureStr = String(_BMP280Driver->temperature);
+        temperatureStr = String(atoi(_BMP280Driver->temperature.c_str()));
     }
 #endif
 
-#ifdef USE_BME680_DRIVER    
+#ifdef USE_BME680_DRIVER
     if ((_BME680Driver != nullptr) && (_BME680Driver->available == 1))
-    {        
+    {
         float kPa = atof(_BME680Driver->pressure.c_str()) / 1000.0f;
-        float mmHg = kPa * 7.5006375541921;
+        int mmHg = kPa * 7.5006375541921;
 
         kPaStr = String(kPa);
         mmHgStr = String(mmHg);
@@ -377,26 +427,9 @@ void drawHomePressureStatus()
     }
 #endif
 
+    BigText(0, "pressure", mmHgStr, "mmHg");
 
-    tft.loadFont(AA_FONT_SMALL);
-    tft.print("pressure  [mmHg]");
-    int yStep = tft.fontHeight(1) + GOLD_6 + GOLD_8 * 2;
-    tft.unloadFont();
-
-    tft.setTextColor(OWLOSLightColor, OWLOSDarkColor);
-
-    tft.loadFont(AA_FONT_LARGE);
-    if (prevmmHg.compareTo(mmHgStr) != 0)
-    {
-        tft.fillRect(WIDTH / 2 - tft.textWidth(prevmmHg) / 2, yStep, tft.textWidth(prevmmHg), tft.fontHeight(0), OWLOSDarkColor);
-        prevmmHg = mmHgStr;
-        tft.setCursor(WIDTH / 2 - tft.textWidth(prevmmHg) / 2, yStep);
-        tft.print(prevmmHg);
-    }
-
-    yStep += tft.fontHeight(0) + GOLD_8;
-    
-    tft.unloadFont();
+    int yStep = HEIGHT / 2  + GOLD_8;
 
     tft.setTextColor(OWLOSInfoColor, OWLOSDarkColor);
     tft.setCursor(valueLeftPadding, yStep);
@@ -433,7 +466,6 @@ void drawHomePressureStatus()
     tft.unloadFont();
 }
 
-
 void HomeScreenDraw()
 {
     homeButton.draw();
@@ -450,13 +482,12 @@ void HomeScreenDraw()
     {
         switch (currentHomeSensor)
         {
-            case HOME_SENSOR_DHT:
-               drawHomeDHTStatus();
+        case HOME_SENSOR_DHT:
+            drawHomeDHTStatus();
             break;
-            case HOME_SENSOR_PRESSURE:
-               drawHomePressureStatus();
+        case HOME_SENSOR_PRESSURE:
+            drawHomePressureStatus();
             break;
-
         }
     }
 }
