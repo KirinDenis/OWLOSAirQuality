@@ -423,7 +423,7 @@ void drawHomePressureStatus()
         kPaStr = String(kPa);
         mmHgStr = String(mmHg);
         altitudeStr = String(atoi(_BME680Driver->altitude.c_str()));
-        temperatureStr = String(_BME680Driver->temperature);
+        temperatureStr = String(atoi(_BME680Driver->temperature.c_str()));
     }
 #endif
 
