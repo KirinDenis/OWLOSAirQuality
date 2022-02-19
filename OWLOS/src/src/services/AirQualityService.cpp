@@ -151,7 +151,7 @@ void AirQualityLoop()
       }
       else 
 #endif      
-#ifdef USE_BME680_DRIVER
+#ifdef USE_BME680_DRIVER //Still BMP280 at HTTP packet key value for server compatailable 
       if (_BME680Driver != nullptr)
       {
           AirQualityPropertiesMode += "BMP280:yes\n";

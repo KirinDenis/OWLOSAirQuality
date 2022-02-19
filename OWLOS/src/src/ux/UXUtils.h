@@ -37,6 +37,12 @@
 #define BUTTON_TOUCH_YES 1
 #define BUTTON_TOUCH_NO 2
 
+#define AA_FONT_SMALL "omegaflight20"
+#define AA_FONT_BIG "omegaflight54"
+#define AA_FONT_LARGE "omegaflight108"
+
+#define LEFT_PADDING GOLD_9
+
 #define OWLOSPrimaryColor rgb32_to_rgb16(0x6faeca)
 #define OWLOSSecondaryColor rgb32_to_rgb16(0x213944)
 #define OWLOSSuccessColor rgb32_to_rgb16(0x43ca15)
