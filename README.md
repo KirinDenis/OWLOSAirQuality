@@ -53,14 +53,16 @@ Discussions about this PCB in our [Facebook](https://www.facebook.com/groups/OWL
 
 ### Special thanks to
 - [PlatformIO IDE](https://platformio.org/)
+- [Pro Sidebar](https://github.com/azouaoui-med/pro-sidebar-template)
 - [ESP32 Arduino Core](https://github.com/espressif/arduino-esp32)
 - [me-no-dev/AsyncTCP (ESP32)](https://github.com/me-no-dev/AsyncTCP)
 - [ESP32 HTTPS Server](https://github.com/fhessel/esp32_https_server)
 - [Async MQTT Client](http://platformio.org/lib/show/346/AsyncMqttClient)
 - [DS3231 Real-Time Clock](http://www.jarzebski.pl/arduino/komponenty/zegar-czasu-rzeczywistego-rtc-ds3231.html)
-- [Adafruit Unified Sensor Library](https://github.com/adafruit/Adafruit_Sensor)
-- [DHT-sensor-library](https://github.com/adafruit/DHT-sensor-library)
+- [Adafruit](https://github.com/adafruit/)
 - [LiquidCrystal_I2C](https://gitlab.com/tandembyte/liquidcrystal_i2c)	
+- [Iconian Fonts](http://www.iconian.com/commercial.html)
+- [WPF](https://github.com/dotnet/wpf)
 
 ### Copyright 2019, 2020, 2021, 2022 by
 - Mónica (rovt@ua.fm)
