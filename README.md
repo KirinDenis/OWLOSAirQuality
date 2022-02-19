@@ -53,7 +53,7 @@ Discussions about this PCB in our [Facebook](https://www.facebook.com/groups/OWL
 
 ### Special thanks to
 - [PlatformIO IDE](https://platformio.org/)
-- [Sidebar](https://github.com/azouaoui-med/pro-sidebar-template)
+- [Pro Sidebar](https://github.com/azouaoui-med/pro-sidebar-template)
 - [ESP32 Arduino Core](https://github.com/espressif/arduino-esp32)
 - [me-no-dev/AsyncTCP (ESP32)](https://github.com/me-no-dev/AsyncTCP)
 - [ESP32 HTTPS Server](https://github.com/fhessel/esp32_https_server)
