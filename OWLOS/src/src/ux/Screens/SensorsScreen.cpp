@@ -202,6 +202,7 @@ void drawBMP280Status()
 #ifdef USE_BMP280_DRIVER    
     if ((_BMP280Driver != nullptr) && (_BMP280Driver->available == 1))
     {
+        statusColor = OWLOSLightColor;
         bmp280HeaderItem.draw("BMP 280", statusColor, OWLOSSecondaryColor, 1);    
         float kPa = atof(_BMP280Driver->pressure.c_str()) / 1000.0f;
         float mmHg = kPa * 7.5006375541921;
@@ -216,6 +217,7 @@ void drawBMP280Status()
 #ifdef USE_BME680_DRIVER    
     if ((_BME680Driver != nullptr) && (_BME680Driver->available == 1))
     {
+        statusColor = OWLOSLightColor;
         bmp280HeaderItem.draw("BME 680", statusColor, OWLOSSecondaryColor, 1);    
         float kPa = atof(_BME680Driver->pressure.c_str()) / 1000.0f;
         float mmHg = kPa * 7.5006375541921;

@@ -44,7 +44,7 @@ OWLOS распространяется в надежде, что она буде
 #define CONFIG_H
 
 #define FIRMWARE_VERSION_NUMVER "1.17"
-#define FIRMWARE_BUILD_NUMBER 127
+#define FIRMWARE_BUILD_NUMBER 128
 #define FIRMWARE_VERSION "OWLOS v.1.17 (RC)"
 
 #define LONG_VERSION
@@ -164,10 +164,10 @@ OWLOS распространяется в надежде, что она буде
         #define USE_DHT_DRIVER
 
         //Драйвер сенсора BME680
-        #define USE_BME680_DRIVER 
+        //#define USE_BME680_DRIVER 
 
         //Драйвер сенсора BMP280
-        //#define USE_BMP280_DRIVER
+        #define USE_BMP280_DRIVER
 
         //Драйвер сенсора ADS1X15
         #define USE_ADS1X15_DRIVER

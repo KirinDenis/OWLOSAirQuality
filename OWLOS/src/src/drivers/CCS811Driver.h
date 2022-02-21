@@ -42,7 +42,7 @@ OWLOS распространяется в надежде, что она буде
 #ifndef CCS811DRIVER_H
 #define CCS811DRIVER_H
 
-#include "../libraries/SparkFunCCS811/SparkFunCCS811.h" 
+#include "../libraries/Adafruit_CCS811/Adafruit_CCS811.h" 
 #define SDA_INDEX 0
 #define SCL_INDEX 1
 #define I2CADDR_INDEX 2
@@ -101,13 +101,13 @@ public:
 	String getTemperatureHistoryData();
 	bool setTemperatureHistoryData(float _historydata);
 
-	String CO2 = "calc";
-	String TVOC = "calc";
-	String resistence = "calc";
-	String temperature = "calc";
+	String CO2 = "nan";
+	String TVOC = "nan";
+	String resistence = "nan";
+	String temperature = "nan";
 
 private:
-	CCS811 *ccs811 = nullptr;
+	Adafruit_CCS811 *ccs811 = nullptr;
 
 	int CO2HistoryCount = 0;
 	float *CO2HistoryData = new float[historySize]();
@@ -120,6 +120,8 @@ private:
 
 	int temperatureHistoryCount = 0;
 	float *temperatureHistoryData = new float[historySize]();
+
+	void printSensorError();
 };
 #endif
 #endif

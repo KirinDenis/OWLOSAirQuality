@@ -352,7 +352,7 @@ void HomeScreenDraw()
         case HOME_SENSOR_CO2:
             drawHomeCO2Status();
             break;
-        case HOME_SENSOR_GAS:    
+        case HOME_SENSOR_GAS:
             drawHomeGasStatus();
             break;
         }
