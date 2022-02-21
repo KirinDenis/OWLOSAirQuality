@@ -40,7 +40,7 @@ OWLOS распространяется в надежде, что она буде
 #ifdef USE_CCS811_DRIVER
 
 #define DRIVER_ID "ccs811"
-#define CCS811_LOOP_INTERVAL 2000
+#define CCS811_LOOP_INTERVAL 10000
 
 // CCS811_ADDR 0x5A Default I2C Address
 
@@ -56,22 +56,24 @@ bool CCS811Driver::init()
 	if (pinDriverInfo != nullptr)
 	{
 		//если пользователь задал адрес, инкапсулируем класс обслуживающий CCS811 и пробуем работать с через указанный порт
-		ccs811 = new CCS811(pinDriverInfo->driverI2CAddr);
-		if (ccs811->begin())
+
+		ccs811 = new Adafruit_CCS811();
+
+		if (ccs811->begin(pinDriverInfo->driverI2CAddr))
 		{
-#if defined(DEBUG) || defined(LOGO_SCREEN_UX)
+#if defined(DEBUG) || defined(LOG_SCREEN_UX)
 			debugOut("CCS811", "OK", DEBUG_SUCCESS);
 #endif
 			available = true;
 		}
-#if defined(DEBUG) || defined(LOGO_SCREEN_UX)
+#if defined(DEBUG) || defined(LOG_SCREEN_UX)
 		else
 		{
 			debugOut("CCS811", "Begin problem", DEBUG_DANGER);
 		}
 #endif
 	}
-#if defined(DEBUG) || defined(LOGO_SCREEN_UX)
+#if defined(DEBUG) || defined(LOG_SCREEN_UX)
 	else
 	{
 		debugOut("CCS811", "Pins problem", DEBUG_WARNING);
@@ -206,28 +208,41 @@ bool CCS811Driver::readData()
 		temperature = "nan";
 
 #ifdef DETAILED_DEBUG
-#if defined(DEBUG) || defined(LOGO_SCREEN_UX)
+#if defined(DEBUG) || defined(LOG_SCREEN_UX)
 		debugOut(id, "CCS811 object not ready");
 #endif
 #endif
 		return false;
 	}
 
-	if (ccs811->dataAvailable())
+	if (!ccs811->readData())
 	{
-		//пробуем получить значение от сенсора
-		ccs811->readAlgorithmResults();
+		uint16_t eCO2 = ccs811->geteCO2();
 
-		CO2 = String(ccs811->getCO2());
-		TVOC = String(ccs811->getTVOC());
-
-		ccs811->readNTC();
-
-		resistence = String(ccs811->getResistance());
-		temperature = String(ccs811->getTemperature());
-		return true;
+		// https://cdn-learn.adafruit.com/assets/assets/000/044/636/original/CCS811_DS000459_2-00-1098798.pdf
+		if ((eCO2 >= 400) && (eCO2 <= 8192))
+		{
+			CO2 = String(ccs811->geteCO2());
+			TVOC = String(ccs811->getTVOC());
+			// calculateTemperature() init resistance property
+			// SEE: libraty sources changes (ONLY FOR TEST)
+			temperature = String(ccs811->calculateTemperature());
+			// NOTE: only for OWLOS Air Quality test
+			resistence = String(ccs811->rntc);
+			return true;
+		}
+		else
+		{
+			// overflow
+			CO2 = TVOC = resistence = temperature = "O/F";
+		}
 	}
-
+	else
+	{
+#if defined(DEBUG) || defined(LOG_SCREEN_UX)
+		debugOut(id, "CCS811 no data");
+#endif
+	}
 	return false;
 }
 

@@ -1,7 +1,6 @@
-﻿/* ----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
 OWLOS DIY Open Source OS for building IoT ecosystems
-Copyright 2021 by:
-- Boris Pavlov (hiroyashy@gmail.com)
+Copyright 2022 by:
 - Denis Kirin (deniskirinacs@gmail.com)
 
 This file is part of OWLOS DIY Open Source OS for building IoT ecosystems
@@ -36,92 +35,42 @@ OWLOS распространяется в надежде, что она буде
 Вы должны были получить копию Стандартной общественной лицензии GNU вместе с
 этой программой. Если это не так, см. <https://www.gnu.org/licenses/>.)
 --------------------------------------------------------------------------------------*/
-#include "BaseDriver.h"
-#ifdef USE_CCS811_DRIVER
 
-#ifndef CCS811DRIVER_H
-#define CCS811DRIVER_H
+#ifndef BIGTEXTCONTROL_H
+#define BIGTEXTCONTROL_H
 
-#include "../libraries/Adafruit_CCS811/Adafruit_CCS811.h" 
-#define SDA_INDEX 0
-#define SCL_INDEX 1
-#define I2CADDR_INDEX 2
-#define I2C_VCC5_INDEX 3
-#define I2C_GND_INDEX 4
+//#include <Arduino.h>
+#include "../UXColors.h"
+#include "../UXUtils.h"
 
-class CCS811Driver : public BaseDriver
+/* ------------------------------------------------------
+Класс рисует большой текст во всю длинну экрана
+- две строки на весь экран
+*/
+class BigTextControlClass
 {
+protected:
+    bool inTouch = false;
+    int size = 1;
+
+    int bgColor = OWLOSDarkColor;
+    int captionColor = OWLOSInfoColor;
+    int valueColor = OWLOSLightColor;
+    int valueTypeColor = OWLOSInfoColor;
+
+    String captionText = "";
+    String valueText = "";
+    String valueTypeText = "";
+
+    int y = GOLD_6 + GOLD_8;
+
 public:
-	static int getPinsCount()
-	{
-		return 5;
-	}
+    void (*OnTouchEvent)() = nullptr;
 
-	static uint16_t getPinType(int pinIndex)
-	{
-		switch (pinIndex)
-		{
-		case SDA_INDEX:
-			return SDA_MASK;
-		case SCL_INDEX:
-			return SCL_MASK;
-		case I2CADDR_INDEX:
-			return I2CADDR_MASK;
-		case I2C_VCC5_INDEX:
-			return VCC5_MASK | VCC33_MASK;
-		case I2C_GND_INDEX:
-			return GND_MASK;
-		default:
-			return NO_MASK;
-		}
-	}
-
-	bool init();
-
-	bool begin(String _topic);
-	bool query();
-	String getAllProperties();
-	String onMessage(String route, String _payload, int8_t transportMask);
-
-	bool readData();
-
-    String getCO2();
-	String getCO2HistoryData();
-	bool setCO2HistoryData(float _historydata);
-
-    String getTVOC();
-	String getTVOCHistoryData();
-	bool setTVOCHistoryData(float _historydata);
-
-    String getResistence();
-	String getResistenceHistoryData();
-	bool setResistenceHistoryData(float _historydata);
-
-    String getTemperature();
-	String getTemperatureHistoryData();
-	bool setTemperatureHistoryData(float _historydata);
-
-	String CO2 = "nan";
-	String TVOC = "nan";
-	String resistence = "nan";
-	String temperature = "nan";
-
-private:
-	Adafruit_CCS811 *ccs811 = nullptr;
-
-	int CO2HistoryCount = 0;
-	float *CO2HistoryData = new float[historySize]();
-
-	int TVOCHistoryCount = 0;
-	float *TVOCHistoryData = new float[historySize]();
-
-	int resistenceHistoryCount = 0;
-	float *resistenceHistoryData = new float[historySize]();
-
-	int temperatureHistoryCount = 0;
-	float *temperatureHistoryData = new float[historySize]();
-
-	void printSensorError();
+    // row = 0 up, row = 1 down
+    BigTextControlClass(int row, int _captionColor = OWLOSInfoColor, int _valueColor = OWLOSLightColor, int _valueTypeColor = OWLOSInfoColor);
+    void refresh();
+    void draw(String caption, String value, String valueType, int _captionColor = OWLOSInfoColor, int _valueColor = OWLOSLightColor, int _valueTypeColor = OWLOSInfoColor);
 };
-#endif
+
 #endif

@@ -39,8 +39,8 @@ OWLOS распространяется в надежде, что она буде
 #include "HomeScreen.h"
 
 #include "../Controls/ButtonControl.h"
-#include "../Controls/TextControl.h"
-#include "../Controls/ButtonControl.h"
+#include "../Controls/BigTextControl.h"
+#include "../Controls/MediumTextControl.h"
 
 #include "LogScreen.h"
 #include "SensorsScreen.h"
@@ -61,6 +61,10 @@ ButtonControlClass pressureButton("Pressure", OWLOSLightColor, OWLOSInfoColor, O
 ButtonControlClass CO2Button("CO2::TVOC", OWLOSLightColor, OWLOSInfoColor, OWLOSWarningColor, 3, 1);
 ButtonControlClass gasButton("Gas::Smoke", OWLOSLightColor, OWLOSInfoColor, OWLOSWarningColor, 4, 1);
 
+BigTextControlClass bigText(0);
+MediumTextControlClass leftDownMediumText(0, 1);
+MediumTextControlClass rightDownMediumText(1, 1);
+
 extern int currentMode;
 
 extern DHTDriver *_DHTDriver;
@@ -76,18 +80,6 @@ extern BME680Driver *_BME680Driver;
 extern ADS1X15Driver *_ADS1X15Driver;
 extern CCS811Driver *_CCS811Driver;
 
-#define AA_FONT_SMALL "omegaflight20"
-#define AA_FONT_BIG "omegaflight54"
-#define AA_FONT_LARGE "omegaflight108"
-
-TextControlClass dhtHomeHeaderItem(0, 0);
-TextControlClass dhtHomeTempItem(10, 20, 4);
-TextControlClass dhtHomeTempValueItem(1, 1);
-TextControlClass dhtHomeHumItem(0, 2);
-TextControlClass dhtHomeHumValueItem(1, 2);
-TextControlClass dhtHomeHeatItem(0, 3);
-TextControlClass dhtHomeHeatValueItem(1, 3);
-
 #define HOME_SENSOR_DHT 0
 #define HOME_SENSOR_PRESSURE 1
 #define HOME_SENSOR_CO2 2
@@ -95,27 +87,8 @@ TextControlClass dhtHomeHeatValueItem(1, 3);
 
 int currentHomeSensor = HOME_SENSOR_DHT;
 
-String prevTemp = "";
-String prevHum = "";
-String prevHeat = "";
-
-String prevkPa = "";
-String prevmmHg = "";
-String prevAltitude = "";
-String prevBMxTemp = "";
-
-int valueLeftPadding = GOLD_9;
-
 void RefreshHomeScreenButtons()
 {
-
-    prevTemp = "";
-    prevHum = "";
-    prevHeat = "";
-    prevkPa = "";
-    prevmmHg = "";
-    prevAltitude = "";
-    prevBMxTemp = "";
 
     homeButton.refresh();
     sensorsButton.refresh();
@@ -146,8 +119,12 @@ void RefreshHomeScreenButtons()
     pressureButton.refresh();
     CO2Button.refresh();
     gasButton.refresh();
-}
 
+    bigText.refresh();
+    leftDownMediumText.refresh();
+    rightDownMediumText.refresh();
+}
+//-----------------------------------------------------------------------------------------
 
 void HomeButtonTouch()
 {
@@ -283,156 +260,72 @@ void HomeScreenRefresh()
 
 void drawHomeDHTStatus()
 {
-    tft.setTextColor(OWLOSInfoColor, OWLOSDarkColor);
-    tft.setCursor(valueLeftPadding, GOLD_6 + GOLD_8);
-
-    tft.loadFont(AA_FONT_SMALL);
-    tft.print("temperature");
-    int yStep = tft.fontHeight(1) + GOLD_6 + GOLD_8 * 2;
-    tft.unloadFont();
-
-    tft.setTextColor(OWLOSLightColor, OWLOSDarkColor);
-
-    tft.loadFont(AA_FONT_LARGE);
-    if (prevTemp.compareTo(_DHTDriver->temperature + "C") != 0)
+    if (_DHTDriver->celsius)
     {
-        tft.fillRect(WIDTH / 2 - tft.textWidth(prevTemp) / 2, yStep, tft.textWidth(prevTemp), tft.fontHeight(0), OWLOSDarkColor);
-        prevTemp = _DHTDriver->temperature + "C";
-        tft.setCursor(WIDTH / 2 - tft.textWidth(prevTemp) / 2, yStep);
-        tft.print(prevTemp);
+        bigText.draw("temperature", String(atoi(_DHTDriver->temperature.c_str())), "C");
     }
-    yStep += tft.fontHeight(0) + GOLD_8;
-    ;
-    tft.unloadFont();
-
-    tft.setTextColor(OWLOSInfoColor, OWLOSDarkColor);
-    tft.setCursor(valueLeftPadding, yStep);
-
-    tft.loadFont(AA_FONT_SMALL);
-    tft.print("humidity");
-
-    tft.setCursor(WIDTH - tft.textWidth("heat index") - valueLeftPadding, yStep);
-    tft.print("heat index");
-
-    yStep += tft.fontHeight(0) + GOLD_8;
-    tft.unloadFont();
-
-    tft.setTextColor(OWLOSPrimaryColor, OWLOSDarkColor);
-    tft.setCursor(valueLeftPadding, yStep);
-
-    tft.loadFont(AA_FONT_BIG);
-
-    if (prevHum.compareTo(_DHTDriver->humidity + "%") != 0)
+    else
     {
-        tft.fillRect(valueLeftPadding, yStep, tft.textWidth(prevHum), tft.fontHeight(0), OWLOSDarkColor);
-        prevHum = _DHTDriver->humidity + "%";
-        tft.print(prevHum);
+        bigText.draw("temperature", String(atoi(_DHTDriver->temperature.c_str())), "F");
     }
 
-    if (prevHeat.compareTo(_DHTDriver->heatIndex) != 0)
-    {
-        tft.fillRect(WIDTH - tft.textWidth(prevHeat) - valueLeftPadding, yStep, tft.textWidth(prevHeat), tft.fontHeight(0), OWLOSDarkColor);
-        prevHeat = _DHTDriver->heatIndex;
-        tft.setCursor(WIDTH - tft.textWidth(prevHeat) - valueLeftPadding, yStep);
-        tft.print(prevHeat);
-    }
-
-    tft.unloadFont();
+    leftDownMediumText.draw("humidity", String(atoi(_DHTDriver->humidity.c_str())) + "%");
+    rightDownMediumText.draw("heat index", String(atoi(_DHTDriver->heatIndex.c_str())));
 }
 
 void drawHomePressureStatus()
 {
-    tft.setTextColor(OWLOSInfoColor, OWLOSDarkColor);
-    tft.setCursor(valueLeftPadding, GOLD_6 + GOLD_8);
-
     String kPaStr = "--";
     String mmHgStr = "--";
     String altitudeStr = "--";
     String temperatureStr = "--";
 
-//NOTE: Use BME680 if BMP280 is not pressent on the PCB
-#ifdef USE_BMP280_DRIVER    
+// NOTE: Use BME680 if BMP280 is not pressent on the PCB
+#ifdef USE_BMP280_DRIVER
     if ((_BMP280Driver != nullptr) && (_BMP280Driver->available == 1))
     {
         float kPa = atof(_BMP280Driver->pressure.c_str()) / 1000.0f;
-        float mmHg = kPa * 7.5006375541921;
+        int mmHg = kPa * 7.5006375541921;
 
         kPaStr = String(kPa);
-        mmHgStr = String(mmHg);        
+        mmHgStr = String(mmHg);
         altitudeStr = String(atoi(_BMP280Driver->altitude.c_str()));
-        temperatureStr = String(_BMP280Driver->temperature);
+        temperatureStr = String(atoi(_BMP280Driver->temperature.c_str()));
     }
 #endif
 
-#ifdef USE_BME680_DRIVER    
+#ifdef USE_BME680_DRIVER
     if ((_BME680Driver != nullptr) && (_BME680Driver->available == 1))
-    {        
+    {
         float kPa = atof(_BME680Driver->pressure.c_str()) / 1000.0f;
-        float mmHg = kPa * 7.5006375541921;
+        int mmHg = kPa * 7.5006375541921;
 
         kPaStr = String(kPa);
         mmHgStr = String(mmHg);
         altitudeStr = String(atoi(_BME680Driver->altitude.c_str()));
-        temperatureStr = String(_BME680Driver->temperature);
+        temperatureStr = String(atoi(_BME680Driver->temperature.c_str()));
     }
 #endif
 
+    bigText.draw("pressure", mmHgStr, "mmHg");
 
-    tft.loadFont(AA_FONT_SMALL);
-    tft.print("pressure  [mmHg]");
-    int yStep = tft.fontHeight(1) + GOLD_6 + GOLD_8 * 2;
-    tft.unloadFont();
-
-    tft.setTextColor(OWLOSLightColor, OWLOSDarkColor);
-
-    tft.loadFont(AA_FONT_LARGE);
-    if (prevmmHg.compareTo(mmHgStr) != 0)
-    {
-        tft.fillRect(WIDTH / 2 - tft.textWidth(prevmmHg) / 2, yStep, tft.textWidth(prevmmHg), tft.fontHeight(0), OWLOSDarkColor);
-        prevmmHg = mmHgStr;
-        tft.setCursor(WIDTH / 2 - tft.textWidth(prevmmHg) / 2, yStep);
-        tft.print(prevmmHg);
-    }
-
-    yStep += tft.fontHeight(0) + GOLD_8;
-    
-    tft.unloadFont();
-
-    tft.setTextColor(OWLOSInfoColor, OWLOSDarkColor);
-    tft.setCursor(valueLeftPadding, yStep);
-
-    tft.loadFont(AA_FONT_SMALL);
-    tft.print("altitude");
-
-    tft.setCursor(WIDTH - tft.textWidth("temperature") - valueLeftPadding, yStep);
-    tft.print("temperature");
-
-    yStep += tft.fontHeight(0) + GOLD_8;
-    tft.unloadFont();
-
-    tft.setTextColor(OWLOSPrimaryColor, OWLOSDarkColor);
-    tft.setCursor(valueLeftPadding, yStep);
-
-    tft.loadFont(AA_FONT_BIG);
-
-    if (prevAltitude.compareTo(altitudeStr + "m") != 0)
-    {
-        tft.fillRect(valueLeftPadding, yStep, tft.textWidth(prevAltitude), tft.fontHeight(0), OWLOSDarkColor);
-        prevAltitude = altitudeStr + "m";
-        tft.print(prevAltitude);
-    }
-
-    if (prevBMxTemp.compareTo(temperatureStr + "C") != 0)
-    {
-        tft.fillRect(WIDTH - tft.textWidth(prevBMxTemp) - valueLeftPadding, yStep, tft.textWidth(prevBMxTemp), tft.fontHeight(0), OWLOSDarkColor);
-        prevBMxTemp = temperatureStr + "C";
-        tft.setCursor(WIDTH - tft.textWidth(prevBMxTemp) - valueLeftPadding, yStep);
-        tft.print(prevBMxTemp);
-    }
-
-    tft.unloadFont();
+    leftDownMediumText.draw("altitude", altitudeStr + "m");
+    rightDownMediumText.draw("temperature", temperatureStr + "C");
 }
 
+void drawHomeCO2Status()
+{
+    bigText.draw("eCO2", _CCS811Driver->CO2, "PPM");
+    leftDownMediumText.draw("TVOC", _CCS811Driver->TVOC + "PPB");
+    rightDownMediumText.draw("Resistance", _CCS811Driver->resistence);
+}
+
+void drawHomeGasStatus()
+{
+    bigText.draw("CO2 CO Smoke Dust [MQ135]", _ADS1X15Driver->chanel_1, "");
+    leftDownMediumText.draw("CO [MQ7]", _ADS1X15Driver->chanel_2);
+    rightDownMediumText.draw("eCO2", _CCS811Driver->CO2 + "PPM");
+}
 
 void HomeScreenDraw()
 {
@@ -450,13 +343,18 @@ void HomeScreenDraw()
     {
         switch (currentHomeSensor)
         {
-            case HOME_SENSOR_DHT:
-               drawHomeDHTStatus();
+        case HOME_SENSOR_DHT:
+            drawHomeDHTStatus();
             break;
-            case HOME_SENSOR_PRESSURE:
-               drawHomePressureStatus();
+        case HOME_SENSOR_PRESSURE:
+            drawHomePressureStatus();
             break;
-
+        case HOME_SENSOR_CO2:
+            drawHomeCO2Status();
+            break;
+        case HOME_SENSOR_GAS:
+            drawHomeGasStatus();
+            break;
         }
     }
 }

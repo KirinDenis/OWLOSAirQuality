@@ -91,6 +91,9 @@ void AirQualityBegin(String __topic)
 {
     _topic = __topic + "/AirQuality";
 
+    driversAdd(CCS811_DRIVER_TYPE, CCS811_Driver_Id, CCS811_Driver_Pind);    
+    _CCS811Driver = (CCS811Driver*)driversGetDriver(CCS811_Driver_Id);
+
     driversAdd(DHT_DRIVER_TYPE, DHT22_Driver_Id, DHT22_Driver_Pind);
     _DHTDriver = (DHTDriver*)driversGetDriver(DHT22_Driver_Id);
 
@@ -108,8 +111,6 @@ void AirQualityBegin(String __topic)
     driversAdd(ADS1X15_DRIVER_TYPE, ADS1X15_Driver_Id, ADS1X15_Driver_Pind);    
     _ADS1X15Driver = (ADS1X15Driver*)driversGetDriver(ADS1X15_Driver_Id);
 
-    driversAdd(CCS811_DRIVER_TYPE, CCS811_Driver_Id, CCS811_Driver_Pind);    
-    _CCS811Driver = (CCS811Driver*)driversGetDriver(CCS811_Driver_Id);
 }
 
 void AirQualityLoop()
@@ -151,7 +152,7 @@ void AirQualityLoop()
       }
       else 
 #endif      
-#ifdef USE_BME680_DRIVER
+#ifdef USE_BME680_DRIVER //Still BMP280 at HTTP packet key value for server compatailable 
       if (_BME680Driver != nullptr)
       {
           AirQualityPropertiesMode += "BMP280:yes\n";
