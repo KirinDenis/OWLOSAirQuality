@@ -99,7 +99,7 @@ void TextControlClass::refresh()
 }
 
 void TextControlClass::draw(String _text, int _fgColor, int _bgColor, int _size)
-{
+{    
     if (OnTouchEvent != nullptr)
     {
         if (touch)

@@ -61,13 +61,12 @@ bool SetupComplete = false;
 uint16_t touchX, touchY;
 bool touch = false;
 //------------------------------------------------------------------------------------------
-//Init
+// Init
 bool UXServiceInit()
 {
     // Setup the LCD
     tft.init();
     tft.setRotation(1);
-
     uint16_t calibrationData[5];
 
     if (filesExists(CALIBRATION_FILE "0"))
@@ -82,7 +81,7 @@ bool UXServiceInit()
     else
     {
         // data not valid. recalibrate
-        tft.calibrateTouch(calibrationData, OWLOSLightColor, OWLOSDangerColor, 15);
+        tft.calibrateTouch(calibrationData, OWLOSLightColor, OWLOSDangerColor, OWLOSDarkColor, GOLD_7);
         filesWriteInt(CALIBRATION_FILE "0", calibrationData[0]);
         filesWriteInt(CALIBRATION_FILE "1", calibrationData[1]);
         filesWriteInt(CALIBRATION_FILE "2", calibrationData[2]);
@@ -101,11 +100,11 @@ bool UXServiceInit()
 
     //	EditControlRefresh();
 
-    //refreshTransportStatuses();
-    //drawTransportStatuses();
+    // refreshTransportStatuses();
+    // drawTransportStatuses();
 
-    //refreshSensorStatuses();
-    //drawSensorStatuses();
+    // refreshSensorStatuses();
+    // drawSensorStatuses();
 
     return true;
 }
@@ -122,16 +121,14 @@ void UXServiceLoop()
         HomeScreenDraw();
     }
 
-
     if (tft.getTouch(&touchX, &touchY))
     {
         touch = true;
     }
-    else 
+    else
     {
         touch = false;
     }
-
 
     if (currentMode != previosMode)
     {
