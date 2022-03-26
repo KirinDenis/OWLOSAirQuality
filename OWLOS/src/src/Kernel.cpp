@@ -59,6 +59,8 @@ OWLOS распространяется в надежде, что она буде
 
 #include "ux/Controls/EditControl.h"
 
+extern bool SetupComplete;
+
 /*-----------------------------------------------------------------------------
 OWLOS Kernel setup section 
 ------------------------------------------------------------------------------*/
@@ -138,6 +140,7 @@ OWLOS Kernel loop section
 
 bool kernelLoop()
 {
+	SetupComplete = true;
 #if defined(ARDUINO_ESP8266_RELEASE_2_5_0) || defined(ARDUINO_ESP32_RELEASE_1_0_4)
 #ifdef ARDUINO_ESP32_RELEASE_1_0_4
 	filesLoop();
@@ -183,7 +186,6 @@ bool kernelLoop()
 	//give CPU time quantum to each driver. Like are sample -> temperature sensor can check physical sensor value
 #ifdef USE_DRIVERS
 	driversLoop(); //the driverLoop() more actual for sensors drivers, the actuator drivers wait until Sub()->OnMessage() happens, see Main::Callback(...) function
-	UXServiceLoop();
 	AirQualityLoop();
 #endif
 

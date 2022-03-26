@@ -49,6 +49,12 @@ OWLOS распространяется в надежде, что она буде
 
 #include "FileService.h"
 
+//#include "freertos/FreeRTOS.h"
+//#include "freertos/task.h"
+
+#include "soc/timer_group_struct.h"
+#include "soc/timer_group_reg.h"
+
 extern TFT_eSPI tft;
 
 #define CALIBRATION_FILE "/TFTCalibration"
@@ -56,10 +62,108 @@ extern TFT_eSPI tft;
 extern int currentMode;
 int previosMode;
 
+bool FirstLoop = false;
 bool SetupComplete = false;
 
 uint16_t touchX, touchY;
 bool touch = false;
+
+
+
+void UXServiceTask(void *pvParameter)
+{
+  
+    while (true)
+    {        
+//TIMERG0.wdt_wprotect=TIMG_WDT_WKEY_VALUE;
+//TIMERG0.wdt_feed=1;
+//TIMERG0.wdt_wprotect=0;
+
+        vTaskDelay(100 / portTICK_RATE_MS);
+
+        if (SetupComplete)
+        {            
+            if (!FirstLoop)
+            {
+                FirstLoop = true;
+                currentMode = HOME_MODE;
+                previosMode = HOME_MODE;
+                HomeButtonTouch();
+                HomeScreenRefresh();
+                HomeScreenDraw();
+            }
+
+            if (tft.getTouch(&touchX, &touchY))
+            {
+                touch = true;
+            }
+            else
+            {
+                touch = false;
+            }
+
+            if (currentMode != previosMode)
+            {
+
+                switch (currentMode)
+                {
+
+                case HOME_MODE:
+                    HomeScreenRefresh();
+                    break;
+
+                case SENSORS_MODE:
+                    sensorsScreenRefresh();
+                    break;
+
+                case TRANSPORT_MODE:
+                    transportScreenRefresh();
+                    break;
+
+                case LOG_MODE:
+                    logScreenRefresh();
+                    break;
+
+                case EDITCONTROL_MODE:
+                    EditControlRefresh();
+                    break;
+
+                default:
+                    break;
+                }
+            }
+
+            switch (currentMode)
+            {
+            case HOME_MODE:
+                HomeScreenDraw();
+                break;
+
+            case SENSORS_MODE:
+                sensorsScreenDraw();
+                break;
+
+            case TRANSPORT_MODE:
+                transportScreenDraw();
+                break;
+
+            case LOG_MODE:
+                logScreenDraw();
+                break;
+
+            case EDITCONTROL_MODE:
+                EditControlDraw();
+                break;
+
+            default:
+                break;
+            }
+
+            previosMode = currentMode;
+        }
+    }
+}
+
 //------------------------------------------------------------------------------------------
 // Init
 bool UXServiceInit()
@@ -105,89 +209,9 @@ bool UXServiceInit()
 
     // refreshSensorStatuses();
     // drawSensorStatuses();
+    xTaskCreate(&UXServiceTask, "UXService_task", 4096, NULL, tskIDLE_PRIORITY, NULL);
 
     return true;
-}
-
-void UXServiceLoop()
-{
-    if (!SetupComplete)
-    {
-        SetupComplete = true;
-        currentMode = HOME_MODE;
-        previosMode = HOME_MODE;
-        HomeButtonTouch();
-        HomeScreenRefresh();
-        HomeScreenDraw();
-    }
-
-    if (tft.getTouch(&touchX, &touchY))
-    {
-        touch = true;
-    }
-    else
-    {
-        touch = false;
-    }
-
-    if (currentMode != previosMode)
-    {
-
-        switch (currentMode)
-        {
-
-        case HOME_MODE:
-            HomeScreenRefresh();
-            break;
-
-        case SENSORS_MODE:
-            sensorsScreenRefresh();
-            break;
-
-        case TRANSPORT_MODE:
-            transportScreenRefresh();
-            break;
-
-        case LOG_MODE:
-            logScreenRefresh();
-            break;
-
-        case EDITCONTROL_MODE:
-            EditControlRefresh();
-            break;
-
-        default:
-            break;
-        }
-    }
-
-    switch (currentMode)
-    {
-    case HOME_MODE:
-        HomeScreenDraw();
-        break;
-
-    case SENSORS_MODE:
-        sensorsScreenDraw();
-        break;
-
-    case TRANSPORT_MODE:
-        transportScreenDraw();
-        break;
-
-    case LOG_MODE:
-        logScreenDraw();
-        break;
-
-    case EDITCONTROL_MODE:
-        EditControlDraw();
-        break;
-
-    default:
-        break;
-    }
-
-    previosMode = currentMode;
 }
 
 #endif

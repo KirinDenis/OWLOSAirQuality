@@ -2,6 +2,6 @@
 #define UX_SERVICE
 
 bool UXServiceInit();
-void UXServiceLoop();
+//void UXServiceLoop(void *pvParameter);
 
 #endif
