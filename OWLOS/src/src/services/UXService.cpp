@@ -44,16 +44,11 @@ OWLOS распространяется в надежде, что она буде
 #include "../ux/Screens/SensorsScreen.h"
 #include "../ux/Screens/TransportScreen.h"
 #include "../ux/Screens/LogScreen.h"
+#include "../ux/Screens/TestScreen.h"
 
 #include "../ux/Controls/EditControl.h"
 
 #include "FileService.h"
-
-//#include "freertos/FreeRTOS.h"
-//#include "freertos/task.h"
-
-#include "soc/timer_group_struct.h"
-#include "soc/timer_group_reg.h"
 
 extern TFT_eSPI tft;
 
@@ -75,9 +70,6 @@ void UXServiceTask(void *pvParameter)
   
     while (true)
     {        
-//TIMERG0.wdt_wprotect=TIMG_WDT_WKEY_VALUE;
-//TIMERG0.wdt_feed=1;
-//TIMERG0.wdt_wprotect=0;
 
         vTaskDelay(100 / portTICK_RATE_MS);
 
@@ -85,12 +77,16 @@ void UXServiceTask(void *pvParameter)
         {            
             if (!FirstLoop)
             {
+                
+                //TEMP ->
+                /*
                 FirstLoop = true;
                 currentMode = HOME_MODE;
                 previosMode = HOME_MODE;
                 HomeButtonTouch();
                 HomeScreenRefresh();
                 HomeScreenDraw();
+                */
             }
 
             if (tft.getTouch(&touchX, &touchY))
@@ -128,6 +124,10 @@ void UXServiceTask(void *pvParameter)
                     EditControlRefresh();
                     break;
 
+                case TEST_MODE:
+                    testScreenRefresh();
+                    break;
+
                 default:
                     break;
                 }
@@ -153,6 +153,10 @@ void UXServiceTask(void *pvParameter)
 
             case EDITCONTROL_MODE:
                 EditControlDraw();
+                break;
+
+            case TEST_MODE:
+                testScreenDraw();
                 break;
 
             default:
@@ -193,14 +197,18 @@ bool UXServiceInit()
         filesWriteInt(CALIBRATION_FILE "4", calibrationData[4]);
     }
 
-    currentMode = LOG_MODE;
-    previosMode = LOG_MODE;
+    //currentMode = LOG_MODE;
+    //previosMode = LOG_MODE;
+
+    currentMode = TEST_MODE;
+    previosMode = TEST_MODE;
+
 
     HomeScreenInit();
     transportScreenInit();
     sensorsScreenInit();
-
     EditControlInit();
+    testScreenInit();
 
     //	EditControlRefresh();
 

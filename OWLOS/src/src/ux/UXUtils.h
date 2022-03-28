@@ -32,6 +32,7 @@
 #define LOG_MODE 0x03
 #define HOME_MODE 0x04
 #define EDITCONTROL_MODE 0x05
+#define TEST_MODE 0x06
 
 #define BUTTON_TOUCH_NOTDEFINE 0
 #define BUTTON_TOUCH_YES 1
