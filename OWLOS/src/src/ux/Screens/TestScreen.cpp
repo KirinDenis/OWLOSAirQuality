@@ -49,7 +49,7 @@ extern bool SetupComplete;
 
 int count = 0;
 
-#define LOG_HEIGHT 14 * GOLD_8 
+#define LOG_HEIGHT 14 * GOLD_8
 
 void testScreenInit()
 {
@@ -58,7 +58,6 @@ void testScreenInit()
 void testScreenRefresh()
 {
   tft.fillScreen(OWLOSDarkColor);
-
 }
 
 #define DEG2RAD 0.0174532925
@@ -77,7 +76,8 @@ void fillArc(int x, int y, int start_angle, int seg_count, int rx, int ry, int w
   uint16_t y1 = sy * ry + y;
 
   // Draw colour blocks every inc degrees
-  for (int i = start_angle; i < start_angle + seg * seg_count; i += inc) {
+  for (int i = start_angle; i < start_angle + seg * seg_count; i += inc)
+  {
 
     // Calculate pair of coordinates for segment end
     float sx2 = cos((i + seg - 90) * DEG2RAD);
@@ -101,6 +101,56 @@ void fillArc(int x, int y, int start_angle, int seg_count, int rx, int ry, int w
 byte inc = 0;
 unsigned int col = 0;
 
+int angleFrom = 270 - 30;
+int angleTo = 90 + 30;
+int fullStep = (360 - angleFrom) + angleTo;
+int width = 25;
+// step = 100%
+
+// DHT temperature
+//-50 ... 50
+// Pressure
+// 720 ... 780
+
+// int low = -20;
+// int high = 30;
+
+int low = -50;
+int high = 50;
+
+void drawIndicator(int value)
+{
+  // value to percent
+  // 100 percent = high - low
+  int oneHungred = high + low * -1;
+  // value to 50 to oneHungred
+  //-20 ... 0%     0
+  //-10 ... 20%    10
+  // 0   ... 40%    20
+  // 10  ... 60%    30
+  // 20  ... 80%    40
+  // 30  ... 100%   50
+
+  int currentAValue = abs(low) + value;
+
+  int percent = currentAValue * (100 / oneHungred);
+
+  // 0%    step = 0
+  // 100%  step = (360 - angleFrom) + angleTo;
+  int currentStep = (fullStep / 100) * percent;
+
+  fillArc(150, 150, angleFrom, currentStep, 100, 100, width, OWLOSInfoColor);
+
+  if (angleFrom + currentStep <= 360)
+  {
+    fillArc(150, 150, angleFrom + currentStep, fullStep - currentStep, 100, 100, width, OWLOSSecondaryColor);
+  }
+  else
+  {
+    fillArc(150, 150, 360 - (360 - (angleFrom + currentStep)), fullStep - currentStep, 100, 100, width, OWLOSSecondaryColor);
+  }
+}
+
 void testScreenDraw()
 {
   if (SetupComplete)
@@ -112,27 +162,35 @@ void testScreenDraw()
     tft.setTextColor(OWLOSLightColor, OWLOSDarkColor);
     tft.print(count);
 
-  
+    drawIndicator(inc - 50);
 
-    //tft.drawCircle(150, 150, 100, OWLOSLightColor);
-    //tft.drawCircleHelper(150, 150, 80, 90, OWLOSLightColor);
+    tft.loadFont(AA_FONT_BIG);
 
-  //fillArc(160, 120, inc * 6, 1, 140, 140, 140, OWLOSInfoColor);
+    // tft.fillRect(180, yStep, tft.textWidth(captionText), tft.fontHeight(0), bgColor);
+    tft.setTextColor(OWLOSInfoColor, OWLOSDarkColor);
+    tft.setCursor(150, 150 + 100);
 
-  // Continuous segmented (inc*2) elliptical arc drawing
-  //fillArc(160, 120, ((inc * 2) % 60) * 6, 1, 120, 120, 120, OWLOSWarningColor);
+    tft.print(inc);
+    tft.unloadFont();
 
-  // Circle drawing using arc with arc width = radius
-  //fillArc(160, 120, inc * 6, 1, 42, 42, 42, OWLOSSuccessColor);
+    /*
+            if (caption.compareTo(captionText) != 0)
+            {
+                tft.fillRect(LEFT_PADDING, yStep, tft.textWidth(captionText), tft.fontHeight(0), bgColor);
+                tft.setTextColor(captionColor, bgColor);
+                tft.setCursor(LEFT_PADDING, yStep);
+                captionText = caption;
+                tft.print(caption);
+            }
 
-  fillArc(150, 150, 200, inc, 100, 100, 10, OWLOSSuccessColor);
-  inc++;
-  col += 1;
-  if (col > 191) col = 0;
-  if (inc > 360 / 3) inc = 0;
-    
+            yStep += tft.fontHeight(1) + GOLD_8;
+            tft.unloadFont();
+    */
 
+    inc += 5;
+    if (inc > 100)
+    {
+      inc = 0;
+    }
   }
 }
-
-
