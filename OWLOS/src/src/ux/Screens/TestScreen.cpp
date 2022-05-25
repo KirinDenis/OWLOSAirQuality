@@ -49,6 +49,8 @@ extern bool SetupComplete;
 
 int count = 0;
 
+int b = 0;
+
 #define LOG_HEIGHT 14 * GOLD_8
 
 void testScreenInit()
@@ -103,7 +105,7 @@ unsigned int col = 0;
 
 int angleFrom = 270 - 30;
 int angleTo = 90 + 30;
-int fullStep = (360 - angleFrom) + angleTo;
+int fullStep = (360 - angleFrom) + angleTo; // 120 + 120 = 240
 int width = 25;
 // step = 100%
 
@@ -122,7 +124,7 @@ void drawIndicator(int value)
 {
   // value to percent
   // 100 percent = high - low
-  int oneHungred = high + low * -1;
+  int oneHungred = abs(high + (low * -1));
   // value to 50 to oneHungred
   //-20 ... 0%     0
   //-10 ... 20%    10
@@ -131,13 +133,13 @@ void drawIndicator(int value)
   // 20  ... 80%    40
   // 30  ... 100%   50
 
-  int currentAValue = abs(low) + value;
+  int currentAValue = abs(low) + value; // 50
 
-  int percent = currentAValue * (100 / oneHungred);
+  float percent = currentAValue * (oneHungred / 100.0f);
 
   // 0%    step = 0
   // 100%  step = (360 - angleFrom) + angleTo;
-  int currentStep = (fullStep / 100) * percent;
+  float currentStep = (fullStep / 100.0f) * percent; // 2.4 * 50 = 120
 
   fillArc(150, 150, angleFrom, currentStep, 100, 100, width, OWLOSInfoColor);
 
@@ -151,6 +153,12 @@ void drawIndicator(int value)
   }
 }
 
+int tW = 0;
+int tH = 0;
+
+int tX = 0;
+int tY = 0;
+
 void testScreenDraw()
 {
   if (SetupComplete)
@@ -162,15 +170,33 @@ void testScreenDraw()
     tft.setTextColor(OWLOSLightColor, OWLOSDarkColor);
     tft.print(count);
 
-    drawIndicator(inc - 50);
-
+    //--- text
     tft.loadFont(AA_FONT_BIG);
 
-    // tft.fillRect(180, yStep, tft.textWidth(captionText), tft.fontHeight(0), bgColor);
-    tft.setTextColor(OWLOSInfoColor, OWLOSDarkColor);
-    tft.setCursor(150, 150 + 100);
+    String incStr = (String)b;
+    tW = tft.textWidth(incStr);
+    tH = tft.fontHeight(0);
 
-    tft.print(inc);
+    tX = 150 - (tW / 2);
+    tY = 150 + 60;
+    tft.fillRect(tX, tY, tW, tH, OWLOSDarkColor);
+
+    b = inc - 50;
+    // b = inc;
+
+    drawIndicator(b);
+    incStr = (String)b;
+
+    tW = tft.textWidth(incStr);
+    tH = tft.fontHeight(0);
+
+    tX = 150 - (tW / 2);
+    tY = 150 + 60;
+
+    tft.setTextColor(OWLOSInfoColor, OWLOSDarkColor);
+    tft.setCursor(tX, tY);
+
+    tft.print(incStr);
     tft.unloadFont();
 
     /*
@@ -187,7 +213,7 @@ void testScreenDraw()
             tft.unloadFont();
     */
 
-    inc += 5;
+    inc += 2;
     if (inc > 100)
     {
       inc = 0;
