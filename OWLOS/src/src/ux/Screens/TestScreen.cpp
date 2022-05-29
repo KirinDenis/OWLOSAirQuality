@@ -51,6 +51,30 @@ int count = 0;
 
 int b = 0;
 
+
+u_int x = 240;
+u_int y = 150;
+u_short size = 70;
+u_short width = size / 5;
+u_short value_size = size - width / 2;
+
+int angleFrom = 270 - 30;
+int angleTo = 90 + 30;
+int fullStep = (360 - angleFrom) + angleTo; // 120 + 120 = 240
+
+float low = -50;
+float high = 50;
+
+float lowDanger = -25;
+float lowWarning = -10;
+float highDanger = 32;
+float highWarning = 27;
+
+// value to percent
+// 100 percent = high - low
+float oneHungred = abs(high + (low * -1));
+ 
+//-----------------------------------------------------------------
 #define LOG_HEIGHT 14 * GOLD_8
 
 void testScreenInit()
@@ -103,28 +127,9 @@ void fillArc(int x, int y, int start_angle, int seg_count, int rx, int ry, int w
 byte inc = 0;
 unsigned int col = 0;
 
-int angleFrom = 270 - 30;
-int angleTo = 90 + 30;
-int fullStep = (360 - angleFrom) + angleTo; // 120 + 120 = 240
-int width = 25;
-// step = 100%
 
-// DHT temperature
-//-50 ... 50
-// Pressure
-// 720 ... 780
-
-// int low = -20;
-// int high = 30;
-
-int low = -50;
-int high = 50;
-
-void drawIndicator(int value)
+float getCurrentStep(float value)
 {
-  // value to percent
-  // 100 percent = high - low
-  int oneHungred = abs(high + (low * -1));
   // value to 50 to oneHungred
   //-20 ... 0%     0
   //-10 ... 20%    10
@@ -139,18 +144,49 @@ void drawIndicator(int value)
 
   // 0%    step = 0
   // 100%  step = (360 - angleFrom) + angleTo;
-  float currentStep = (fullStep / 100.0f) * percent; // 2.4 * 50 = 120
+  return (fullStep / 100.0f) * percent; // 2.4 * 50 = 120
+}
 
-  fillArc(150, 150, angleFrom, currentStep, 100, 100, width, OWLOSInfoColor);
+// step = 100%
+void drawIndicator(float value)
+{
+  float currentStep = getCurrentStep(value);
+
+  u_int value_color = OWLOSDangerColor;
+  if ((value > lowDanger) && (value <= lowWarning))
+  {
+     value_color = OWLOSWarningColor;  
+  }
+  else 
+  if ((value > lowWarning) && (value <= highWarning))
+  {
+     value_color = OWLOSPrimaryColor;  
+  }
+  else 
+  if ((value > highWarning) && (value <= highDanger))
+  {
+     value_color = OWLOSWarningColor;  
+  }
+
+  fillArc(x, y, angleFrom, currentStep, value_size, value_size, width, value_color);
 
   if (angleFrom + currentStep <= 360)
   {
-    fillArc(150, 150, angleFrom + currentStep, fullStep - currentStep, 100, 100, width, OWLOSSecondaryColor);
+    fillArc(x, y, angleFrom + currentStep, fullStep - currentStep, value_size, value_size, width, OWLOSSecondaryColor);
   }
   else
   {
-    fillArc(150, 150, 360 - (360 - (angleFrom + currentStep)), fullStep - currentStep, 100, 100, width, OWLOSSecondaryColor);
+    fillArc(x, y, 360 - (360 - (angleFrom + currentStep)), fullStep - currentStep, value_size, value_size, width, OWLOSSecondaryColor);
   }
+}
+
+void drawWarningDanger()
+{
+  fillArc(x, y, angleFrom, getCurrentStep(lowDanger), size, size, 2, OWLOSDangerColor);
+  fillArc(x, y, angleFrom + getCurrentStep(lowDanger), getCurrentStep(lowWarning) - getCurrentStep(lowDanger), size, size, 2, OWLOSWarningColor);
+  fillArc(x, y, angleFrom + getCurrentStep(lowWarning), getCurrentStep(highWarning) - getCurrentStep(lowWarning), size, size, 2, OWLOSInfoColor);
+  fillArc(x, y, angleFrom + getCurrentStep(highWarning), getCurrentStep(highDanger) - getCurrentStep(highWarning),size, size, 2, OWLOSWarningColor);
+  fillArc(x, y, angleFrom + getCurrentStep(highDanger), fullStep - getCurrentStep(highDanger), size, size, 2, OWLOSDangerColor);
 }
 
 int tW = 0;
@@ -163,6 +199,7 @@ void testScreenDraw()
 {
   if (SetupComplete)
   {
+    drawWarningDanger(); //TODO: draw once
     count++;
     tft.setCursor(0, 0);
     tft.setTextColor(OWLOSInfoColor, OWLOSDarkColor);
@@ -173,12 +210,27 @@ void testScreenDraw()
     //--- text
     tft.loadFont(AA_FONT_BIG);
 
+    //unit of mesure 
+    String valuStr = "C";
+    tW = tft.textWidth(valuStr);
+    tH = tft.fontHeight(0);
+    tX = x - (tW / 2);
+    tY = y - (tH / 2);
+    tft.setTextColor(OWLOSInfoColor, OWLOSDarkColor);
+    tft.setCursor(tX, tY);
+
+    tft.print(valuStr);
+
+    tft.unloadFont();
+    
+    //values
+    tft.loadFont(AA_FONT_SMALL);    
     String incStr = (String)b;
     tW = tft.textWidth(incStr);
     tH = tft.fontHeight(0);
 
-    tX = 150 - (tW / 2);
-    tY = 150 + 60;
+    tX = x - (tW / 2);
+    tY = y + size;
     tft.fillRect(tX, tY, tW, tH, OWLOSDarkColor);
 
     b = inc - 50;
@@ -190,8 +242,8 @@ void testScreenDraw()
     tW = tft.textWidth(incStr);
     tH = tft.fontHeight(0);
 
-    tX = 150 - (tW / 2);
-    tY = 150 + 60;
+    tX = x - (tW / 2);
+    tY = y + size;
 
     tft.setTextColor(OWLOSInfoColor, OWLOSDarkColor);
     tft.setCursor(tX, tY);
