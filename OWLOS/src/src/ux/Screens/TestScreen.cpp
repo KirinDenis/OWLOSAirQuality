@@ -86,6 +86,8 @@ void testScreenRefresh()
   tft.fillScreen(OWLOSDarkColor);
 }
 
+
+
 #define DEG2RAD 0.0174532925
 void fillArc(int x, int y, int start_angle, int seg_count, int rx, int ry, int w, unsigned int colour)
 {
@@ -113,8 +115,20 @@ void fillArc(int x, int y, int start_angle, int seg_count, int rx, int ry, int w
     int x3 = sx2 * rx + x;
     int y3 = sy2 * ry + y;
 
-    tft.fillTriangle(x0, y0, x1, y1, x2, y2, colour);
+    tft.fillTriangle(x0, y0, x1, y1, x2, y2, colour);    
     tft.fillTriangle(x1, y1, x2, y2, x3, y3, colour);
+
+    
+   float smoothX = sx * (rx - w) + x;
+   float smoothY = sy * (ry - w) + y;
+   double intpart;
+   
+   if ((modf(smoothX, &intpart) < 0.5) && (modf(smoothY, &intpart) < 0.5))        
+   {
+     tft.drawPixel(x0, y0, tft.alphaBlend(127, colour, OWLOSDarkColor));          
+   }
+   
+
 
     // Copy segment end to sgement start for next segment
     x0 = x2;
