@@ -54,6 +54,7 @@
 #define OWLOSDarkColor rgb32_to_rgb16(0x141515)
 
 void drawArc(int x, int y, int radiusFrom, int radiusTo, double angleFrom, double angleTo, int color);
+void fillArc(int x, int y, int start_angle, int seg_count, int rx, int ry, int w, unsigned int colour);
 void drawWifiIcon(int x, int y, int dBm);
 String millisToDate(unsigned long _millis);
 String bytesToString(int bytesCount);
