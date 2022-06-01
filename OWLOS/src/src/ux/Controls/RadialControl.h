@@ -42,11 +42,19 @@ OWLOS распространяется в надежде, что она буде
 #include "../UXColors.h"
 #include "../UXUtils.h"
 
+struct TextRect 
+{
+    uint16_t x;
+    uint16_t y;
+    uint16_t width;
+    uint16_t height;
+};
+
 class RadialControlClass
 {
 protected:
     u_short size = 100;
-    u_short width = size / 5;
+    u_short width = size / 6;
     u_short value_size = size - width / 2;
 
     int angleFrom = 270 - 30;
@@ -54,15 +62,15 @@ protected:
     int fullStep = (360 - angleFrom) + angleTo; // 120 + 120 = 240
 
 
-    // value to percent
-    // 100 percent = high - low
-    float oneHungred = abs(high + (low * -1));
 
-    float value = 0;
+    float value = low;
+    float prevValue = high;
 
     float getCurrentStep(float _value);
     void drawIndicator();
     void drawIndicatorInfo();
+    
+    TextRect getTextRect(String text);
     void drawValue();
 
 public:
@@ -71,13 +79,19 @@ public:
     u_int x = 240;
     u_int y = 150;
 
-    float low = 0;
-    float high = 100;
+    float low = -50;
+    float high = 50;
+    // value to percent
+    // 100 percent = high - low
+    float oneHungred = abs(high + (low * -1));
 
-    float lowDanger = 25;
-    float lowWarning = 35;
-    float highDanger = 70;
-    float highWarning = 90;
+
+    float lowDanger = -35;
+    float lowWarning = -25;
+    float highWarning = 20;
+    float highDanger = 30;
+    
+    bool printFloatValue = false;
     
     RadialControlClass();
 

@@ -201,7 +201,7 @@ bool UXServiceInit()
     //previosMode = LOG_MODE;
 
     currentMode = TEST_MODE;
-    previosMode = TEST_MODE;
+    previosMode = LOG_MODE;
 
 
     HomeScreenInit();

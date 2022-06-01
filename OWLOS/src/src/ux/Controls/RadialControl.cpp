@@ -45,9 +45,7 @@ extern bool touch;
 
 RadialControlClass::RadialControlClass()
 {
-
 }
-
 
 float RadialControlClass::getCurrentStep(float _value)
 {
@@ -58,11 +56,8 @@ float RadialControlClass::getCurrentStep(float _value)
     // 10  ... 60%    30
     // 20  ... 80%    40
     // 30  ... 100%   50
-
     int currentAValue = abs(low) + _value; // 50
-
     float percent = currentAValue * (oneHungred / 100.0f);
-
     // 0%    step = 0
     // 100%  step = (360 - angleFrom) + angleTo;
     return (fullStep / 100.0f) * percent; // 2.4 * 50 = 120
@@ -125,28 +120,66 @@ void RadialControlClass::drawIndicatorInfo()
     tft.unloadFont();
 }
 
+TextRect RadialControlClass::getTextRect(String text)
+{
+    TextRect result;
+    result.width = tft.textWidth(text);
+    result.height = tft.fontHeight(0);
+
+    result.x = x - (result.width / 2);
+    result.y = y + size - result.height;
+    return result;
+}
+
 void RadialControlClass::drawValue()
 {
-    tft.loadFont(AA_FONT_SMALL);
-    String incStr = (String)value;
-    int16_t tW = tft.textWidth(incStr);
-    int16_t tH = tft.fontHeight(0);
+    if (value != prevValue)
+    {
+        String valueStr;
+        // hide previos
+        tft.loadFont(AA_FONT_BIG);
 
-    int16_t tX = x - (tW / 2);
-    int16_t tY = y + size;
-    tft.fillRect(tX, tY, tW, tH, OWLOSDarkColor);
+        if (printFloatValue)
+        {
+            valueStr = (String)prevValue;
+        }
+        else
+        {
+            valueStr = (String)(int)prevValue;
+        }
 
-    //    tW = tft.textWidth(incStr);
-    // tH = tft.fontHeight(0);
+        TextRect textRect = getTextRect(valueStr);
 
-    // tX = x - (tW / 2);
-    // tY = y + size;
+        tft.fillRect(textRect.x, textRect.y, textRect.width, textRect.height, OWLOSDarkColor);
 
-    tft.setTextColor(OWLOSInfoColor, OWLOSDarkColor);
-    tft.setCursor(tX, tY);
+        prevValue = value;
 
-    tft.print(incStr);
-    tft.unloadFont();
+        if (printFloatValue)
+        {
+            valueStr = (String)prevValue;
+        }
+        else
+        {
+            valueStr = (String)(int)prevValue;
+        }
+
+        // print new
+        textRect = getTextRect(valueStr);
+
+        if (printFloatValue)
+        {
+            valueStr = (String)prevValue;
+        }
+        else
+        {
+            valueStr = (String)(int)prevValue;
+        }
+
+        tft.setTextColor(OWLOSPrimaryColor, OWLOSDarkColor);
+        tft.setCursor(textRect.x, textRect.y);
+        tft.print(valueStr);
+        tft.unloadFont();
+    }
 }
 
 void RadialControlClass::setSize(u_short _size)
@@ -164,7 +197,10 @@ void RadialControlClass::refresh()
 
 void RadialControlClass::draw(float _value)
 {
-     value = _value;
-     drawIndicator();
-     drawValue();
+    if ((_value >= low) && (_value <= high))
+    {
+        value = _value;
+        drawIndicator();
+        drawValue();
+    }
 }
