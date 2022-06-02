@@ -81,43 +81,62 @@ void RadialControlClass::drawIndicator()
         value_color = OWLOSWarningColor;
     }
 
-    fillArc(x, y, angleFrom, currentStep, value_size, value_size, width, value_color);
+    fillArc(x + (size / 2), y + (size / 2), angleFrom, currentStep, indicatorRadius, indicatorRadius, indicatorWidth, value_color);
 
-    // plotQuadBezierSegAA(x,y, 199, 100, 250, 200);
 
     if (angleFrom + currentStep <= 360)
     {
-        fillArc(x, y, angleFrom + currentStep, fullStep - currentStep, value_size, value_size, width, OWLOSSecondaryColor);
+        fillArc(x + (size / 2), y + (size / 2), angleFrom + currentStep, fullStep - currentStep, indicatorRadius, indicatorRadius, indicatorWidth, OWLOSSecondaryColor);
     }
     else
     {
-        fillArc(x, y, 360 - (360 - (angleFrom + currentStep)), fullStep - currentStep, value_size, value_size, width, OWLOSSecondaryColor);
+        fillArc(x + (size / 2), y + (size / 2), 360 - (360 - (angleFrom + currentStep)), fullStep - currentStep, indicatorRadius, indicatorRadius, indicatorWidth, OWLOSSecondaryColor);
     }
 }
 
 void RadialControlClass::drawIndicatorInfo()
 {
-    fillArc(x, y, angleFrom, getCurrentStep(lowDanger), size, size, 2, OWLOSDangerColor);
-    fillArc(x, y, angleFrom + getCurrentStep(lowDanger), getCurrentStep(lowWarning) - getCurrentStep(lowDanger), size, size, 2, OWLOSWarningColor);
-    fillArc(x, y, angleFrom + getCurrentStep(lowWarning), getCurrentStep(highWarning) - getCurrentStep(lowWarning), size, size, 2, OWLOSInfoColor);
-    fillArc(x, y, angleFrom + getCurrentStep(highWarning), getCurrentStep(highDanger) - getCurrentStep(highWarning), size, size, 2, OWLOSWarningColor);
-    fillArc(x, y, angleFrom + getCurrentStep(highDanger), fullStep - getCurrentStep(highDanger), size, size, 2, OWLOSDangerColor);
+    fillArc(x + (size / 2), y + (size / 2), angleFrom, getCurrentStep(lowDanger), indicatorRadius + 4, indicatorRadius+ 4, 2, OWLOSDangerColor);
+    fillArc(x + (size / 2), y + (size / 2), angleFrom + getCurrentStep(lowDanger), getCurrentStep(lowWarning) - getCurrentStep(lowDanger), indicatorRadius+ 4, indicatorRadius+ 4, 2, OWLOSWarningColor);
+    fillArc(x + (size / 2), y + (size / 2), angleFrom + getCurrentStep(lowWarning), getCurrentStep(highWarning) - getCurrentStep(lowWarning), indicatorRadius+ 4, indicatorRadius+ 4, 2, OWLOSInfoColor);
+    fillArc(x + (size / 2), y + (size / 2), angleFrom + getCurrentStep(highWarning), getCurrentStep(highDanger) - getCurrentStep(highWarning), indicatorRadius+ 4, indicatorRadius+ 4, 2, OWLOSWarningColor);
+    fillArc(x + (size / 2), y + (size / 2), angleFrom + getCurrentStep(highDanger), fullStep - getCurrentStep(highDanger), indicatorRadius+ 4, indicatorRadius+ 4, 2, OWLOSDangerColor);
 
     //--- text
     tft.loadFont(AA_FONT_BIG);
 
     // unit of mesure
-    String valuStr = "C";
+    String valuStr = unitOfMesure;
     int16_t tW = tft.textWidth(valuStr);
     int16_t tH = tft.fontHeight(0);
-    int16_t tX = x - (tW / 2);
-    int16_t tY = y - (tH / 2);
+    int16_t tX = x + (size / 2) - (tW / 2);
+    int16_t tY = y + (size / 2) - (tH / 2);
     tft.setTextColor(OWLOSInfoColor, OWLOSDarkColor);
     tft.setCursor(tX, tY);
 
     tft.print(valuStr);
 
     tft.unloadFont();
+
+    //title 
+    tft.loadFont(AA_FONT_SMALL);
+    tft.setTextColor(OWLOSInfoColor, OWLOSDarkColor);
+    tft.setCursor(x, y);
+    tft.print(title);
+
+    tft.setCursor(x, y);
+    tft.print(title);
+ 
+    //value type
+    tft.setCursor(x, y + size);
+    tft.print(valueType);
+
+    tft.unloadFont();
+
+    //String title = "";
+    //String unitOfMesure = "";
+    //String valueType = "";
+
 }
 
 TextRect RadialControlClass::getTextRect(String text)
@@ -126,7 +145,7 @@ TextRect RadialControlClass::getTextRect(String text)
     result.width = tft.textWidth(text);
     result.height = tft.fontHeight(0);
 
-    result.x = x - (result.width / 2);
+    result.x = x + (size / 2) - (result.width / 2);
     result.y = y + size - result.height;
     return result;
 }
@@ -185,8 +204,8 @@ void RadialControlClass::drawValue()
 void RadialControlClass::setSize(u_short _size)
 {
     size = _size;
-    width = _size / 5;
-    value_size = _size - width / 2;
+    indicatorRadius = size / 2 - size / 10;
+    indicatorWidth = indicatorRadius / 10;    
 }
 
 void RadialControlClass::refresh()

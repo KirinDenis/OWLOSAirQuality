@@ -53,9 +53,9 @@ struct TextRect
 class RadialControlClass
 {
 protected:
-    u_short size = 100;
-    u_short width = size / 6;
-    u_short value_size = size - width / 2;
+    uint16_t size = 200;
+    uint16_t indicatorRadius = size / 2 - size / 10;
+    u_short indicatorWidth = indicatorRadius / 10;    
 
     int angleFrom = 270 - 30;
     int angleTo = 90 + 30;
@@ -76,20 +76,24 @@ protected:
 public:
     //void (*OnTouchEvent)() = nullptr;
 
-    u_int x = 240;
-    u_int y = 150;
+    u_int x = 0;
+    u_int y = 50;
 
-    float low = -50;
-    float high = 50;
+    float low = 0;
+    float high = 100;
     // value to percent
     // 100 percent = high - low
     float oneHungred = abs(high + (low * -1));
 
 
-    float lowDanger = -35;
-    float lowWarning = -25;
-    float highWarning = 20;
-    float highDanger = 30;
+    float lowDanger = 25;
+    float lowWarning =  35;
+    float highWarning = 70;
+    float highDanger = 90;
+    
+    String title = "";
+    String unitOfMesure = "";
+    String valueType = "";
     
     bool printFloatValue = false;
     

@@ -58,11 +58,18 @@ void testScreenRefresh()
 {
   tft.fillScreen(OWLOSDarkColor);
 
-    radial1.x = 100;
+    radial1.x = 0;
+    radial1.setSize(200);
+    radial1.title = "DHT22";
+    radial1.unitOfMesure = "C";
+    radial1.valueType = "temperature";
     radial1.refresh();
 
-    radial2.x = 350;
-    radial2.setSize(70);
+    radial2.x = 250;
+    radial2.setSize(170);
+    radial2.title = "DHT22";
+    radial2.unitOfMesure = "%";
+    radial2.valueType = "humidity";
     radial2.refresh();
 }
 
