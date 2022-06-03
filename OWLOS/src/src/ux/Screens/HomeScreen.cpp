@@ -41,6 +41,7 @@ OWLOS распространяется в надежде, что она буде
 #include "../Controls/ButtonControl.h"
 #include "../Controls/BigTextControl.h"
 #include "../Controls/MediumTextControl.h"
+#include "../Controls/RadialControl.h"
 
 #include "LogScreen.h"
 #include "SensorsScreen.h"
@@ -64,6 +65,8 @@ ButtonControlClass gasButton("Gas::Smoke", OWLOSLightColor, OWLOSInfoColor, OWLO
 BigTextControlClass bigText(0);
 MediumTextControlClass leftDownMediumText(0, 1);
 MediumTextControlClass rightDownMediumText(1, 1);
+
+RadialControlClass radialControl;
 
 extern int currentMode;
 
@@ -123,6 +126,25 @@ void RefreshHomeScreenButtons()
     bigText.refresh();
     leftDownMediumText.refresh();
     rightDownMediumText.refresh();
+
+    radialControl.x = (480 - 200) / 2;
+    radialControl.y = 60;
+
+    //DHT22 characteristics
+    radialControl.low = -40;
+    radialControl.high = 80;
+
+    radialControl.lowDanger = -16;
+    radialControl.lowWarning = -3;
+    radialControl.highWarning =  27;
+    radialControl.highDanger =  33;
+
+    radialControl.setSize(200);
+    radialControl.title = "DHT22";
+    radialControl.unitOfMesure = "C";
+    radialControl.valueType = "temperature";
+    radialControl.refresh();
+
 }
 //-----------------------------------------------------------------------------------------
 
@@ -260,14 +282,19 @@ void HomeScreenRefresh()
 
 void drawHomeDHTStatus()
 {
+    
     if (_DHTDriver->celsius)
     {
-        bigText.draw("temperature", String(atoi(_DHTDriver->temperature.c_str())), "C");
+       // bigText.draw("temperature", String(atoi(_DHTDriver->temperature.c_str())), "C");
+        bigText.draw("", "", "");
     }
     else
     {
-        bigText.draw("temperature", String(atoi(_DHTDriver->temperature.c_str())), "F");
+        //bigText.draw("temperature", String(atoi(_DHTDriver->temperature.c_str())), "F");
+        bigText.draw("", "", "");
     }
+    
+    radialControl.draw(atoi(_DHTDriver->temperature.c_str()));
 
     leftDownMediumText.draw("humidity", String(atoi(_DHTDriver->humidity.c_str())) + "%");
     rightDownMediumText.draw("heat index", String(atoi(_DHTDriver->heatIndex.c_str())));

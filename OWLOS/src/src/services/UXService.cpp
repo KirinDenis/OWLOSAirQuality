@@ -78,15 +78,12 @@ void UXServiceTask(void *pvParameter)
             if (!FirstLoop)
             {
                 
-                //TEMP ->
-                /*
                 FirstLoop = true;
                 currentMode = HOME_MODE;
                 previosMode = HOME_MODE;
                 HomeButtonTouch();
                 HomeScreenRefresh();
                 HomeScreenDraw();
-                */
             }
 
             if (tft.getTouch(&touchX, &touchY))
@@ -197,12 +194,8 @@ bool UXServiceInit()
         filesWriteInt(CALIBRATION_FILE "4", calibrationData[4]);
     }
 
-    //currentMode = LOG_MODE;
-    //previosMode = LOG_MODE;
-
-    currentMode = TEST_MODE;
+    currentMode = LOG_MODE;
     previosMode = LOG_MODE;
-
 
     HomeScreenInit();
     transportScreenInit();

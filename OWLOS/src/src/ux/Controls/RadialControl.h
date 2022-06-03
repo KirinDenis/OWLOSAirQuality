@@ -44,27 +44,26 @@ OWLOS распространяется в надежде, что она буде
 
 struct TextRect 
 {
-    uint16_t x;
-    uint16_t y;
-    uint16_t width;
-    uint16_t height;
+    uint16_t x = 0;
+    uint16_t y = 0;
+    uint16_t width = 0;
+    uint16_t height = 0;
 };
 
 class RadialControlClass
 {
 protected:
     uint16_t size = 200;
-    uint16_t indicatorRadius = size / 2 - size / 10;
-    u_short indicatorWidth = indicatorRadius / 10;    
+    uint16_t indicatorRadius = size / 2 - size / 11;
+    u_short indicatorWidth = indicatorRadius / 11;    
 
     int angleFrom = 270 - 30;
     int angleTo = 90 + 30;
     int fullStep = (360 - angleFrom) + angleTo; // 120 + 120 = 240
 
-
-
     float value = low;
-    float prevValue = high;
+    String prevValue = (String)high;
+    TextRect prevTextRect;
 
     float getCurrentStep(float _value);
     void drawIndicator();

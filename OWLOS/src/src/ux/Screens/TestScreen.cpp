@@ -65,8 +65,8 @@ void testScreenRefresh()
     radial1.valueType = "temperature";
     radial1.refresh();
 
-    radial2.x = 250;
-    radial2.setSize(170);
+    radial2.x = 480-200;
+    radial2.setSize(200);
     radial2.title = "DHT22";
     radial2.unitOfMesure = "%";
     radial2.valueType = "humidity";

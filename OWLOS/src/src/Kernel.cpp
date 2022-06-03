@@ -99,11 +99,11 @@ bool kernelSetup()
 
 #ifdef USE_DRIVERS
 #ifdef USE_ESP_DRIVER
-	//--! TEMP driversInit(thingGetTopic()); //prepare onboard Unit's drivers
+	driversInit(thingGetTopic()); //prepare onboard Unit's drivers
 #else
 	driversInit("owlosthing");
 #endif
-	//--! TEMP AirQualityBegin(thingGetTopic());
+	AirQualityBegin(thingGetTopic());
 #endif
 
 #ifdef USE_SCRIPT
@@ -185,8 +185,8 @@ bool kernelLoop()
 
 	//give CPU time quantum to each driver. Like are sample -> temperature sensor can check physical sensor value
 #ifdef USE_DRIVERS
-	//--! TEMP driversLoop(); //the driverLoop() more actual for sensors drivers, the actuator drivers wait until Sub()->OnMessage() happens, see Main::Callback(...) function
-	//--! TEMP AirQualityLoop();
+	driversLoop(); //the driverLoop() more actual for sensors drivers, the actuator drivers wait until Sub()->OnMessage() happens, see Main::Callback(...) function
+	AirQualityLoop();
 #endif
 
 #ifdef USE_SCRIPT
