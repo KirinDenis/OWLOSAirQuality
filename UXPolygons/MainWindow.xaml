@@ -7,9 +7,11 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Viewbox>
-        <Grid>
+        <Grid Width="480" Height="320">
             <TextBlock x:Name="coord" />
-            <Canvas Width="480" Height="320" x:Name="canvas" />
+            <Canvas  x:Name="canvas" />
+
+
         </Grid>
     </Viewbox>
 </Window>

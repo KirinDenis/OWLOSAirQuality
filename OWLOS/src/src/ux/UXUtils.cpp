@@ -98,8 +98,8 @@ void fillArc(int x, int y, int start_angle, int seg_count, int rx, int ry, int w
     int x3 = sx2 * rx + x;
     int y3 = sy2 * ry + y;
 
-    tft.fillTriangle(x0, y0, x1, y1, x2, y2, colour);
-    tft.fillTriangle(x1, y1, x2, y2, x3, y3, colour);
+   // tft.fillTriangle(x0, y0, x1, y1, x2, y2, colour);
+   // tft.fillTriangle(x1, y1, x2, y2, x3, y3, colour);
 
     // Copy segment end to sgement start for next segment
     x0 = x2;
@@ -119,22 +119,40 @@ void fillArc(int x, int y, int start_angle, int seg_count, int rx, int ry, int w
     float smoothY = sy * (ry - w) + y;
     double intpart;
 
-    float fX = modf(smoothX, &intpart);
-    float fY = modf(smoothY, &intpart);
+    //float fX = modf(smoothX, &intpart);
+    //float fY = modf(smoothY, &intpart);
 
-    if (fX > 0.5)
+    ////if (fX > 0.5)
+    //{
+      //fX = 1.0 - fX;
+    //}
+    //if (fY > 0.5)
+    //{
+      //fY = 1.0 - fY;
+    //}
+
+    //byte alphaChannel = (fX * 127 + fY * 127) * 2;
+    
+    
+    tft.drawPixel(smoothX+1, smoothY, tft.alphaBlend(255, colour, tft.readPixel(smoothX, smoothY)));
+    tft.drawPixel(smoothX+1, smoothY, tft.alphaBlend(255, colour, tft.readPixel(smoothX+1, smoothY)));
+    tft.drawPixel(smoothX, smoothY+1, tft.alphaBlend(255, colour, tft.readPixel(smoothX, smoothY+1)));    
+    tft.drawPixel(smoothX+1, smoothY+1, tft.alphaBlend(255, colour, tft.readPixel(smoothX+1, smoothY+1)));
+
+
+    for (int j=-1; j < 3; j++)
     {
-      fX = 1.0 - fX;
-    }
-    if (fY > 0.5)
-    {
-      fY = 1.0 - fY;
+      tft.drawPixel(smoothX+j, smoothY-1, tft.alphaBlend(75, colour, tft.readPixel(smoothX+j, smoothY-1)));    
+      tft.drawPixel(smoothX+j, smoothY+2, tft.alphaBlend(75, colour, tft.readPixel(smoothX+j, smoothY+2)));    
     }
 
-    byte alphaChannel = (fX * 127 + fY * 127) * 2;
-
-    tft.drawPixel(smoothX, smoothY, tft.alphaBlend(alphaChannel, colour, OWLOSDarkColor));
+    tft.drawPixel(smoothX-1, smoothY, tft.alphaBlend(75, colour, tft.readPixel(smoothX-1, smoothY)));    
+    tft.drawPixel(smoothX+2, smoothY, tft.alphaBlend(75, colour, tft.readPixel(smoothX+2, smoothY)));    
+    tft.drawPixel(smoothX-1, smoothY+1, tft.alphaBlend(75, colour, tft.readPixel(smoothX-1, smoothY+1)));    
+    tft.drawPixel(smoothX+2, smoothY+1, tft.alphaBlend(75, colour, tft.readPixel(smoothX+2, smoothY+1)));    
+    
   }
+  
 }
 
 

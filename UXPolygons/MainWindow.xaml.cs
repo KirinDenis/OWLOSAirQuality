@@ -13,19 +13,44 @@ namespace UXPolygons
         public int x = 0;
         public int y = 0;
     }
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    ///
     public partial class MainWindow : Window
     {
 
-        private readonly float step = 1;
+        private readonly float step = 0.5f;
         private readonly Brush baseColor = Brushes.Blue;
+
+        private void PutRect(float _x, float _y, Brush color)
+        {
+            Rectangle rect = new Rectangle()
+            {
+                Width = step,
+                Height = step,
+                Margin = new Thickness(_x * step, _y * step, _x * step, _y * step),
+                Fill = color
+            };
+
+            rect.Tag = new PixelCoord()
+            {
+                x = (int)_x,
+                y = (int)_y
+            };
+            rect.MouseEnter += Rect_MouseEnter;
+
+            canvas.Children.Add(rect);
+
+        }
+
 
         private void drawPixel(float x, float y, Brush color)
         {
             int _x = (int)Math.Truncate(x);
             int _y = (int)Math.Truncate(y);
+
 
 
             double intpart;
@@ -45,148 +70,30 @@ namespace UXPolygons
             byte alphaChannel = (byte)((fX * 127 + fY * 127) * 2);
 
 
-            Rectangle rect = new Rectangle()
+            PutRect(_x, _y, alphaBlend(50, color, null));
+            PutRect(_x + 1, _y, alphaBlend(50, color, null));
+            PutRect(_x, _y + 1, alphaBlend(50, color, null));
+            PutRect(_x+1, _y + 1, alphaBlend(50, color, null));
+
+            for (int i=-1; i < 3; i++)
             {
-                Width = step,
-                Height = step,
-                Margin = new Thickness(_x * step, _y * step, _x * step, _y * step),
-                //Fill = alphaBlend(alphaChannel, color, null)
-                Fill = color
-            };
+                PutRect(_x + i, _y - 1, alphaBlend(15, color, null));
+                PutRect(_x + i, _y + 2, alphaBlend(15, color, null));
+                PutRect(_x - 1, _y + i, alphaBlend(15, color, null));
+                PutRect(_x + 2, _y + i, alphaBlend(15, color, null));
+            }
 
-            rect.Tag = new PixelCoord()
+            for (int i = -2; i < 4; i++)
             {
-                fx = x,
-                fy = y,
-                x = _x,
-                y = _y
-            };
-            rect.MouseEnter += Rect_MouseEnter;
-
-            canvas.Children.Add(rect);
-
-
-            rect = new Rectangle()
-            {
-                Width = step,
-                Height = step,
-                Margin = new Thickness((_x - 1) * step, _y * step, (_x - 1) * step, _y * step),
-                Fill = alphaBlend(alphaChannel, color, null)                
-            };
-            canvas.Children.Add(rect);
-
-            rect = new Rectangle()
-            {
-                Width = step,
-                Height = step,
-                Margin = new Thickness((_x + 1) * step, _y * step, (_x + 1) * step, _y * step),
-                Fill = alphaBlend(alphaChannel, color, null)
-            };
-            canvas.Children.Add(rect);
-
-            rect = new Rectangle()
-            {
-                Width = step,
-                Height = step,
-                Margin = new Thickness((_x) * step, (_y - 1) * step, (_x) * step, (_y - 1) * step),
-                Fill = alphaBlend(alphaChannel, color, null)
-            };
-            canvas.Children.Add(rect);
-
-            rect = new Rectangle()
-            {
-                Width = step,
-                Height = step,
-                Margin = new Thickness((_x) * step, (_y + 1) * step, (_x) * step, (_y + 1) * step),
-                Fill = alphaBlend(alphaChannel, color, null)
-            };
-            canvas.Children.Add(rect);
-
-            rect = new Rectangle()
-            {
-                Width = step,
-                Height = step,
-                Margin = new Thickness((_x-1) * step, (_y + 1) * step, (_x -1 ) * step, (_y + 1) * step),
-                Fill = alphaBlend(alphaChannel, color, null)
-            };
-            canvas.Children.Add(rect);
-
-
-            rect = new Rectangle()
-            {
-                Width = step,
-                Height = step,
-                Margin = new Thickness((_x + 1) * step, (_y + 1) * step, (_x  - 1) * step, (_y + 1) * step),
-                Fill = alphaBlend(alphaChannel, color, null)
-            };
-            canvas.Children.Add(rect);
-
-            rect = new Rectangle()
-            {
-                Width = step,
-                Height = step,
-                Margin = new Thickness((_x + 1) * step, (_y + 1) * step, (_x  + 1) * step, (_y + 1) * step),
-                Fill = alphaBlend(alphaChannel, color, null)
-            };
-            canvas.Children.Add(rect);
-
-
-            rect = new Rectangle()
-            {
-                Width = step,
-                Height = step,
-                Margin = new Thickness((_x + 1) * step, (_y - 1) * step, (_x - 1) * step, (_y - 1) * step),
-                Fill = alphaBlend(alphaChannel, color, null)
-            };
-            canvas.Children.Add(rect);
-
-            rect = new Rectangle()
-            {
-                Width = step,
-                Height = step,
-                Margin = new Thickness((_x + 1) * step, (_y + 1) * step, (_x + 1) * step, (_y - 1) * step),
-                Fill = alphaBlend(alphaChannel, color, null)
-            };
-            canvas.Children.Add(rect);
-
-            rect = new Rectangle()
-            {
-                Width = step,
-                Height = step,
-                Margin = new Thickness((_x - 1) * step, (_y - 1) * step, (_x - 1) * step, (_y - 1) * step),
-                Fill = alphaBlend(alphaChannel, color, null)
-            };
-            canvas.Children.Add(rect);
-
-            rect = new Rectangle()
-            {
-                Width = step,
-                Height = step,
-                Margin = new Thickness((_x - 1) * step, (_y + 1) * step, (_x + 1) * step, (_y - 1) * step),
-                Fill = alphaBlend(alphaChannel, color, null)
-            };
-
-            rect = new Rectangle()
-            {
-                Width = step,
-                Height = step,
-                Margin = new Thickness((_x - 1) * step, (_y + 1) * step, (_x + 1) * step, (_y + 1) * step),
-                Fill = alphaBlend(alphaChannel, color, null)
-            };
-
+                PutRect(_x + i, _y - 2, alphaBlend(5, color, null));
+                PutRect(_x + i, _y + 3, alphaBlend(5, color, null));
+                PutRect(_x - 2, _y + i, alphaBlend(5, color, null));
+                PutRect(_x + 3, _y + i, alphaBlend(5, color, null));
+            }
 
             /*
-                        rect = new Rectangle()
-                        {
-                            Width = step,
-                            Height = step,
-                            Margin = new Thickness(Math.Truncate(x) * step, Math.Truncate(y) * step, Math.Truncate(x) * step, Math.Truncate(y) * step),
-                            Fill = Brushes.Green
-                        };
-                        canvas.Children.Add(rect);
-            */
 
-            rect = new Rectangle()
+            Rectangle rect = new Rectangle()
             {
                 Width = 0.5f,
                 Height = 0.5f,
@@ -194,7 +101,7 @@ namespace UXPolygons
                 Fill = Brushes.Red
             };
             canvas.Children.Add(rect);
-
+            */
         }
 
         private void Rect_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
@@ -238,12 +145,12 @@ namespace UXPolygons
             int y1 = (int)sy * ry + y;
 
             // Draw colour blocks every inc degrees
-            for (int i = start_angle; i < start_angle + seg * seg_count; i += inc)
+            for (int i = start_angle; i < start_angle + seg * seg_count * 2; i += inc)
             {
 
                 // Calculate pair of coordinates for segment end
-                float sx2 = (float)Math.Cos((i + seg - 90) * DEG2RAD);
-                float sy2 = (float)Math.Sin((i + seg - 90) * DEG2RAD);
+                float sx2 = (float)Math.Cos((i / 2 + seg - 90) * DEG2RAD);
+                float sy2 = (float)Math.Sin((i / 2 + seg - 90) * DEG2RAD);
                 int x2 = (int) sx2 * (rx - w) + x;
                 int y2 = (int)sy2 * (ry - w) + y;
                 int x3 = (int)sx2 * rx + x;
@@ -260,11 +167,11 @@ namespace UXPolygons
             }
 
             // SMOOTH  
-            for (int i = start_angle; i < start_angle + seg * seg_count; i += inc)
+            for (int i = start_angle; i < start_angle + seg * seg_count * 3; i += inc)
             {
                 // Calculate pair of coordinates for segment end
-                sx = (float)Math.Cos((i + seg - 90) * DEG2RAD);
-                sy = (float)Math.Sin((i + seg - 90) * DEG2RAD);
+                sx = (float)Math.Cos((i / 3 + seg - 90) * DEG2RAD);
+                sy = (float)Math.Sin((i / 3 + seg - 90) * DEG2RAD);
 
                 float smoothX = sx * (rx - w) + x;
                 float smoothY = sy * (ry - w) + y;
@@ -280,7 +187,8 @@ namespace UXPolygons
 
             drawPixel(10, 10, baseColor);
 
-            fillArc(200, 200, 150, 270, 100, 100, 4, baseColor);
+            fillArc(200, 200, 150, 270, 150, 150, 4, baseColor);
+
 
         }
     }
