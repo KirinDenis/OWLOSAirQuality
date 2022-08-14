@@ -189,7 +189,7 @@ namespace UXPolygons
 
             fillArc(200, 200, 150, 270, 150, 150, 4, baseColor);
 
-
+            
         }
     }
 }

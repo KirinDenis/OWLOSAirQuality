@@ -66,7 +66,7 @@ BigTextControlClass bigText(0);
 MediumTextControlClass leftDownMediumText(0, 1);
 MediumTextControlClass rightDownMediumText(1, 1);
 
-RadialControlClass radialControl;
+//RadialControlClass radialControl;
 
 extern int currentMode;
 
@@ -127,6 +127,7 @@ void RefreshHomeScreenButtons()
     leftDownMediumText.refresh();
     rightDownMediumText.refresh();
 
+/*
     radialControl.x = (480 - 200) / 2;
     radialControl.y = 60;
 
@@ -144,7 +145,7 @@ void RefreshHomeScreenButtons()
     radialControl.unitOfMesure = "C";
     radialControl.valueType = "temperature";
     radialControl.refresh();
-
+*/
 }
 //-----------------------------------------------------------------------------------------
 
@@ -285,16 +286,14 @@ void drawHomeDHTStatus()
     
     if (_DHTDriver->celsius)
     {
-       // bigText.draw("temperature", String(atoi(_DHTDriver->temperature.c_str())), "C");
-        bigText.draw("", "", "");
+        bigText.draw("temperature", String(atoi(_DHTDriver->temperature.c_str())), "C");        
     }
     else
     {
-        //bigText.draw("temperature", String(atoi(_DHTDriver->temperature.c_str())), "F");
-        bigText.draw("", "", "");
+        bigText.draw("temperature", String(atoi(_DHTDriver->temperature.c_str())), "F");        
     }
     
-    radialControl.draw(atoi(_DHTDriver->temperature.c_str()));
+    //radialControl.draw(atoi(_DHTDriver->temperature.c_str()));
 
     leftDownMediumText.draw("humidity", String(atoi(_DHTDriver->humidity.c_str())) + "%");
     rightDownMediumText.draw("heat index", String(atoi(_DHTDriver->heatIndex.c_str())));

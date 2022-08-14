@@ -10,7 +10,7 @@
         <Grid Width="480" Height="320">
             <TextBlock x:Name="coord" />
             <Canvas  x:Name="canvas" />
-
+            <Ellipse Height="199" Width="188" Stroke="Blue" Margin="10,10" StrokeThickness="0.5" />
 
         </Grid>
     </Viewbox>

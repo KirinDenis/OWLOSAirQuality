@@ -6,6 +6,10 @@
 		{
 			"name": "OWLOS",
 			"path": "OWLOS"
+		},
+		{
+			"name": "OWLOS-F16",
+			"path": "C:\\Users\\Egor3\\Source\\Repos\\NewRepo\\OWLOS-F16"
 		}
 	],
 	"settings": {
