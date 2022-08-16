@@ -1,16 +1,9 @@
 {
 	"folders": [
-		{
-			"path": "."
-		},
-		{
-			"name": "OWLOS",
+{
+			"name": "OWLOS Air Qulity",
 			"path": "OWLOS"
-		},
-		{
-			"name": "OWLOS-F16",
-			"path": "C:\\Users\\Egor3\\Source\\Repos\\NewRepo\\OWLOS-F16"
-		}
+}
 	],
 	"settings": {
 		"files.associations": {

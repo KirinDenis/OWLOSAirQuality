@@ -132,6 +132,8 @@ private:
 	int currentTemperatureFileIndex = 0;
 	int historyTemperatureFileCount = 0;
 	int *temperatureHistoryFilesIndexes = new int[filesIndexesSize]();
+
+	unsigned long saveTick = 5000;
 };
 
 #endif

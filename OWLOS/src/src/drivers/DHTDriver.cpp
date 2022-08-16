@@ -457,7 +457,7 @@ String DHTDriver::getTemperature()
 	if (_temperature != _temperature) //float NAN check
 	{
 		//если сенсор не доступем
-		setAvailable(false);
+		//setAvailable(false);
 		temperature = "nan";
 #ifdef DETAILED_DEBUG
 #if defined(DEBUG) || defined(LOG_SCREEN_UX)
